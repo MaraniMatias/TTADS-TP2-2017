@@ -1,9 +1,11 @@
 var express = require('express');
+var routes = require('./Routes/api');
+
 var app = express();
 
-app.get('/',(req,res)=>{
-  res.send('Hola Mundo');
-})
+//Inicializo las rutas
+app.use('/api',routes);
+
 
 //process.env.port es usado por el servidor donde se publique la aplicacion
 //oara proveer el puerto donde escuchara, si no lo tiene especificado escuchara
