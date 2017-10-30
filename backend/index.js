@@ -18,7 +18,7 @@ app.use('/api',require('./routes/api/apiTiposEvento'));
 
 //Middleware
 app.use(function(err,req,res,next){
-  res.status(422).send({error: err.message})
+  res.status().send({error: err.message})
 })
 
 //process.env.port es usado por el servidor donde se publique la aplicacion
