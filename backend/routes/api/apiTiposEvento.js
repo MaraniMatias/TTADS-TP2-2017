@@ -10,7 +10,7 @@ router.get('/tiposEvento',function(req,res){
 });
 
 //Agrega un tipo de evento a la bd
-router.post('/tiposEvento',function(req,res){
+router.post('/tiposEvento',function(req,res,next){
   TipoEvento.create(req.body).then(function(tipoEvento){
     res.send(tipoEvento);
   }).catch(next);

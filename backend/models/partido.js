@@ -9,14 +9,14 @@ var PartidoSchema = new Schema({
   },
   marcador: {
     type: [Number]
-  }
+  },
   //El estado contendrá valores para 'Programado','En curso','Entretiempo','Terminado'
   estado: {
     type: String
-  }
+  },
   eventos:{
     type: [String]
-  }
+  },
   fechaYhoraInicio:{
     type: Date
   }

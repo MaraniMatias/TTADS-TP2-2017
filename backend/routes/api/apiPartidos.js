@@ -10,7 +10,7 @@ router.get('/partidos',function(req,res){
 });
 
 //Agrega un partido a la bd
-router.post('/partidos',function(req,res){
+router.post('/partidos',function(req,res,next){
   Partido.create(req.body).then(function(partido){
     res.send(partido);
   }).catch(next);
