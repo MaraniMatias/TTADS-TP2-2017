@@ -1,0 +1,27 @@
+{
+  "name": "ttads-tp2-2017",
+  "version": "1.0.0",
+  "description": "Segundo trabajo práctico de la materia TTADS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andres1790/TTADS-TP2-2017.git"
+  },
+  "author": "Andrés de la Grana",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andres1790/TTADS-TP2-2017/issues"
+  },
+  "homepage": "https://github.com/andres1790/TTADS-TP2-2017#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mongoose": "^4.12.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  }
+}
