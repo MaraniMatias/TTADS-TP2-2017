@@ -3,14 +3,14 @@ var Schema = mongoose.Schema;
 
 //Creo el modelo y schema del partidos
 var PartidoSchema = new Schema({
-  /*primerEquipo: {
+  primerEquipo: {
     type: String,
-    required: [true, 'El campo de primer equipo es necesario']
+    required: true
   },
   segundoEquipo: {
     type: String,
-    required: [true, 'El campo de segundo equipo es necesario']
-  },*/
+    required: true
+  },
   marcadorPrimerEquipo: {
     type: Number
   },
@@ -24,4 +24,11 @@ var PartidoSchema = new Schema({
   eventos:{
     type: String[]
   }
-})
+  fechaYhoraInicio:{
+    type: Date
+  }
+});
+
+var Partido = mongoose.model('partido',PartidoSchema);
+
+module.exports = Partido;
