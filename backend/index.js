@@ -8,12 +8,18 @@ var app = express();
 mongoose.connect('mongodb://localhost/handballdb');
 mongoose.Promise = global.Promise; //TODO:Ver esto
 
+//Middleware
 app.use(bodyParser.json());
 
 //Inicializo las rutas
 app.use('/api',require('./routes/api/apiPartidos'));
 app.use('/api',require('./routes/api/apiEquipos'));
-app.use('/api',require('./routes/api/apiTiposEventos'));
+app.use('/api',require('./routes/api/apiTiposEvento'));
+
+//Middleware
+app.use(function(err,req,res,next){
+  res.status(422).send({error: err.message})
+})
 
 //process.env.port es usado por el servidor donde se publique la aplicacion
 //oara proveer el puerto donde escuchara, si no lo tiene especificado escuchara
