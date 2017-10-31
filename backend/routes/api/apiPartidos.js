@@ -5,14 +5,14 @@ Partido = require('../../models/partido');
 //Recupera todos los partidos
 router.get('/partidos',function(req,res){
   Partido.find([]).then(function(partidos){
-    res.send(partidos);
+    res.status(200).send(partidos);
   })
 });
 
 //Agrega un partido a la bd
 router.post('/partidos',function(req,res,next){
   Partido.create(req.body).then(function(partido){
-    res.send(partido);
+    res.status(200).send(partido);
   }).catch(next);
 });
 
@@ -20,7 +20,7 @@ router.post('/partidos',function(req,res,next){
 router.put('/partidos/:id',function(req,res){
   Partido.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(){
     Parido.findOne({_id: req.params.id}).then(function(partido){
-      res.send(partido);
+      res.status(200).send(partido);
     });
   });
 });
@@ -28,7 +28,7 @@ router.put('/partidos/:id',function(req,res){
 //Borra un partido de la bd
 router.delete('/partidos/:id',function(req,res){
   Partido.findByIdAndRemove({_id: req.params.id}).then(function(partido){
-    res.send(partido);
+    res.status(200).send(partido);
   });
 });
 

@@ -9,11 +9,12 @@ var port = process.env.port || 3000;
 
 /*Mongoose's default connection logic is deprecated as of 4.11.0. 
 Please opt in to the new connection logic using the useMongoClient option, 
-but make sure you test your connections first if you're upgrading an existing codebase! */
+but make sure you test your connections first if you're upgrading an existing codebase!
+
 mongoose.connect('mongodb://localhost/handballdb', {
   useMongoClient: true
-});
-mongoose.Promise = global.Promise; //TODO:Ver esto
+});*/
+mongoose.Promise = global.Promise; //TODO:Ver esto  <-- Que se supone que es?
 
 //Middleware
 app.use(bodyParser.json());
@@ -31,6 +32,16 @@ app.use(function(err,req,res,next){
 //process.env.port es usado por el servidor donde se publique la aplicacion
 //para proveer el puerto donde escuchara, si no lo tiene especificado escuchara
 //en el puerto 3000
-app.listen(port, function(){
-  console.log('Escuchando en el puerto: ' + port);
-})
+
+mongoose.connect('mongodb://localhost/handballdb', { useMongoClient: true }, function(err, res) {
+
+  if (err) {
+    return console.error("Error al conectar a la base de datos: " + err);
+  } else {
+    console.log("Conexón a la base de datos establecida correctamente.");
+    
+    app.listen(port, function(){
+      console.log('Escuchando en el puerto: ' + port);
+    });
+  }
+});
