@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var Evento = require('./tipoEvento')
 
 //Creo el modelo y schema del partidos
 var PartidoSchema = new Schema({
@@ -7,7 +8,7 @@ var PartidoSchema = new Schema({
     type: [String],
     required: true
   },
-  marcador: {
+  marcadorFInal: {
     type: [Number]
   },
   //El estado contendrá valores para 'Programado','En curso','Entretiempo','Terminado'
@@ -15,10 +16,19 @@ var PartidoSchema = new Schema({
     type: String
   },
   eventos:{
-    type: [String]
+    type: [Evento]
   },
   fechaYhoraInicio:{
     type: Date
+  },
+  estadio:{
+    type: String
+  },
+  categoria:{
+    type: String
+  },
+  arbitros:{
+    type: [String]
   }
 });
 

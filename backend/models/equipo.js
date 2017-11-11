@@ -10,6 +10,15 @@ var EquipoSchema = new Schema({
   escudoURL: {
     type: String,
     default: 'http://www.fgf-gff.org/pub/skin/img/equipos/default.png'
+  },
+  jugadores:{
+    type:[String]
+  },
+  goles: {
+    type: Number
+  },
+  cuerpoTecnico:{
+    type: [String]
   }
 });
 

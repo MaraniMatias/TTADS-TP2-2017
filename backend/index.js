@@ -7,8 +7,8 @@ var port = process.env.port || 3000;
 
 //Creo la conexion con MongoDB. Si no existe, la crea.
 
-/*Mongoose's default connection logic is deprecated as of 4.11.0. 
-Please opt in to the new connection logic using the useMongoClient option, 
+/*Mongoose's default connection logic is deprecated as of 4.11.0.
+Please opt in to the new connection logic using the useMongoClient option,
 but make sure you test your connections first if you're upgrading an existing codebase!
 
 mongoose.connect('mongodb://localhost/handballdb', {
@@ -39,7 +39,7 @@ mongoose.connect('mongodb://localhost/handballdb', { useMongoClient: true }, fun
     return console.error("Error al conectar a la base de datos: " + err);
   } else {
     console.log("Conexón a la base de datos establecida correctamente.");
-    
+
     app.listen(port, function(){
       console.log('Escuchando en el puerto: ' + port);
     });
