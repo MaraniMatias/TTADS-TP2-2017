@@ -19,6 +19,13 @@ mongoose.Promise = global.Promise; //TODO:Ver esto  <-- Que se supone que es?
 //Middleware
 app.use(bodyParser.json());
 
+//Middleware. Esta funcion me permite hacer peticiones http de localhost a localhost
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 //Inicializo las rutas
 app.use('/api',require('./routes/api/apiPartidos'));
 app.use('/api',require('./routes/api/apiEquipos'));

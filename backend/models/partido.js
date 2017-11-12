@@ -5,10 +5,13 @@ var Evento = require('./tipoEvento')
 //Creo el modelo y schema del partidos
 var PartidoSchema = new Schema({
   equipos: {
-    type: [String],
+    type: [Object],
     required: true
   },
-  marcadorFInal: {
+  golesEquipo1: {
+    type: [Number]
+  },
+  golesEquipo2: {
     type: [Number]
   },
   //El estado contendrá valores para 'Programado','En curso','Entretiempo','Terminado'
@@ -16,7 +19,7 @@ var PartidoSchema = new Schema({
     type: String
   },
   eventos:{
-    type: [Evento]
+    type: [Object]
   },
   fechaYhoraInicio:{
     type: Date
@@ -29,6 +32,9 @@ var PartidoSchema = new Schema({
   },
   arbitros:{
     type: [String]
+  },
+  destacado: {
+    type: Boolean
   }
 });
 
