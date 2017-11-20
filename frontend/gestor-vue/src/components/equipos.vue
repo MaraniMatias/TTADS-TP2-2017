@@ -12,22 +12,22 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="equipo in teams">
+      <tr v-for="(equipo,index) in equipos">
         <td>{{equipo.nombre}}</td>
         <td class="fila-escudo">
           <img class="escudo" :src='equipo.escudoURL'/>
         <td>
-          <button class="ui red basic button">Borrar</button>
+          <button class="ui red basic button" @click="borrarEquipo(index)">Borrar</button>
           <button class="ui blue basic button">Editar</button>
         </td>
       </tr>
     </tbody>
     <tfoot>
-      <tr><th colspan="3">
+      <tr>
+        <th colspan="3">
         <div class="ui left floated">
           <button class="ui green basic button" @click="agregarEquipo">Agregar</button>
         </div>
-
         <!--<div class="ui right floated pagination menu">
           <a class="icon item">
             <i class="left chevron icon"></i>
@@ -41,7 +41,8 @@
           </a>
         </div>-->
       </th>
-    </tr></tfoot>
+    </tr>
+  </tfoot>
   </table>
   <div class="form-alta" v-if="add">
     <h1 class="ui title"> Agregar equipo</h1>
@@ -58,7 +59,6 @@
     </form>
   </div>
 </div>
-
 </template>
 
 <script>
@@ -70,33 +70,33 @@ data(){
   return{
     nombre: '',
     escudoURL: '',
-    teams: [],
     add: false
   }
 },
 
 methods: {
+  ...mapActions(['setEquipo','getEquipos','deleteEquipo']),
+
   agregarEquipo: function(){
     this.add = !this.add
   },
 
   guardarEquipo: function(){
-    this.$store.dispatch('setEquipo', {
+    this.setEquipo({
       nombre: this.nombre,
       escudoURL: this.escudoURL
      })
+  },
+
+  borrarEquipo: function(index){
+    this.deleteEquipo(this.equipos[index])
   }
 },
 
-computed: {
-  ...mapState(['equipos']),
-  ...mapActions(['setEquipo'])
-},
-
+computed: mapState(['equipos']),
 
 mounted: function () {
-    this.$store.dispatch('getEquipos');
-    this.teams = this.equipos
+    this.getEquipos();
   }
 }
 
@@ -114,8 +114,8 @@ mounted: function () {
   text-align: center;
 }
 .escudo{
-    height: 100%;
-    width: 20%;
+    height: 50px;
+    width: 50px;
 }
 .form-alta{
   border: 1px solid rgba(34,36,38,.1);
@@ -123,5 +123,4 @@ mounted: function () {
   background-color: #F9FAFB;
   width: 50%
 }
-
 </style>

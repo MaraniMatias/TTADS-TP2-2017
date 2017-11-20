@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var cors = require('cors');
 
 var app = express();
 var port = process.env.port || 3000;
@@ -15,6 +16,9 @@ mongoose.connect('mongodb://localhost/handballdb', {
   useMongoClient: true
 });*/
 mongoose.Promise = global.Promise; //TODO:Ver esto  <-- Que se supone que es?
+
+//Permito el acceso a los recursos del servidor desde otros dominios
+app.use(cors());
 
 //Middleware
 app.use(bodyParser.json());
