@@ -1,5 +1,8 @@
 {
-  "presets": [
-    ["env", { "modules": false }]
-  ]
+  "presets": ["latest"],
+  "plugins": [
+    ["transform-object-rest-spread"],
+    ["istanbul", {"exclude": [ "**/*.spec.js" ]}]
+  ],
+  "comments": false
 }
