@@ -6,6 +6,9 @@ export default {
   state: {
     equipos: {
       results: []
+    },
+    partidos: {
+      results: []
     }
   },
   actions,

@@ -318,7 +318,7 @@ export default {
       Object.keys(baseTimeValue).forEach((key) => {
         timeValue[key] = fullValues[key]
       })
-      this.$emit('input', timeValue)
+      this.$emit('input', timeValue);
       this.$nextTick(() => {
         self.muteWatch = false
       })
@@ -339,6 +339,7 @@ export default {
       } else if (type === 'apm') {
         this.apm = value
       }
+      this.$emit('inputVal',{hora: this.hour, minutos: this.minute})
     },
     clearTime () {
       this.hour = ''

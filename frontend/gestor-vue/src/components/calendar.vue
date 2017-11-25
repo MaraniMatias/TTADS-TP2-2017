@@ -345,6 +345,10 @@ export default {
           this.currDate = date
           this.inputValue = this.stringify(this.currDate)
           this.displayDayView = false
+          //HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+          //console.log(this.inputValue);
+          //console.log(this.currDate);
+          this.$emit('fechaintro',this.currDate);
           if (this.rangeStatus === 1) {
             this.eventbus.$emit('calendar-rangestart', this.currDate)
           }
