@@ -18,7 +18,7 @@
           <img class="escudo" :src='equipo.escudoURL'/>
         <td>
           <button class="ui red basic button" @click="borrarEquipo(index)">Borrar</button>
-          <button class="ui blue basic button">Editar</button>
+          <button class="ui blue basic button"@click="editarEquipo(index)">Editar</button>
         </td>
       </tr>
     </tbody>
@@ -68,6 +68,8 @@ export default {
 
 data(){
   return{
+    modoAlta: true,
+    index: 0,
     nombre: '',
     escudoURL: '',
     add: false
@@ -75,22 +77,43 @@ data(){
 },
 
 methods: {
-  ...mapActions(['setEquipo','getEquipos','deleteEquipo']),
+  ...mapActions(['setEquipo','getEquipos','deleteEquipo','updateEquipo']),
 
   agregarEquipo: function(){
     this.add = !this.add
   },
 
   guardarEquipo: function(){
-    this.setEquipo({
-      nombre: this.nombre,
-      escudoURL: this.escudoURL
-     })
+    if(this.modoAlta){
+      this.setEquipo({
+        nombre: this.nombre,
+        escudoURL: this.escudoURL
+       })
+    }else{
+      this.updateEquipo({
+        id: this.equipos[this.index]._id,
+        nombre: this.nombre,
+        escudoURL: this.escudoURL
+      });
+      this.modoAlta = true;
+    };
+    this.add = !this.add;
   },
 
   borrarEquipo: function(index){
     this.deleteEquipo(this.equipos[index])
+  },
+
+  editarEquipo: function(index){
+    if(!this.add){
+      this.agregarEquipo();
+    }
+    this.modoAlta = false;
+    this.nombre = this.equipos[index].nombre;
+    this.escudoURL = this.equipos[index].escudoURL;
+    this.index = index;
   }
+
 },
 
 computed: mapState(['equipos']),
