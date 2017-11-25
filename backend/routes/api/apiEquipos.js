@@ -5,7 +5,7 @@ var Equipo = require('../../models/equipo');
 //Recupera todos los equipos
 router.get('/equipos',function(req,res){
   Equipo.find([]).then(function(equipos){
-    res.send(equipos);
+    res.status(200).send(equipos);
   });
 });
 
@@ -15,7 +15,7 @@ router.post('/equipos',function(req,res,next){
   //Equipo.create devuelve un promise que lo uso para asegurarme que la insercion
   //se hizo correctamente
   Equipo.create(req.body).then(function(equipo){
-    res.send(equipo)
+    res.status(200).send(equipo)
   }).catch(next);
 });
 
@@ -23,7 +23,7 @@ router.post('/equipos',function(req,res,next){
 router.put('/equipos/:id',function(req,res){
   Equipo.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(){
     Equipo.findOne({_id: req.params.id}).then(function(equipo){
-      res.send(equipo);
+      res.status(200).send(equipo);
     });
   });
 });
@@ -32,7 +32,7 @@ router.put('/equipos/:id',function(req,res){
 router.delete('/equipos/:id',function(req,res,next){
   //findByIdAndRemove busca la propiedad _id en Mongo y elimina el objeto
   Equipo.findByIdAndRemove({_id: req.params.id}).then(function(equipo){
-    res.send(equipo);
+    res.status(200).send(equipo);
   });
 });
 
