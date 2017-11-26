@@ -14,11 +14,30 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="partido in partidos">
-          <th>{{partido.equipos[0].nombre}} vs {{partido.equipos[1].nombre}}</th>
+        <tr v-for="(partido,index) in partidos">
+          <th class="celda-equipos">
+            <div class="escudo-tabla-container">
+              <img class="escudo-tabla" :src="partido.equipos[0].escudoURL"/>
+            </div>
+            <div style="display: inline-block;">
+              {{partido.equipos[0].nombre}}
+            </div>
+            <div style="display: inline-block; margin-left:5%; margin-right:5%">
+              vs
+            </div>
+            <div style="display: inline-block;">
+              {{partido.equipos[1].nombre}}
+            </div>
+            <div class="escudo-tabla-container">
+              <img class="escudo-tabla" :src="partido.equipos[1].escudoURL"/>
+            </div>
+          </th>
           <th>{{partido.fechaInicio}}</th>
           <th>{{partido.estado}}</th>
-          <th>fdf</th>
+          <th>
+            <button class="ui red basic button" @click="borrarPartido(index)">Borrar</button>
+            <button class="ui blue basic button"@click="editarPartido(index)">Editar</button>
+          </th>
         </tr>
       </tbody>
       <tfoot>
@@ -123,6 +142,8 @@ export default {
       equipo2:null,
       fecha:null,
       hora:null,
+      modoAlta: true,
+      index: null,
 
       disabled: [],
       value: 'Fecha del partido',
@@ -133,7 +154,7 @@ export default {
     }
   },
   methods:{
-    ...mapActions(['getEquipos','getPartidos','setPartido']),
+    ...mapActions(['getEquipos','getPartidos','setPartido','deletePartido','updatePartido']),
 
     setFecha(e){
       this.fecha = new Date(e.getFullYear(), e.getMonth(),e.getDate(), -3, 0, 0);
@@ -149,21 +170,56 @@ export default {
 
     guardarPartido: function(){
 
-      var fecha = this.addMinutes(this.fecha,this.calcularMinutos(this.hora.hora,this.hora.minutos));
+      if(this.modoAlta){
+        var fecha = this.addMinutes(this.fecha,this.calcularMinutos(this.hora.hora,this.hora.minutos));
 
-      var nuevoPartido = {
-        "equipos": [this.equipo1,this.equipo2],
-        "golesEquipo1": 0,
-        "golesEquipo2": 0,
-        "estado": 'Programado',
-        "eventos": [],
-        "fechaInicio": fecha,
-        "estadio": 'Estadio Monumental',
-        "categoria": 'Adultos',
-        "arbitros": [],
-        "destacado": true
-      };
-      this.setPartido(nuevoPartido);
+        var nuevoPartido = {
+          "equipos": [this.equipo1,this.equipo2],
+          "golesEquipo1": 0,
+          "golesEquipo2": 0,
+          "estado": 'Programado',
+          "eventos": [],
+          "fechaInicio": fecha,
+          "estadio": 'Estadio Monumental',
+          "categoria": 'Adultos',
+          "arbitros": [],
+          "destacado": true
+        };
+        this.setPartido(nuevoPartido);
+      }else{
+          var partidoEdit = {
+            "id": this.partidos[this.index]._id,
+            "equipos": [this.equipo1,this.equipo2],
+            "golesEquipo1": 0,
+            "golesEquipo2": 0,
+            "estado": 'Programado',
+            "eventos": [],
+            "fechaInicio": fecha,
+            "estadio": 'Estadio Monumental',
+            "categoria": 'Adultos',
+            "arbitros": [],
+            "destacado": true
+          };
+          this.updatePartido(partidoEdit);
+        }
+        this.add = !this.add;
+      },
+
+    editarPartido: function(index){
+      if(!this.add){
+        this.add=!this.add
+      }
+      this.modoAlta = false;
+
+      //relleno el formulario
+      this.equipo1 = this.partidos[index].equipos[0];
+      this.equipo2 = this.partidos[index].equipos[1];
+
+      this.index = index;
+    },
+
+    borrarPartido: function(index){
+      this.deletePartido(this.partidos[index])
     },
 
     calcularMinutos(hora,minutos){
@@ -199,11 +255,27 @@ export default {
   width: 90%
 }
 
+.celda-equipos{
+  text-align: center;
+  width: 30%;
+}
+
 .form-alta{
   border: 1px solid rgba(34,36,38,.1);
   padding: .92857143em .78571429em;
   background-color: #F9FAFB;
   width: 40%
+}
+
+.escudo-tabla-container{
+  width: 10%;
+  height: 100%;
+  display: inline-block;
+}
+
+.escudo-tabla{
+  width: 100%;
+  height: 100%;
 }
 
 </style>

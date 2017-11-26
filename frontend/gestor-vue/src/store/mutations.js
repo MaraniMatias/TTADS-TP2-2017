@@ -38,4 +38,33 @@ export default {
   add_partido_to_store: (state, partido) => {
     state.partidos.push(partido);
   },
+
+  update_partido_store: (state, partido) => {
+    for(var i = 0; i< state.partidos.length; i++){
+      if(state.partidos[i]._id === partido._id){
+        console.log("hola");
+        state.partidos[i].equipos = partido.equipos;
+        state.partidos[i].golesEquipo1 = partido.golesEquipo1;
+        state.partidos[i].golesEquipo2 = partido.golesEquipo2;
+        state.partidos[i].estado = partido.estado;
+        state.partidos[i].eventos = partido.eventos;
+        state.partidos[i].fechaInicio = partido.fechaInicio;
+        state.partidos[i].estadio = partido.estadio;
+        state.partidos[i].categoria = partido.categoria;
+        state.partidos[i].arbitros = partido.arbitros;
+        state.partidos[i].destacado = partido.destacado;
+        break;
+      }
+    }
+  },
+
+  delete_partido_from_store: (state, partido) => {
+    for(var i = 0; i< state.partidos.length; i++){
+      if(state.partidos[i]._id === partido._id){
+        state.partidos.splice(i,1);
+        break;
+      }
+    }
+  },
+
 };

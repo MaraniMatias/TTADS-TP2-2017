@@ -48,8 +48,6 @@ export default {
           console.error(err);
         });
   },
-
-
   setPartido: function ({ commit, state }, obj) {
     axios.post(baseURL + "/partidos/", obj)
       .then((response) => {
@@ -58,5 +56,24 @@ export default {
       }, (err) => {
         console.error(err);
       });
+  },
+  updatePartido: function ({ commit, state }, obj) {
+    axios.put(baseURL + "/partidos/"+obj.id, obj)
+      .then((response) => {
+        console.log("hola");
+        commit('update_partido_store',response.data);
+        return response.data;
+      }, (err) => {
+        console.error(err);
+      });
+  },
+  deletePartido: function({ commit, state }, obj){
+    axios.delete(baseURL+ "/partidos/"+obj._id)
+    .then((response) => {
+      commit('delete_partido_from_store',response.data);
+      return response.data;
+    }, (err) => {
+      console.error(err);
+    });
   },
 };

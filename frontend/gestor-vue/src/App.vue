@@ -9,11 +9,13 @@
 
 <script>
 import header from './components/header.vue';
+import footer from './components/footer.vue';
 
 export default {
   name: 'app',
   components: {
     'app-header': header,
+    'app-footer': footer
   },
   data () {
     return {

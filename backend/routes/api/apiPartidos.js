@@ -20,7 +20,7 @@ router.post('/partidos',function(req,res,next){
 //Modifica un partido en la bd
 router.put('/partidos/:id',function(req,res){
   Partido.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(){
-    Parido.findOne({_id: req.params.id}).then(function(partido){
+    Partido.findOne({_id: req.params.id}).then(function(partido){
       res.status(200).send(partido);
     });
   });
