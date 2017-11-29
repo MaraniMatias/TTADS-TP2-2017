@@ -9,6 +9,9 @@ export default {
     },
     partidos: {
       results: []
+    },
+    tiposEvento: {
+      results: []
     }
   },
   actions,

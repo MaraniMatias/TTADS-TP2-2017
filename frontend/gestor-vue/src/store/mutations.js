@@ -42,7 +42,6 @@ export default {
   update_partido_store: (state, partido) => {
     for(var i = 0; i< state.partidos.length; i++){
       if(state.partidos[i]._id === partido._id){
-        console.log("hola");
         state.partidos[i].equipos = partido.equipos;
         state.partidos[i].golesEquipo1 = partido.golesEquipo1;
         state.partidos[i].golesEquipo2 = partido.golesEquipo2;
@@ -62,6 +61,34 @@ export default {
     for(var i = 0; i< state.partidos.length; i++){
       if(state.partidos[i]._id === partido._id){
         state.partidos.splice(i,1);
+        break;
+      }
+    }
+  },
+
+
+  //Tipos Evento
+  set_tipo_evento_store: (state, tiposEvento) => {
+    state.tiposEvento = tiposEvento;
+  },
+
+  add_tipo_evento_to_store: (state, tipoEvento) => {
+    state.tiposEvento.push(tipoEvento);
+  },
+
+  update_tipo_evento_store: (state, tipoEvento) => {
+    for(var i = 0; i< state.tiposEvento.length; i++){
+      if(state.tiposEvento[i]._id === tipoEvento._id){
+        state.tiposEvento[i].nombre = tipoEvento.nombre;
+        break;
+      }
+    }
+  },
+
+  delete_tipo_evento_from_store: (state, tipoEvento) => {
+    for(var i = 0; i< state.tiposEvento.length; i++){
+      if(state.tiposEvento[i]._id === tipoEvento._id){
+        state.tiposEvento.splice(i,1);
         break;
       }
     }

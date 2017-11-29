@@ -20,7 +20,7 @@ var PartidoSchema = new Schema({
     type: String
   },
   eventos:{
-    type: [Object]
+    type: Array
   },
   fechaInicio:{
     type: Date
