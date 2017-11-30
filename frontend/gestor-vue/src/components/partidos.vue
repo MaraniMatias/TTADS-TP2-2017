@@ -256,7 +256,6 @@ export default {
 }
 
 .celda-equipos{
-  text-align: center;
   width: 30%;
 }
 

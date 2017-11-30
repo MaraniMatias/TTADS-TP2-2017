@@ -13,8 +13,8 @@
       </div>
       <div class="extra content">
         <div class="ui two buttons">
-          <div class="ui basic green button" @click="goPartidoInfo()">Ingresar</div>
-          <div class="ui basic red button">Finalizar</div>
+          <div v-if="partido.estado !=='Finalizado'" class="ui basic green button" @click="goPartidoInfo()">Ingresar</div>
+          <div v-if="partido.estado ==='Finalizado'" class="ui red label">Patido finalizado</div>
         </div>
       </div>
     </div>

@@ -2,14 +2,15 @@
   <div class="ui feed">
     <div class="event">
       <div class="label">
-        <img src="/images/avatar/small/jenny.jpg">
+        <img src="https://images.vexels.com/media/users/3/131904/isolated/preview/314ac7a195e5759f2cfadde070a92cc7-volver-a-cargar-el-icono-del-reloj-temporizador-by-vexels.png">
       </div>
       <div class="content">
         <div class="date">
-          3 days ago
+          {{evento.fecha}}
         </div>
         <div class="summary">
-           {{evento.nombre}}
+           {{evento.tipoEvento.nombre}} -
+           {{evento.team.nombre}}
         </div>
       </div>
     </div>
