@@ -46,7 +46,11 @@ export default{
       return fecha.substring(11,16);
     }
   },
-  
+
+  created(){
+    //this.partido = this.$store.getters.findPartido(this.partidoId);
+  }
+
 }
 </script>
 

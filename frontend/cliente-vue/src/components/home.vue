@@ -12,7 +12,6 @@
         <card :partido="partido"></card>
       </div>
     </div>
-
   </div>
 </template>
 
