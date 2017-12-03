@@ -1,18 +1,23 @@
 <template>
   <div>
+    <div class="ui center aligned container">
+      <clock :started="iniciado" :paused="pausa" :resumed="reanudado" :estadoPartido="partido.estado" :fechaInicioPartido="partido.fechaInicio"  v-on:timechanged="setReloj($event)"></clock>
+    </div>
     <div class="ui container">
       <div class="ui basic green button" @click="comenzarPartido">Comenzar partido</div>
+      <div class="ui basic yellow button" @click="pausarPartido">{{textoDescanso}}</div>
       <div class="ui basic red button" @click="finalizarPartido">Finalizar partido</div>
+
     </div>
     <div class="ui three column stackable grid">
       <div class="column" v-if="iniciado">
-        <h2>Eventos equipo 1</h2>
+        <h2>{{partido.equipos[0].nombre}}</h2>
         <button class="ui inverted blue button" v-for="(tipoEvento,index) in tiposEvento" @click="cargarEvento(index,1)">
           {{tipoEvento.nombre}}
         </button>
       </div>
       <div class="column" v-if="iniciado">
-        <h2>Sucesos del partido</h2>
+        <h2 style="text-align:center">Sucesos del partido</h2>
         <!--div para feed de fin-->
         <div v-if="finalizado" class="ui feed">
           <div class="event">
@@ -29,17 +34,18 @@
             </div>
           </div>
         </div>
-
-        <feed v-for="evento in partido.eventos" :evento="evento"></feed>
+        <div class="sucesos">
+          <feed v-for="evento in partido.eventos" :evento="evento"></feed>
+        </div>
         <!-- div para feed de comienzo -->
-        <div v-if="iniciado" class="ui feed">
+        <div v-if="iniciado" class="ui feed sucesos">
           <div class="event">
             <div class="label">
               <img src="https://images.vexels.com/media/users/3/131904/isolated/preview/314ac7a195e5759f2cfadde070a92cc7-volver-a-cargar-el-icono-del-reloj-temporizador-by-vexels.png">
             </div>
             <div class="content">
               <div class="date">
-                Ahora
+                00:00:00
               </div>
               <div class="summary">
                  Comienzo del partido
@@ -48,11 +54,12 @@
           </div>
         </div>
       </div>
-      <div id="botonera2" class="column" v-if="iniciado">
-        <h2>Eventos equipo 2</h2>
-        <button class="ui inverted blue button" v-for="(tipoEvento,index) in tiposEvento" @click="cargarEvento(index,2)">
+      <div class="column" v-if="iniciado">
+        <h2 class="derecha">{{partido.equipos[1].nombre}}</h2>
+        <button id="botonera2" class="ui inverted blue button" v-for="(tipoEvento,index) in tiposEvento" @click="cargarEvento(index,2)">
           {{tipoEvento.nombre}}
         </button>
+        <br />
       </div>
     </div>
   </div>
@@ -63,12 +70,13 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex';
 import feed from './feed.vue';
+import clock from './clock.vue';
 
 export default{
 
-
   components:{
-    'feed': feed
+    'feed': feed,
+    'clock': clock
   },
 
   data(){
@@ -76,7 +84,12 @@ export default{
       partidoId: this.$route.params.partidoId,
       partido: {},
       iniciado: false,
-      finalizado: false
+      finalizado: false,
+      pausa: false,
+      reanudado: false,
+      dateTime: null,
+      reloj:'',
+      textoDescanso:'Descanso'
     }
   },
 
@@ -87,9 +100,36 @@ export default{
     ...mapActions(['getTiposEvento','updatePartido','getPartido','updatePartido','getPartidos']),
 
     comenzarPartido:function(){
-      this.iniciado = true;
-      this.partido.estado = "Iniciado";
-      this.updatePartido(this.partido);
+
+      if(!this.iniciado){
+        var today = new Date();
+        // convert to msec
+        // add local time zone offset
+        // get UTC time in msec
+        var utc = today.getTime() + (today.getTimezoneOffset() * 60000);
+        // create new Date object for different city
+        // using supplied offset
+        var nd = new Date(utc -21600000);
+        this.dateTime = nd;
+        this.iniciado = true;
+        this.partido.estado = "Iniciado";
+        this.partido.fechaInicio = this.dateTime;
+        this.updatePartido(this.partido);
+        this.comienzoReloj();
+      }
+
+    },
+
+    pausarPartido: function(){
+      this.pausa = !this.pausa;
+      if(this.pausa){
+        this.reanudado = false;
+        this.textoDescanso ='Reanudar'
+      }else{
+        this.reanudado = true;
+        this.textoDescanso ='Descanso'
+      }
+
     },
 
     finalizarPartido:function(){
@@ -107,22 +147,35 @@ export default{
         equipo = this.partido.equipos[1];
       }
       var evento = this.tiposEvento[index];
-      var today = new Date();
+      /*var today = new Date();
       var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
       var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      var dateTime = date+' '+time;
+      var dateTime = date+' '+time;*/
+      var dateTime = this.reloj
       this.partido.eventos.unshift({
         tipoEvento: evento,
         team: equipo,
         fecha: dateTime});
       this.updatePartido(this.partido);
+    },
+
+    comienzoReloj: function(){
+      this.reloj = "00" + ":" + "00";
+    },
+
+    setReloj: function(e){
+      this.reloj = e
     }
+
   },
 
-  mounted(){
+  created(){
     this.getPartidos();
     this.getTiposEvento();
     this.partido = this.$store.getters.findPartido(this.partidoId);
+    if(this.partido.estado==="Iniciado"){
+      this.iniciado=true;
+    }
   }
 }
 
@@ -136,11 +189,25 @@ export default{
 }
 
 .ui.inverted.blue.button{
-  display: block;
+  width: 200px;
 }
 
 #botonera2{
+  display: block;
+  position: relative;
   float: right;
+}
+
+.derecha{
+  text-align: right;
+}
+
+.ui.center.aligned.container{
+  width: 50%
+}
+
+.sucesos{
+  margin-left: 10%;
 }
 
 </style>

@@ -32,7 +32,7 @@
               <img class="escudo-tabla" :src="partido.equipos[1].escudoURL"/>
             </div>
           </th>
-          <th>{{partido.fechaInicio}}</th>
+          <th>{{formatDate(partido.fechaInicio)}} | {{formatTime(partido.fechaInicio)}}</th>
           <th>{{partido.estado}}</th>
           <th>
             <button class="ui red basic button" @click="borrarPartido(index)">Borrar</button>
@@ -170,9 +170,9 @@ export default {
 
     guardarPartido: function(){
 
+      var fecha = this.addMinutes(this.fecha,this.calcularMinutos(this.hora.hora,this.hora.minutos));
+      
       if(this.modoAlta){
-        var fecha = this.addMinutes(this.fecha,this.calcularMinutos(this.hora.hora,this.hora.minutos));
-
         var nuevoPartido = {
           "equipos": [this.equipo1,this.equipo2],
           "golesEquipo1": 0,
@@ -188,7 +188,7 @@ export default {
         this.setPartido(nuevoPartido);
       }else{
           var partidoEdit = {
-            "id": this.partidos[this.index]._id,
+            "_id": this.partidos[this.index]._id,
             "equipos": [this.equipo1,this.equipo2],
             "golesEquipo1": 0,
             "golesEquipo2": 0,
@@ -229,6 +229,14 @@ export default {
 
     addMinutes: function(date, minutes) {
       return new Date(date.getTime() + minutes*60000);
+    },
+
+    formatDate: function(fecha){
+      return fecha.substring(0,10);
+    },
+
+    formatTime: function(fecha){
+      return fecha.substring(11,16);
     }
   },
 

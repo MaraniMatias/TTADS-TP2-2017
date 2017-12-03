@@ -68,7 +68,6 @@ export default {
   updatePartido: function ({ commit, state }, obj) {
     axios.put(baseURL + "/partidos/"+obj._id, obj)
       .then((response) => {
-        console.log("hola");
         commit('update_partido_store',response.data);
         return response.data;
       }, (err) => {
