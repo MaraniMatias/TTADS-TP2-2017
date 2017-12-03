@@ -10,10 +10,10 @@ var PartidoSchema = new Schema({
     required: true
   },
   golesEquipo1: {
-    type: [Number]
+    type: Number
   },
   golesEquipo2: {
-    type: [Number]
+    type: Number
   },
   //El estado contendrá valores para 'Programado','En curso','Entretiempo','Terminado'
   estado: {
@@ -24,6 +24,9 @@ var PartidoSchema = new Schema({
   },
   fechaInicio:{
     type: Date
+  },
+  msDescanso:{
+    type: Number
   },
   estadio:{
     type: String

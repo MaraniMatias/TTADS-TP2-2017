@@ -2,7 +2,10 @@
   <div class="app">
     <app-header></app-header>
     <div class="ui main container">
-      <router-view></router-view>
+      <keep-alive>
+
+        <router-view></router-view>
+      </keep-alive>
     </div>
   </div>
 </template>

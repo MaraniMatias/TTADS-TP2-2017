@@ -9,7 +9,7 @@
     <h1>Partidos finalizados</h1>
     <div class="card-container" v-for="partido in partidos" v-if="partido.estado==='Finalizado'">
       <div class="ui cards">
-        <card :partido="partido"></card>
+        <card :partidoId="partido"></card>
       </div>
     </div>
 
@@ -39,7 +39,7 @@ export default{
 
   computed:mapState(['partidos']),
 
-  mounted(){
+  created(){
     this.getPartidos();
   }
 }

@@ -6,7 +6,7 @@
         <p v-if="!started">
           El encuentro aún no ha comenzado
         </p>
-        <p v-if="started" class="ui big label">{{time}}</p>
+        <p v-if="started || paused" class="ui big label">{{time}}</p>
       </div>
     </div>
   </div>
@@ -18,7 +18,7 @@ import { timer } from 'vue-timers'
 
 export default{
 
-  props:['started','paused','resumed','estadoPartido','fechaInicioPartido'],
+  props:['started','paused','resumed','estadoPartido','fechaInicioPartido','msDescanso'],
 
   mixins: [VueTimers],
 
@@ -31,13 +31,19 @@ export default{
 
   watch:{
     started: function(){
+      if(!this.paused){
       this.comienzo(this.started);
+    }
     },
     resumed: function(){
-      this.$timers.start('updateTime');
+      if(this.resumed){
+          this.$timers.start('updateTime');
+      }
     },
     paused: function(){
       if(this.paused){
+        console.log(this.timeNuevo);
+        this.$emit('setMsDescanso',this.timeNuevo);
         this.$timers.stop('updateTime');
       }
     },
@@ -56,15 +62,20 @@ export default{
         timer: 1000,
         autostart: false
       });
-      this.$timers.start('updateTime');
+      if(this.estadoPartido==="Iniciado"){
+        this.$timers.start('updateTime');
+      }
     },
 
     updateTime: function(){
-      this.timeNuevo += 1000
-      this.msToHMS(this.timeNuevo);
+      if(this.estadoPartido !== "Descanso"){
+        this.timeNuevo += 1000
+        this.msToHMS(this.timeNuevo);
+      }
     },
 
     msToHMS: function( duration ) {
+      console.log(duration);
       var milliseconds = parseInt((duration%1000)/100)
               , seconds = parseInt((duration/1000)%60)
               , minutes = parseInt((duration/(1000*60))%60)
@@ -79,7 +90,7 @@ export default{
   },
 
   mounted(){
-    if(this.started){
+    if(this.estadoPartido==="Iniciado" && this.resumed===false){
       var md = new Date(this.fechaInicioPartido);
       var today = new Date();
       var utc = today.getTime() + (today.getTimezoneOffset() * 60000);
@@ -87,9 +98,13 @@ export default{
       this.timeNuevo = nd.getTime() - md.getTime();
       this.msToHMS(this.timeNuevo);
       this.crearTimer();
+    }else if (this.estadoPartido==="Descanso" && this.resumed===false) {
+      console.log('hola');
+      this.timeNuevo = this.msDescanso;
+      this.msToHMS(this.timeNuevo);
+      this.crearTimer();
     }
-
-  }
+  },
 }
 </script>
 

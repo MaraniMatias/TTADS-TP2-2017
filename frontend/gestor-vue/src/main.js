@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-//import VueTimers from 'vue-timers'
 import App from './App.vue'
 import VueRouter from 'vue-router'
 import home from './components/home.vue'
@@ -13,10 +12,8 @@ import store from './store';
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
-//Vue.use(VueTimers)
 
 const router = new VueRouter({
-  //mode: 'history', //navega sin recargar pag y sin #, requiere config. el backend
   routes: [
     {
       path: '*',

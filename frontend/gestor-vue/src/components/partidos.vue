@@ -171,7 +171,7 @@ export default {
     guardarPartido: function(){
 
       var fecha = this.addMinutes(this.fecha,this.calcularMinutos(this.hora.hora,this.hora.minutos));
-      
+
       if(this.modoAlta){
         var nuevoPartido = {
           "equipos": [this.equipo1,this.equipo2],
@@ -180,6 +180,7 @@ export default {
           "estado": 'Programado',
           "eventos": [],
           "fechaInicio": fecha,
+          "fechaDescanso": null,
           "estadio": 'Estadio Monumental',
           "categoria": 'Adultos',
           "arbitros": [],
@@ -195,6 +196,7 @@ export default {
             "estado": 'Programado',
             "eventos": [],
             "fechaInicio": fecha,
+            "fechaDescanso": null,
             "estadio": 'Estadio Monumental',
             "categoria": 'Adultos',
             "arbitros": [],
@@ -242,7 +244,7 @@ export default {
 
   computed: mapState(['equipos','partidos']),
 
-  mounted: function () {
+  created() {
       this.getEquipos();
       this.getPartidos();
   }

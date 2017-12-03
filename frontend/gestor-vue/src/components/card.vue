@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { mapGetters, mapActions, mapState } from 'vuex';
+
 export default{
 
   props:['partido'],
@@ -28,7 +30,8 @@ export default{
   data() {
     return {
       fecha: '',
-      hora: ''
+      hora: '',
+      //partido: null
     }
   },
 
@@ -43,6 +46,10 @@ export default{
       return fecha.substring(11,16);
     }
   },
+
+  created(){
+    //this.partido = this.$store.getters.findPartido(this.partidoId);
+  }
 
 }
 </script>
