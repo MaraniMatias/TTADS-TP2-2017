@@ -11,15 +11,12 @@
       <div class="column">
         <h2 style="text-align:center">Sucesos del partido</h2>
         <!--div para feed de fin-->
-        <div v-if="finalizado" class="ui feed">
+        <div v-if="finalizado" class="ui feed sucesos">
           <div class="event">
             <div class="label">
               <img src="https://images.vexels.com/media/users/3/131904/isolated/preview/314ac7a195e5759f2cfadde070a92cc7-volver-a-cargar-el-icono-del-reloj-temporizador-by-vexels.png">
             </div>
             <div class="content">
-              <div class="date">
-                Ahora
-              </div>
               <div class="summary">
                  Fin del partido
               </div>
@@ -36,9 +33,6 @@
               <img src="https://images.vexels.com/media/users/3/131904/isolated/preview/314ac7a195e5759f2cfadde070a92cc7-volver-a-cargar-el-icono-del-reloj-temporizador-by-vexels.png">
             </div>
             <div class="content">
-              <div class="date">
-                00:00:00
-              </div>
               <div class="summary">
                  Comienzo del partido
               </div>
@@ -56,10 +50,13 @@
 
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex';
+import VueTimers from 'vue-timers/mixin'
 import feed from './feed.vue';
 import clock from './clock.vue';
 
 export default{
+
+  mixins: [VueTimers],
 
   components:{
     'feed': feed,
@@ -80,16 +77,46 @@ export default{
     }
   },
 
+
   computed: mapState(['tiposEvento']),
 
   methods:{
     ...mapGetters(['findPartido']),
     ...mapActions(['getTiposEvento','updatePartido','getPartido','updatePartido','getPartidos']),
+
+    setReloj: function(e){
+      this.reloj = e
+    },
+
+    hola: function(){
+      this.getPartidos();
+      this.partido = this.$store.getters.findPartido(this.partidoId);
+      if(this.partido.estado==="Iniciado"){
+        this.iniciado=true;
+      }else if (this.partido.estado==="Descanso") {
+        this.reanudado = false;
+        this.iniciado=true;
+        this.pausa=true;
+        this.textoDescanso="Reanudar";
+      }else if (this.partido.estado==="Finalizado") {
+        this.finalizado = true;
+        this.$timers.stop('hola');
+      }
+
+      if(this.partido.estado==="Iniciado" && this.partido.msDescanso !== undefined){
+        this.reanudado = true;
+      }
+    }
   },
 
   created(){
-    this.getPartidos();
-    this.partido = this.$store.getters.findPartido(this.partidoId);
+    this.hola();
+    this.$timers.add({
+      name: 'hola',
+      timer: 5000,
+      autostart: false
+    });
+    this.$timers.start('hola');
   },
 
 }

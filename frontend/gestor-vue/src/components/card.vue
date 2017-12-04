@@ -15,6 +15,9 @@
         <div class="ui two buttons">
           <div v-if="partido.estado !=='Finalizado'" class="ui basic green button" @click="goPartidoInfo()">Ingresar</div>
           <div v-if="partido.estado ==='Finalizado'" class="ui red label">Partido finalizado</div>
+          <div v-if="partido.estado ==='Finalizado'" class="ui blue label">
+            {{partido.golesEquipo1}} - {{partido.golesEquipo2}}
+          </div>
         </div>
       </div>
     </div>
@@ -46,7 +49,7 @@ export default{
       return fecha.substring(11,16);
     }
   },
-  
+
 }
 </script>
 

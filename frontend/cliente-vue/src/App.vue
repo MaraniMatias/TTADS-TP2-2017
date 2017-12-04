@@ -2,9 +2,7 @@
   <div class="app">
     <app-header></app-header>
     <div class="ui main container">
-      <keep-alive>
         <router-view></router-view>
-      </keep-alive>
     </div>
   </div>
 </template>

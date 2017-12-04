@@ -19,7 +19,7 @@
       <div class="column">
         <h2 style="text-align:center">Sucesos del partido</h2>
         <!--div para feed de fin-->
-        <div v-if="finalizado" class="ui feed">
+        <div v-if="finalizado" class="ui feed sucesos">
           <div class="event">
             <div class="label">
               <img src="https://images.vexels.com/media/users/3/131904/isolated/preview/314ac7a195e5759f2cfadde070a92cc7-volver-a-cargar-el-icono-del-reloj-temporizador-by-vexels.png">
