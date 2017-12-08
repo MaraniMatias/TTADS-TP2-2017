@@ -12,7 +12,7 @@ router.get('/partidos/:id',function(req,res){
 
 //Recupera todos los partidos
 router.get('/partidos',function(req,res){
-  Partido.find([]).then(function(partidos){
+  Partido.find({}).then(function(partidos){
     res.status(200).send(partidos);
   })
 });

@@ -4,7 +4,7 @@ var Equipo = require('../../models/equipo');
 
 //Recupera todos los equipos
 router.get('/equipos',function(req,res){
-  Equipo.find([]).then(function(equipos){
+  Equipo.find({}).then(function(equipos){
     res.status(200).send(equipos);
   });
 });

@@ -65,7 +65,7 @@ export default {
         console.error(err);
       });
   },
-  updatePartido: function ({ commit, state }, obj) {  
+  updatePartido: function ({ commit, state }, obj) {
     axios.put(baseURL + "/partidos/"+obj._id, obj)
       .then((response) => {
         commit('update_partido_store',response.data);
