@@ -2,6 +2,14 @@ var express = require('express');
 var router = express.Router();
 Partido = require('../../models/partido');
 
+
+//Recupera un partido
+router.get('/partidos/:id',function(req,res){
+  Partido.findById({_id: req.params.id}).then(function(partido){
+    res.status(200).send(partido);
+  })
+});
+
 //Recupera todos los partidos
 router.get('/partidos',function(req,res){
   Partido.find([]).then(function(partidos){
@@ -19,7 +27,7 @@ router.post('/partidos',function(req,res,next){
 //Modifica un partido en la bd
 router.put('/partidos/:id',function(req,res){
   Partido.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(){
-    Parido.findOne({_id: req.params.id}).then(function(partido){
+    Partido.findOne({_id: req.params.id}).then(function(partido){
       res.status(200).send(partido);
     });
   });

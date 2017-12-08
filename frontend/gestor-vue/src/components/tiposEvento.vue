@@ -1,25 +1,21 @@
 <template>
   <div>
     <div id="title">
-      <h1>ABM EQUIPOS</h1>
+      <h1>ABM TIPO EVENTOS</h1>
     </div>
     <table class="ui celled table">
     <thead>
       <tr>
-        <th>Nombre</th>
-        <th>Escudo</th>
+        <th>Evento</th>
         <th>Acción</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(equipo,index) in equipos">
-        <td>{{equipo.nombre}}</td>
-        <td class="fila-escudo">
-          <img class="escudo" :src='equipo.escudoURL'/>
-        </td>
+      <tr v-for="(tipoEvento,index) in tiposEvento">
+        <td>{{tipoEvento.nombre}}</td>
         <td>
-          <button class="ui red basic button" @click="borrarEquipo(index)">Borrar</button>
-          <button class="ui blue basic button"@click="editarEquipo(index)">Editar</button>
+          <button class="ui red basic button" @click="borrarTipoEvento(index)">Borrar</button>
+          <button class="ui blue basic button"@click="editarTipoEvento(index)">Editar</button>
         </td>
       </tr>
     </tbody>
@@ -27,7 +23,7 @@
       <tr>
         <th colspan="3">
         <div class="ui left floated">
-          <button class="ui green basic button" @click="agregarEquipo">Agregar</button>
+          <button class="ui green basic button" @click="agregarTipoEvento">Agregar</button>
         </div>
         <!--<div class="ui right floated pagination menu">
           <a class="icon item">
@@ -46,17 +42,13 @@
   </tfoot>
   </table>
   <div class="form-alta" v-if="add">
-    <h1 class="ui title"> Agregar equipo</h1>
+    <h1 class="ui title"> Agregar Tipo Evento</h1>
     <form class="ui form">
       <div class="field">
         <label>Nombre</label>
         <input placeholder="Nombre" type="text" v-model="nombre" required>
       </div>
-      <div class="field">
-        <label>URL Escudo</label>
-        <input placeholder="URL" type="text" v-model="escudoURL" required>
-      </div>
-      <button class="ui button" type="submit" @click="guardarEquipo">Guardar</button>
+      <button class="ui button" type="submit" @click="guardarTipoEvento">Guardar</button>
     </form>
   </div>
 </div>
@@ -72,55 +64,51 @@ data(){
     modoAlta: true,
     index: 0,
     nombre: '',
-    escudoURL: '',
     add: false
   }
 },
 
 methods: {
-  ...mapActions(['setEquipo','getEquipos','deleteEquipo','updateEquipo']),
+  ...mapActions(['setTipoEvento','getTiposEvento','deleteTipoEvento','updateTipoEvento']),
 
-  agregarEquipo: function(){
+  agregarTipoEvento: function(){
     this.add = !this.add
   },
 
-  guardarEquipo: function(){
+  guardarTipoEvento: function(){
     if(this.modoAlta){
-      this.setEquipo({
+      this.setTipoEvento({
         nombre: this.nombre,
-        escudoURL: this.escudoURL
        })
     }else{
-      this.updateEquipo({
-        id: this.equipos[this.index]._id,
+      this.updateTipoEvento({
+        id: this.tiposEvento[this.index]._id,
         nombre: this.nombre,
-        escudoURL: this.escudoURL
       });
       this.modoAlta = true;
     };
     this.add = !this.add;
   },
 
-  borrarEquipo: function(index){
-    this.deleteEquipo(this.equipos[index])
+  borrarTipoEvento: function(index){
+    this.deleteTipoEvento(this.tiposEvento[index])
   },
 
-  editarEquipo: function(index){
+  editarTipoEvento: function(index){
     if(!this.add){
-      this.agregarEquipo();
+      this.agregarTipoEvento();
     }
     this.modoAlta = false;
-    this.nombre = this.equipos[index].nombre;
-    this.escudoURL = this.equipos[index].escudoURL;
+    this.nombre = this.tiposEvento[index].nombre;
     this.index = index;
   }
 
 },
 
-computed: mapState(['equipos']),
+computed: mapState(['tiposEvento']),
 
 mounted: function () {
-    this.getEquipos();
+    this.getTiposEvento();
   }
 }
 
