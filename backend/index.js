@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var cors = require('cors');
 
 var app = express();
-var port = process.env.port || 8000;
+var port = process.env.port || 3000;
 
 //Creo la conexion con MongoDB. Si no existe, la crea.
 
