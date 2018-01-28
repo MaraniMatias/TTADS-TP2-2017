@@ -31,6 +31,8 @@ app.use(function(req, res, next) {
 });
 
 //Inicializo las rutas
+app.use('/api',require('./routes/api/apiMiembrosCuerpoTecnico'));
+app.use('/api',require('./routes/api/apiJugadores'));
 app.use('/api',require('./routes/api/apiPartidos'));
 app.use('/api',require('./routes/api/apiEquipos'));
 app.use('/api',require('./routes/api/apiTiposEvento'));
@@ -45,12 +47,10 @@ app.use(function(err,req,res,next){
 //en el puerto 3000
 
 mongoose.connect('mongodb://localhost/handballdb', { useMongoClient: true }, function(err, res) {
-
   if (err) {
     return console.error("Error al conectar a la base de datos: " + err);
   } else {
     console.log("Conexón a la base de datos establecida correctamente.");
-
     app.listen(port, function(){
       console.log('Escuchando en el puerto: ' + port);
     });

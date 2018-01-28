@@ -5,23 +5,29 @@ var Equipo = require('./equipo');
 
 //Creo el modelo y schema del partidos
 var PartidoSchema = new Schema({
-  equipos: {
+  /*equipos: {
     type: Array,
     required: true
-  },
-  golesEquipo1: {
+  },*/
+  equipos: [{
+    type : Schema.ObjectId, ref: 'equipo'
+  }],
+  /*golesEquipo1: {
     type: Number
   },
   golesEquipo2: {
     type: Number
-  },
+  },*/
   //El estado contendrá valores para 'Programado','En curso','Entretiempo','Terminado'
   estado: {
     type: String
   },
-  eventos:{
+  /*eventos:{
     type: Array
-  },
+  },*/
+  eventos: [{
+    type : Schema.ObjectId, ref: 'jugador'
+  }],
   fechaInicio:{
     type: Date
   },
@@ -40,6 +46,9 @@ var PartidoSchema = new Schema({
   destacado: {
     type: Boolean,
     default: false
+  },
+  marcador: {
+    type : Schema.ObjectId, ref: 'marcador'
   }
 });
 

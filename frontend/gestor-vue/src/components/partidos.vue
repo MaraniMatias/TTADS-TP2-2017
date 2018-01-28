@@ -234,6 +234,7 @@ export default {
     },
 
     formatDate: function(fecha){
+      console.log(fecha);
       return fecha.substring(0,10);
     },
 

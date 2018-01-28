@@ -4,9 +4,33 @@ var Equipo = require('../../models/equipo');
 
 //Recupera todos los equipos
 router.get('/equipos',function(req,res){
-  Equipo.find({}).then(function(equipos){
-    res.status(200).send(equipos);
-  });
+  Equipo.find({})
+        .populate({path:'jugadores',match: { _id: { $ne: null }}})
+        .populate({path:'cuerpoTecnico',match: { _id: { $ne: null }}})
+        .exec(function (err, result) {
+          console.log(result);
+            if (err){
+              return res.status(400).send({msg: 'Ha ocurrido un error al popular', err: err})
+            }
+          })
+        .then(function(equipos){
+          console.log(equipos);
+          res.status(200).send(equipos);
+        });
+});
+
+router.get('/equipos/:id',function(req,res){
+  Equipo.findById({_id: req.params.id})
+        .populate({path:'jugadores',match: { _id: { $ne: null }}})
+        .populate({path:'cuerpoTecnico',match: { _id: { $ne: null }}})
+        .exec(function (err, jugadores) {
+            if (err)
+            console.log('ERROR AL POPULAR');
+          })
+        .then(function(equipo){
+          console.log(equipo);
+          res.status(200).send(equipo);
+        });
 });
 
 //Agrega un equipo a la bd

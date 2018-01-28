@@ -42,7 +42,6 @@ export default{
     },
     paused: function(){
       if(this.paused){
-        console.log(this.timeNuevo);
         this.$emit('setMsDescanso',this.timeNuevo);
         this.$timers.stop('updateTime');
       }
@@ -104,7 +103,6 @@ export default{
       this.msToHMS(this.timeNuevo);
       this.crearTimer();
     }else if (this.estadoPartido==="Descanso" && this.resumed===false) {
-      console.log('hola');
       this.timeNuevo = this.msDescanso;
       this.msToHMS(this.timeNuevo);
       this.crearTimer();
