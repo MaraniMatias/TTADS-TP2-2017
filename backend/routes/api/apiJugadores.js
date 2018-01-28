@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-Jugador = require('../../models/jugador');
+var Jugador = require('../../models/jugador');
 
 //Recupera todos los jugadores
 router.get('/jugadores',function(req,res){

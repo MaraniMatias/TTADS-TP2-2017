@@ -10,11 +10,9 @@ var MiembroCuerpoTecnicoSchema = new Schema({
     type: String,
     required: [true, 'El apellido del miembro tecnico es requerido']
   },
-  cargo:{
+  cargo: {
     type: String
   }
 });
 
-var MiembroCuerpoTecnico = mongoose.model('miembroCuerpoTecnico',MiembroCuerpoTecnicoSchema);
-
-module.exports = MiembroCuerpoTecnico;
+module.exports = mongoose.model('miembroCuerpoTecnico', MiembroCuerpoTecnicoSchema);
