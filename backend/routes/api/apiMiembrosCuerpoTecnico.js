@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-MiembroCuerpoTecnico = require('../../models/miembroCuerpoTecnico');
+var MiembroCuerpoTecnico = require('../../models/miembroCuerpoTecnico');
 
 //Recupera todos los miembros del cuerpo tecnico
 router.get('/miembrosCuerpoTecnico',function(req,res){

@@ -2,21 +2,19 @@ var express = require('express');
 var router = express.Router();
 var Equipo = require('../../models/equipo');
 
-//Recupera todos los equipos
-router.get('/equipos',function(req,res){
+// Recupera todos los equipos
+router.get('/equipos', function (req, res) {
   Equipo.find({})
-        .populate({path:'jugadores',match: { _id: { $ne: null }}})
-        .populate({path:'cuerpoTecnico',match: { _id: { $ne: null }}})
-        .exec(function (err, result) {
-          console.log(result);
-            if (err){
-              return res.status(400).send({msg: 'Ha ocurrido un error al popular', err: err})
-            }
-          })
-        .then(function(equipos){
-          console.log(equipos);
-          res.status(200).send(equipos);
-        });
+    .populate('jugadores')
+    .populate('cuerpoTecnico')
+    .exec(function (err, equipos) {
+      console.log(equipos);
+      if (err) {
+        return res.status(500).send({ msg: 'Ha ocurrido un error al popular', err: err });
+      } else {
+        return res.status(200).send(equipos);
+      }
+    });
 });
 
 router.get('/equipos/:id',function(req,res){

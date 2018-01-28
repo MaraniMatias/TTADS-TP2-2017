@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var Jugador = require('../models/jugador');
 
 var EquipoSchema = new Schema({
   nombre: {
@@ -12,17 +11,18 @@ var EquipoSchema = new Schema({
     type: String,
     default: 'http://www.fgf-gff.org/pub/skin/img/equipos/default.png'
   },
-  jugadores:[{
-    type : Schema.Types.ObjectId, ref: 'jugador'
+  jugadores: [{
+    type: Schema.Types.ObjectId,
+    ref: 'jugador'
   }],
   goles: {
-    type: Number
+    type: Number,
+    default: 0
   },
-  cuerpoTecnico:[{
-    type : Schema.ObjectId, ref: 'miembroCuerpoTecnico'
+  cuerpoTecnico: [{
+    type: Schema.Types.ObjectId,
+    ref: 'miembroCuerpoTecnico'
   }]
 });
 
-var Equipo = mongoose.model('equipo',EquipoSchema);
-
-module.exports = Equipo;
+module.exports = mongoose.model('equipos', EquipoSchema);

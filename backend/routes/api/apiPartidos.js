@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-Partido = require('../../models/partido');
+var Partido = require('../../models/partido');
 
 
 //Recupera un partido
