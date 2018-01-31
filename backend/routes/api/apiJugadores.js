@@ -4,7 +4,22 @@ var Jugador = require('../../models/jugador');
 
 //Recupera todos los jugadores
 router.get('/jugadores',function(req,res){
-  Jugador.find({}).then(function(jugadores){
+  if(req.query.player != undefined){
+    Jugador.find({$or:[
+      {nombre:{$regex: req.query.player }},
+      {apellido:{$regex: req.query.player }}
+    ]}).then(function(jugadores){
+      res.status(200).send(jugadores)
+    });
+  }else{
+    Jugador.find({}).then(function(jugadores){
+      res.status(200).send(jugadores)
+    });
+  }
+});
+
+router.get('/jugadores/:id',function(req,res){
+  Jugador.findById({_id: req.params.id}).then(function(jugadores){
     res.status(200).send(jugadores)
   });
 });

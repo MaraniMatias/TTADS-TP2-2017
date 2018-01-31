@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var Evento = require('./tipoEvento');
-var Equipo = require('./equipo');
+require('../models/marcador');
 
 //Creo el modelo y schema del partidos
 var PartidoSchema = new Schema({
@@ -10,7 +9,7 @@ var PartidoSchema = new Schema({
     required: true
   },*/
   equipos: [{
-    type : Schema.ObjectId, ref: 'equipo'
+    type : Schema.ObjectId, ref: 'equipos'
   }],
   /*golesEquipo1: {
     type: Number
@@ -48,7 +47,8 @@ var PartidoSchema = new Schema({
     default: false
   },
   marcador: {
-    type : Schema.ObjectId, ref: 'marcador'
+    type : Schema.Types.ObjectId,
+    ref: 'marcador'
   }
 });
 

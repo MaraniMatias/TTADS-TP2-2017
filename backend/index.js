@@ -36,6 +36,7 @@ app.use('/api',require('./routes/api/apiJugadores'));
 app.use('/api',require('./routes/api/apiPartidos'));
 app.use('/api',require('./routes/api/apiEquipos'));
 app.use('/api',require('./routes/api/apiTiposEvento'));
+app.use('/api',require('./routes/api/apiTorneos'));
 
 //Middleware
 app.use(function(err,req,res,next){

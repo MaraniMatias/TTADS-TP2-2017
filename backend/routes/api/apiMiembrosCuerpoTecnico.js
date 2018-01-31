@@ -9,6 +9,12 @@ router.get('/miembrosCuerpoTecnico',function(req,res){
   });
 });
 
+router.get('/miembrosCuerpoTecnico/:id',function(req,res){
+  MiembroCuerpoTecnico.findById({_id: req.params.id}).then(function(miembrosCuerpoTecnico){
+    res.status(200).send(miembrosCuerpoTecnico)
+  });
+});
+
 //Agrega un miembro de cuerpo tecnico a la bd
 router.post('/miembrosCuerpoTecnico',function(req,res,next){
   MiembroCuerpoTecnico.create(req.body).then(function(miembrosCuerpoTecnico){

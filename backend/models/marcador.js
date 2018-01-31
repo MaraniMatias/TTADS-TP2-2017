@@ -2,16 +2,20 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var MarcadorSchema = new Schema({
-  equipoA:{
-    id: Schema.ObjectId : ref: 'equipo',
-    goles: Number
+  equipos:[{
+    type: Schema.ObjectId,
+    ref: 'equipo'
+  }],
+  golesEquipoA:{
+    type: Number,
+    default: 0
   },
-  equipoB: {
-    id: Schema.ObjectId : ref: 'equipo',
-    goles: Number
+  golesEquipoB:{
+    type: Number,
+    default: 0
   }
 });
 
-var Marcador = mongoose.model('marcador',MarcadorSchema);
+var Marcador = mongoose.model('marcador', MarcadorSchema);
 
 module.exports = Marcador;
