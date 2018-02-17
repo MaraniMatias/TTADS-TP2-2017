@@ -114,16 +114,42 @@ mongoose.connect('mongodb://localhost/handballdb', { useMongoClient: true }, fun
                   }
                 });
 
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth()+1; //January is 0!
+                var yyyy = today.getFullYear();
+                if(dd<10) {
+                    dd = '0'+dd
+                }
+                if(mm<10) {
+                    mm = '0'+mm
+                }
+                today = mm + '/' + dd + '/' + yyyy;
+
                 var partido1 = new Partido({
                   equipos: equipos,
                   estado: "Programado",
-                  marcador: marcador
+                  marcador: marcador,
+                  eventos: [],
+                  fechaInicio: today,
+                  msDescanso: null,
+                  estadio:"Malvinas Argentinas",
+                  categoria: "Adultos",
+                  arbitros: [],
+                  destacado: true
                 });
 
                 var partido2 = new Partido({
                   equipos: equipos,
                   estado: "Programado",
-                  marcador: marcador
+                  marcador: marcador,
+                  eventos: [],
+                  fechaInicio:  today,
+                  msDescanso: null,
+                  estadio:"Malvinas Argentinas",
+                  categoria: "Adultos",
+                  arbitros:[],
+                  destacado: true
                 });
 
 
@@ -162,10 +188,9 @@ mongoose.connect('mongodb://localhost/handballdb', { useMongoClient: true }, fun
                       nombre: "Torneo " + getRandomInt(10),
                       equipos: equipos,
                       partidos: partidos,
-                      fechaInicio: undefined,
-                      fechaFin: undefined
+                      fechaInicio: today,
+                      fechaFin: today
                     });
-
 
                     torneo.save(function(err,torneo_db){
                       if (err || !torneo_db) { return new Error("Error"); }

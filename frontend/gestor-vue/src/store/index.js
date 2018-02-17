@@ -12,6 +12,9 @@ export default {
     },
     tiposEvento: {
       results: []
+    },
+    torneos: {
+      results: []
     }
   },
   actions,

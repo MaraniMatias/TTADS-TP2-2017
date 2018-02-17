@@ -121,4 +121,42 @@ export default {
       console.error(err);
     });
   },
+
+  //Torneos
+  getTorneos: function({ commit, state }){
+    axios.get(baseURL+"/torneos")
+        .then((response) => {
+          commit('set_torneos_store', response.data);
+        }, (err) => {
+          console.error(err);
+        });
+  }
+  /*
+  setTipoEvento: function ({ commit, state }, obj) {
+    axios.post(baseURL + "/tiposEvento/", obj)
+      .then((response) => {
+        commit('add_tipo_evento_to_store',response.data);
+        return response.data;
+      }, (err) => {
+        console.error(err);
+      });
+  },
+  updateTipoEvento: function ({ commit, state }, obj) {
+    axios.put(baseURL + "/tiposEvento/"+obj._id, obj)
+      .then((response) => {
+        commit('update_tipo_evento_store',response.data);
+        return response.data;
+      }, (err) => {
+        console.error(err);
+      });
+  },
+  deleteTipoEvento: function({ commit, state }, obj){
+    axios.delete(baseURL+ "/tiposEvento/"+obj._id)
+    .then((response) => {
+      commit('delete_tipo_evento_from_store',response.data);
+      return response.data;
+    }, (err) => {
+      console.error(err);
+    });
+  },*/
 };

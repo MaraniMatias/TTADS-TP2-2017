@@ -94,4 +94,9 @@ export default {
     }
   },
 
+  //torneos
+  set_torneos_store: (state, torneos) => {
+    state.torneos = torneos;
+  },
+
 };
