@@ -1,8 +1,11 @@
-var express = require('express');
-var router = express.Router();
-var Jugador = require('../../models/jugador');
+const express = require('express');
+const router = express.Router();
+const _ = require('loadsh');
+const Jugador = require('../../models/jugador');
 
-//Recupera todos los jugadores
+// Recupera todos los jugadores
+// Buscar jugadores por nomnbre o apellido
+// query parameter skip limit player
 router.get('/jugadores',function(req,res){
   if(req.query.player != undefined){
     Jugador.find({$or:[
