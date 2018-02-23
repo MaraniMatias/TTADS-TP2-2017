@@ -11,12 +11,12 @@ function sendRes(res, cod, data, message, error) {
 }
 
 function queryPage(req, res, next) {
-  // en caso de no estar definido se fuersa a 10
-  const skip = _.get(req, 'query.skip', 2) || 2;
+  // en caso de no estar definido se fuersa a 0
+  const skip = _.get(req, 'query.skip', 0) || 0;
   // en caso de no estar definido se fuersa a 10
   const limit = _.get(req, 'query.limit', 2) || 2;
-  req.query.skip = skip;
-  req.query.limit = limit;
+  req.query.skip = parseInt(skip,10);
+  req.query.limit = parseInt(limit,10);
   // Continuar con la consulta ala API
   next();
 }
@@ -24,6 +24,7 @@ function queryPage(req, res, next) {
 // Recupera todos los jugadores
 // Buscar jugadores por nomnbre o apellido
 // query parameter skip limit player
+// http://localhost:3000/api/jugadores?jugador=a&skip=1&limit=1
 router.get('/jugadores',
   queryPage, // interceptor para completar el paginado
   function (req, res) {
@@ -33,8 +34,8 @@ router.get('/jugadores',
     if (player) {
       Jugador.find({
           $or: [
-            { nombre: { $regex: player } },
-            { apellido: { $regex: player } }
+            { nombre: { $regex: player, $options: 'i' } },
+            { apellido: { $regex: player, $options: 'i' } }
           ]
         })
         .sort('apellido')
