@@ -58,10 +58,23 @@ router.get('/jugadores',
     }
   });
 
-router.get('/jugadores/:id',function(req,res){
-  Jugador.findById({_id: req.params.id}).then(function(jugadores){
-    res.status(200).send(jugadores)
-  });
+router.get('/jugadores/:id', function (req, res) {
+  // Validar parámetro de la consulta
+  const id = _.get(req, 'params.id', false) || false;
+  if (id) {
+    Jugador.findById(id)
+      .then(function (jugadores) {
+        // res, status, data, messager, error
+        return sendRes(res, 200, jugadores, "Success", null);
+      })
+      .catch(function (err) {
+        // res, status, data, messager, error
+        return sendRes(res, 500, null, "Ha ocurrido un error", err);
+      });
+  } else {
+    // res, status, data, messager, error
+    return sendRes(res, 402, null, "Parametro 'jugador' es requerido", null);
+  }
 });
 
 //Agrega un jugador a la bd
