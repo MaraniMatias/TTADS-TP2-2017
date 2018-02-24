@@ -20,18 +20,18 @@ mongoose.connect('mongodb://localhost/handballdb', { useMongoClient: true }, fun
     console.log("Conexón a la base de datos establecida correctamente.");
 
     var jugadorA = new Jugador({
-      nombre: "jugador " + getRandomInt(10),
-      apellido: "A " + getRandomInt(10),
+      nombre: "jugador " + getRandomInt(100),
+      apellido: "A " + getRandomInt(100),
     });
 
     var jugadorB = new Jugador({
-      nombre: "jugador " + getRandomInt(10),
-      apellido: "B " + getRandomInt(10),
+      nombre: "jugador " + getRandomInt(100),
+      apellido: "B " + getRandomInt(100),
     });
 
     var tecnico = new MiembroCuerpoTecnico({
-      nombre: "tecnico " + getRandomInt(10),
-      apellido: "A " + getRandomInt(10),
+      nombre: "tecnico " + getRandomInt(100),
+      apellido: "A " + getRandomInt(100),
     });
 
     jugadorA.save(function (err, jugadorA_db) {
