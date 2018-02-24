@@ -1,27 +1,19 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var Evento = require('./tipoEvento');
-var Equipo = require('./equipo');
+require('../models/marcador');
 
 //Creo el modelo y schema del partidos
 var PartidoSchema = new Schema({
-  equipos: {
-    type: Array,
-    required: true
-  },
-  golesEquipo1: {
-    type: Number
-  },
-  golesEquipo2: {
-    type: Number
-  },
+  equipos: [{
+    type : Schema.ObjectId, ref: 'equipos'
+  }],
   //El estado contendrá valores para 'Programado','En curso','Entretiempo','Terminado'
   estado: {
     type: String
   },
-  eventos:{
-    type: Array
-  },
+  eventos: [{
+    type : Schema.ObjectId, ref: 'jugador'
+  }],
   fechaInicio:{
     type: Date
   },
@@ -40,6 +32,10 @@ var PartidoSchema = new Schema({
   destacado: {
     type: Boolean,
     default: false
+  },
+  marcador: {
+    type : Schema.Types.ObjectId,
+    ref: 'marcador'
   }
 });
 

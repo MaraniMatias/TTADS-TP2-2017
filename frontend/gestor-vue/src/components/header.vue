@@ -4,6 +4,7 @@
       <img src="../assets/handball-logo.png">
     </router-link>
     <div class="right menu">
+      <router-link class="item" to="/torneos">ABM Torneos</router-link>
       <router-link class="item" to="/partidos">ABM Partidos</router-link>
       <router-link class="item" to="/equipos">ABM Equipos</router-link>
       <router-link class="item" to="/tiposEvento">ABM Tipo Evento</router-link>

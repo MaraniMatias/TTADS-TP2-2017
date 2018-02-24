@@ -7,6 +7,7 @@ import equipos from './components/equipos.vue'
 import partidos from './components/partidos.vue'
 import partidoInfo from './components/partidoInfo.vue'
 import tiposEvento from './components/tiposEvento.vue'
+import torneos from './components/torneos.vue'
 
 import store from './store';
 
@@ -43,6 +44,11 @@ const router = new VueRouter({
       name: "partidoInfo",
       path: '/partidoInfo',
       component: partidoInfo
+    },
+    {
+      name: "torneos",
+      path: '/torneos',
+      component: torneos
     },
   ]
 });

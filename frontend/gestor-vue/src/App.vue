@@ -1,10 +1,14 @@
 <template>
-  <div class="app">
-    <app-header></app-header>
-    <div class="ui main container">
-        <router-view></router-view>
+  <div>
+    <div class="app" style="height: inherit">
+      <app-header></app-header>
+      <div class="ui main container">
+          <router-view></router-view>
+      </div>
     </div>
+    <app-footer></app-footer>
   </div>
+
 </template>
 
 <script>
@@ -26,6 +30,9 @@ export default {
 </script>
 
 <style lang="scss">
+body{
+  height: 100%;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -33,6 +40,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+
 }
 
 h1, h2 {
@@ -52,4 +60,6 @@ li {
 a {
   color: #42b983;
 }
+
+
 </style>

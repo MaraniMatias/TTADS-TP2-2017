@@ -66,58 +66,61 @@
     <!--Formulario -->
     <form v-if="add" class="ui form form-alta">
       <h1 class="ui title"> Agregar partido</h1>
-      <div class="field">
-        <label>Equipo 1</label>
-        <div class="ui compact menu">
-          <div class="ui simple dropdown item">
-            <div class="el">
-              <div v-if="equipo1 === null">
-                Elegir equipo
+      <div class="fields">
+        <div class="field">
+          <label>Equipo 1</label>
+          <div class="ui compact menu">
+            <div class="ui simple dropdown item">
+              <div class="el">
+                <div v-if="equipo1 === null">
+                  Elegir equipo
+                </div>
+                <div v-else-if="equipo1 !== null">
+                  {{equipo1.nombre}}
+                </div>
               </div>
-              <div v-else-if="equipo1 !== null">
-                {{equipo1.nombre}}
-              </div>
-            </div>
-            <i class="dropdown icon"></i>
-            <div class="menu">
-              <div class="item" v-for="(equipo,index) in equipos" @click="equipo1 = equipo">
-                <img :src="equipo.escudoURL" />
-                {{equipo.nombre}}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="field">
-        <label>Equipo 2</label>
-        <div class="ui compact menu">
-          <div class="ui simple dropdown item">
-            <div class="el">
-              <div v-if="equipo2 === null">
-                Elegir equipo
-              </div>
-              <div v-else-if="equipo2 !== null">
-                {{equipo2.nombre}}
-              </div>
-            </div>
-            <i class="dropdown icon"></i>
-            <div class="menu">
-              <div class="item" v-for="(equipo,index) in equipos" @click="equipo2 = equipo">
-                <img :src="equipo.escudoURL" />
-                {{equipo.nombre}}
+              <i class="dropdown icon"></i>
+              <div class="menu">
+                <div class="item" v-for="(equipo,index) in equipos" @click="equipo1 = equipo">
+                  <img :src="equipo.escudoURL" />
+                  {{equipo.nombre}}
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <div class="field">
+          <label>Equipo 2</label>
+          <div class="ui compact menu">
+            <div class="ui simple dropdown item">
+              <div class="el">
+                <div v-if="equipo2 === null">
+                  Elegir equipo
+                </div>
+                <div v-else-if="equipo2 !== null">
+                  {{equipo2.nombre}}
+                </div>
+              </div>
+              <i class="dropdown icon"></i>
+              <div class="menu">
+                <div class="item" v-for="(equipo,index) in equipos" @click="equipo2 = equipo">
+                  <img :src="equipo.escudoURL" />
+                  {{equipo.nombre}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Fecha del partido</label>
+          <calendar :value="value" :disabled-days-of-week="disabled" :format="format" :clear-button="clear" :placeholder="placeholder" v-on:fechaintro="setFecha($event)"></calendar>
+        </div>
+        <div class="field">
+          <label>Hora del partido</label>
+          <time-picker v-on:inputVal  ="setHora($event)"></time-picker>
+        </div>
       </div>
-      <div class="field">
-        <label>Fecha del partido</label>
-        <calendar :value="value" :disabled-days-of-week="disabled" :format="format" :clear-button="clear" :placeholder="placeholder" v-on:fechaintro="setFecha($event)"></calendar>
-      </div>
-      <div class="field">
-        <label>Hora del partido</label>
-        <time-picker v-on:inputVal  ="setHora($event)"></time-picker>
-      </div>
+
       <button class="ui button" type="submit" @click="guardarPartido">Guardar</button>
     </form>
 
@@ -234,6 +237,7 @@ export default {
     },
 
     formatDate: function(fecha){
+      console.log(fecha);
       return fecha.substring(0,10);
     },
 
@@ -273,7 +277,7 @@ export default {
   border: 1px solid rgba(34,36,38,.1);
   padding: .92857143em .78571429em;
   background-color: #F9FAFB;
-  width: 40%
+  width: 74%;
 }
 
 .escudo-tabla-container{

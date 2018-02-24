@@ -2,6 +2,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var cors = require('cors');
+const os = require('os');
+const ifaces = os.networkInterfaces();
 
 var app = express();
 var port = process.env.port || 3000;
@@ -31,9 +33,12 @@ app.use(function(req, res, next) {
 });
 
 //Inicializo las rutas
+app.use('/api',require('./routes/api/apiMiembrosCuerpoTecnico'));
+app.use('/api',require('./routes/api/apiJugadores'));
 app.use('/api',require('./routes/api/apiPartidos'));
 app.use('/api',require('./routes/api/apiEquipos'));
 app.use('/api',require('./routes/api/apiTiposEvento'));
+app.use('/api',require('./routes/api/apiTorneos'));
 
 //Middleware
 app.use(function(err,req,res,next){
@@ -44,14 +49,19 @@ app.use(function(err,req,res,next){
 //para proveer el puerto donde escuchara, si no lo tiene especificado escuchara
 //en el puerto 3000
 
-mongoose.connect('mongodb://localhost/handballdb', { useMongoClient: true }, function(err, res) {
+function getLocalIP() {
+  for (key in ifaces) {
+    console.log(`IP ${key}: ${ifaces[key][0].address}`);
+  }
+}
 
+mongoose.connect('mongodb://localhost/handballdb', { useMongoClient: true }, function(err, res) {
   if (err) {
     return console.error("Error al conectar a la base de datos: " + err);
   } else {
     console.log("Conexón a la base de datos establecida correctamente.");
-
     app.listen(port, function(){
+      getLocalIP();
       console.log('Escuchando en el puerto: ' + port);
     });
   }

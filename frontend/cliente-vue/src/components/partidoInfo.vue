@@ -88,7 +88,7 @@ export default{
       this.reloj = e
     },
 
-    hola: function(){
+    st: function(){
       this.getPartidos();
       this.partido = this.$store.getters.findPartido(this.partidoId);
       if(this.partido.estado==="Iniciado"){
@@ -100,7 +100,7 @@ export default{
         this.textoDescanso="Reanudar";
       }else if (this.partido.estado==="Finalizado") {
         this.finalizado = true;
-        this.$timers.stop('hola');
+        this.$timers.stop('st');
       }
 
       if(this.partido.estado==="Iniciado" && this.partido.msDescanso !== undefined){
@@ -110,13 +110,13 @@ export default{
   },
 
   created(){
-    this.hola();
+    this.st()
     this.$timers.add({
-      name: 'hola',
+      name: 'st',
       timer: 5000,
       autostart: false
     });
-    this.$timers.start('hola');
+    this.$timers.start('st');
   },
 
 }

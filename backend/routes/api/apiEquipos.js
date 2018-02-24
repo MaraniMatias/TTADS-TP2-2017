@@ -2,10 +2,46 @@ var express = require('express');
 var router = express.Router();
 var Equipo = require('../../models/equipo');
 
-//Recupera todos los equipos
-router.get('/equipos',function(req,res){
-  Equipo.find({}).then(function(equipos){
-    res.status(200).send(equipos);
+// Recupera todos los equipos
+router.get('/equipos', function (req, res) {
+  if(req.query.nombre != undefined){
+    Equipo.find({nombre: {$regex: req.query.nombre }})
+      .populate('jugadores')
+      .populate('cuerpoTecnico')
+      .exec(function (err, equipos) {
+        if (err || !equipos) {
+          return res.status(500).send({ msg: 'Ha ocurrido un error al popular', err: err });
+        } else {
+          return res.status(200).send(equipos);
+        }
+      });
+  }else{
+    Equipo.find({})
+      .populate('jugadores')
+      .populate('cuerpoTecnico')
+      .exec(function (err, equipos) {
+        if (err || !equipos) {
+          return res.status(500).send({ msg: 'Ha ocurrido un error al popular', err: err });
+        } else {
+          return res.status(200).send(equipos);
+        }
+      });
+  }
+
+});
+
+
+
+router.get('/equipos/:id',function(req,res){
+  Equipo.findById({_id: req.params.id})
+  .populate('jugadores')
+  .populate('cuerpoTecnico')
+  .exec(function (err, equipos) {
+    if (err || !equipos) {
+      return res.status(500).send({ msg: 'Ha ocurrido un error al popular', err: err });
+    } else {
+      return res.status(200).send(equipos);
+    }
   });
 });
 
@@ -22,8 +58,15 @@ router.post('/equipos',function(req,res,next){
 //Modifica un equipo en la bd
 router.put('/equipos/:id',function(req,res){
   Equipo.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(){
-    Equipo.findOne({_id: req.params.id}).then(function(equipo){
-      res.status(200).send(equipo);
+    Equipo.findOne({_id: req.params.id})
+    .populate('jugadores')
+    .populate('cuerpoTecnico')
+    .exec(function (err, equipos) {
+      if (err || !equipos) {
+        return res.status(500).send({ msg: 'Ha ocurrido un error al popular', err: err });
+      } else {
+        return res.status(200).send(equipos);
+      }
     });
   });
 });
