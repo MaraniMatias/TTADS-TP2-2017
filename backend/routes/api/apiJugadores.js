@@ -10,6 +10,7 @@ function sendRes(res, cod, data, message, error) {
   return res.json({ data, message, error });
 }
 
+// Normalizar parametros para el paginado
 function queryPage(req, res, next) {
   // en caso de no estar definido se fuersa a 0
   const skip = _.get(req, 'query.skip', 0) || 0;
@@ -38,6 +39,7 @@ router.get('/jugadores',
             { apellido: { $regex: player, $options: 'i' } }
           ]
         })
+        .select('nombre apellido')
         .sort('apellido')
         .skip(req.query.skip)
         .limit(req.query.limit)
