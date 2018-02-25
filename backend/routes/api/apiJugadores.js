@@ -15,9 +15,10 @@ function queryPage(req, res, next) {
   // en caso de no estar definido se fuersa a 0
   const skip = _.get(req, 'query.skip', 0) || 0;
   // en caso de no estar definido se fuersa a 15
-  const limit = _.get(req, 'query.limit', 15) || 15;
+  let limit = _.get(req, 'query.limit', 15) || 15;
+  limit = parseInt(limit, 10);
   req.query.skip = parseInt(skip, 10);
-  req.query.limit = parseInt(limit, 10);
+  req.query.limit = limit > 0 ? limit : 15;
   // Continuar con la consulta ala API
   next();
 }
@@ -46,7 +47,7 @@ router.get('/jugadores',
         .exec(function (err, jugadores) {
           if (err) {
             // res, status, data, messager, error
-            return sendRes(res, 500, null, "Ha ocurrido un error", err);
+            return sendRes(res, 500, [], "Ha ocurrido un error", err);
           } else {
             // res, status, data, messager, error
             return sendRes(res, 200, jugadores, "Success", null);
@@ -54,7 +55,7 @@ router.get('/jugadores',
         });
     } else {
       // res, status, data, messager, error
-      return sendRes(res, 402, null, "Parametro 'jugador' es requerido", null);
+      return sendRes(res, 402, [], "Parametro 'jugador' es requerido", null);
     }
   });
 
@@ -63,9 +64,9 @@ router.get('/jugadores/:id', function (req, res) {
   const id = _.get(req, 'params.id', false) || false;
   if (id) {
     Jugador.findById(id)
-      .then(function (jugadores) {
+      .then(function (jugador) {
         // res, status, data, messager, error
-        return sendRes(res, 200, jugadores, "Success", null);
+        return sendRes(res, 200, jugador, "Success", null);
       })
       .catch(function (err) {
         // res, status, data, messager, error
