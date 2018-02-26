@@ -1,10 +1,10 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var EquipoSchema = new Schema({
+const EquipoSchema = new Schema({
   nombre: {
     type: String,
-    //Si no esta este campo en la consola aparece este error.
+    // Si no esta este campo en la consola aparece este error.
     required: [true, 'El nombre del equipo es requerido']
   },
   escudoURL: {

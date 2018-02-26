@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var MiembroCuerpoTecnicoSchema = new Schema({
+const MiembroCuerpoTecnicoSchema = new Schema({
   nombre: {
     type: String,
     required: [true, 'El nombre del miembro tecnico es requerido']

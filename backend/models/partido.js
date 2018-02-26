@@ -1,32 +1,33 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-require('../models/marcador');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-//Creo el modelo y schema del partidos
-var PartidoSchema = new Schema({
+// Creo el modelo y schema del partidos
+const PartidoSchema = new Schema({
   equipos: [{
-    type : Schema.ObjectId, ref: 'equipos'
+    type: Schema.ObjectId,
+    ref: 'equipos'
   }],
-  //El estado contendrá valores para 'Programado','En curso','Entretiempo','Terminado'
+  // El estado contendrá valores para 'Programado','En curso','Entretiempo','Terminado'
   estado: {
     type: String
   },
   eventos: [{
-    type : Schema.ObjectId, ref: 'jugador'
+    type: Schema.ObjectId,
+    ref: 'tipoEvento'
   }],
-  fechaInicio:{
+  fechaInicio: {
     type: Date
   },
-  msDescanso:{
+  msDescanso: {
     type: Number
   },
-  estadio:{
+  estadio: {
     type: String
   },
-  categoria:{
+  categoria: {
     type: String
   },
-  arbitros:{
+  arbitros: {
     type: [String]
   },
   destacado: {
@@ -34,11 +35,9 @@ var PartidoSchema = new Schema({
     default: false
   },
   marcador: {
-    type : Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'marcador'
   }
 });
 
-var Partido = mongoose.model('partido',PartidoSchema);
-
-module.exports = Partido;
+module.exports = mongoose.model('partido', PartidoSchema);

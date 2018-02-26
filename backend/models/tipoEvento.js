@@ -1,16 +1,14 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var TipoEventoSchema = new Schema({
+const TipoEventoSchema = new Schema({
   nombre: {
     type: String,
     required: [true, 'El tipo de evento es requerido']
   },
-  fechaYhora:{
+  fechaYhora: {
     type: Date
   }
 });
 
-var TipoEvento = mongoose.model('tipoEvento',TipoEventoSchema);
-
-module.exports = TipoEvento;
+module.exports =  mongoose.model('tipoEvento', TipoEventoSchema);

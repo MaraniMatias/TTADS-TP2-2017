@@ -1,28 +1,23 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-require('../models/partido');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 //Creo el modelo y schema del torneo
-var TorneoSchema = new Schema({
+const TorneoSchema = new Schema({
   nombre: {
     type: String
   },
-  partidos:[{
-    type : Schema.ObjectId,
+  partidos: [{
+    type: Schema.ObjectId,
     ref: 'partido'
   }],
-  equipos: [{
-    type : Schema.ObjectId,
-    ref: 'equipos'
-  }],
-  fechaInicio:{
+  fechaInicio: {
     type: Date
   },
-  fechaFin:{
+  fechaFin: {
     type: Date
   }
 });
 
-var Torneo = mongoose.model('torneo',TorneoSchema);
+const Torneo = mongoose.model('torneo', TorneoSchema);
 
 module.exports = Torneo;
