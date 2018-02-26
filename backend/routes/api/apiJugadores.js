@@ -31,13 +31,13 @@ router.get('/jugadores',
   queryPage, // interceptor para completar el paginado
   function (req, res) {
     // Validar parámetro de la consulta
-    const player = _.get(req, 'query.jugador', false) || false;
+    const nombre = _.get(req, 'query.jugador', false) || false;
 
-    if (player) {
+    if (nombre) {
       Jugador.find({
           $or: [
-            { nombre: { $regex: player, $options: 'i' } },
-            { apellido: { $regex: player, $options: 'i' } }
+            { nombre: { $regex: nombre, $options: 'i' } },
+            { apellido: { $regex: nombre, $options: 'i' } }
           ]
         })
         .select('nombre apellido')
