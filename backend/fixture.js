@@ -101,10 +101,10 @@ mongoose.connect('mongodb://localhost/handballdb', { useMongoClient: true }, fun
                     estado: "Iniciado",
                     marcador: marcador,
                     eventos: [{
-                      eventoId: eventoGool_db,
+                      evento: eventoGool_db,
                       fechaYhora: new Date(new Date().getTime() + 3000422)
                                   }, {
-                      eventoId: eventoTiroLibre_db,
+                      evento: eventoTiroLibre_db,
                       fechaYhora: new Date(new Date().getTime() + 3000231422)
                                   }],
                     fechaInicio: new Date(),
@@ -120,7 +120,7 @@ mongoose.connect('mongodb://localhost/handballdb', { useMongoClient: true }, fun
                     estado: "Programado",
                     marcador: marcador,
                     eventos: [{
-                      eventoId: eventoGool_db,
+                      evento: eventoGool_db,
                       fechaYhora: new Date(new Date().getTime() + 3000422)
                                   }],
                     fechaInicio: new Date('2-10-2030'),
@@ -154,17 +154,9 @@ mongoose.connect('mongodb://localhost/handballdb', { useMongoClient: true }, fun
 
                       torneo.save(function (err, torneo_db) {
                         if (err || !torneo_db) { return new Error("Error"); }
-                        Torneo.find({})
-                          .populate('equipos')
-                          .populate('partidos')
-                          .exec(function (err, res) {
-                            if (err || !res) {
-                              return new Error("Error");
-                            }
-                            console.log("DB poblada :D");
-                            mongoose.connection.close();
-                          });
-                      })
+                        console.log("DB poblada :D");
+                        mongoose.connection.close();
+                      });
                     });
                   });
                 });

@@ -11,10 +11,14 @@ const PartidoSchema = new Schema({
   estado: {
     type: String
   },
+  marcador: {
+    type: Schema.Types.ObjectId,
+    ref: 'marcadores'
+  },
   eventos: [{
-    eventoId: {
-      type: Schema.ObjectId,
-      ref: 'tipoEvento'
+    evento: {
+      type: Schema.Types.ObjectId,
+      ref: 'tiposEvento'
     },
     fechaYhora: {
       type: Date,
@@ -40,11 +44,7 @@ const PartidoSchema = new Schema({
   destacado: {
     type: Boolean,
     default: false
-  },
-  marcador: {
-    type: Schema.Types.ObjectId,
-    ref: 'marcador'
   }
 });
 
-module.exports = mongoose.model('partido', PartidoSchema);
+module.exports = mongoose.model('partidos', PartidoSchema);

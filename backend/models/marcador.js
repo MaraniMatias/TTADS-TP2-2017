@@ -12,5 +12,5 @@ const MarcadorSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model('marcador', MarcadorSchema);
+module.exports = mongoose.model('marcadores', MarcadorSchema);
 

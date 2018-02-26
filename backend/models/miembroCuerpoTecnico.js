@@ -15,4 +15,4 @@ const MiembroCuerpoTecnicoSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model('miembroCuerpoTecnico', MiembroCuerpoTecnicoSchema);
+module.exports = mongoose.model('miembrosCuerpoTecnico', MiembroCuerpoTecnicoSchema);

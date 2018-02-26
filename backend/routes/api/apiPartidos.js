@@ -30,13 +30,12 @@ router.get('/partidos',
   function(req,res){
     Partido.find({})
     .populate('equipos', 'nombre escudoURL')
-    // .populate('eventos')
-    .populate('marcador')
+    // .populate('marcador')
     .sort('fechaInicio')
     .skip(req.query.skip)
     .limit(req.query.limit)
     .exec(function (err, partidos) {
-      if (err) {
+      if (err || !partidos) {
         // res, status, data, messager, error
         return sendRes(res, 500, [], "Ha ocurrido un error", err);
       } else {

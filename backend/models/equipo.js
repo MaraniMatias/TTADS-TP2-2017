@@ -13,7 +13,7 @@ const EquipoSchema = new Schema({
   },
   jugadores: [{
     type: Schema.Types.ObjectId,
-    ref: 'jugador'
+    ref: 'jugadores'
   }],
   goles: {
     type: Number,
@@ -21,7 +21,7 @@ const EquipoSchema = new Schema({
   },
   cuerpoTecnico: [{
     type: Schema.Types.ObjectId,
-    ref: 'miembroCuerpoTecnico'
+    ref: 'miembrosCuerpoTecnico'
   }]
 });
 
