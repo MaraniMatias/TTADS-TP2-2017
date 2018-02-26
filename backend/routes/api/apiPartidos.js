@@ -108,15 +108,15 @@ router.get('/eventos-por-partido/:idPartido',
     if (id) {
       Partido.findById(id)
         .populate({
-          path: 'eventos',
+          path: 'eventos.evento',
           model: TipoEvento
         })
         .select('eventos')
         .skip(req.query.skip)
         .limit(req.query.limit)
-        .then(function (eventos) {
+        .then(function (partido) {
           // res, status, data, messager, error
-          return sendRes(res, 200, eventos, "Success", null);
+          return sendRes(res, 200, partido.eventos, "Success", null);
         })
         .catch(function (err) {
           // res, status, data, messager, error
