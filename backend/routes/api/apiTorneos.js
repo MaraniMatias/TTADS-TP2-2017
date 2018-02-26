@@ -1,6 +1,17 @@
-var express = require('express');
-var router = express.Router();
-Torneo = require('../../models/torneo');
+const express = require('express');
+const router = express.Router();
+const util = require('../utilities');
+const queryPage = util.queryPage;
+const sendRes = util.sendRes;
+
+const Torneo = require('../../models/torneo');
+
+// Fixture, usado en la pantalla principal paa listar los partidos
+router.get('/fixture-activos',
+  queryPage, // interceptor para completar el paginado
+  function (req, res) {
+
+  });
 
 //Recupera todos los tipos de evento
 router.get('/torneos',function(req,res){
