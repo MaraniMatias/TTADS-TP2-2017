@@ -45,7 +45,7 @@ router.get('/equipos',
             return sendRes(res, 500, [], "Ha ocurrido un error", err);
           } else {
             // res, status, data, messager, error
-            return sendRes(res, 200, equipos, "Success", null);
+            return sendRes(res, 200, equipos || [], "Success", null);
           }
         });
     } else {

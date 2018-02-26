@@ -83,7 +83,7 @@ router.get('/partidos/:id', function (req, res) {
       // .populate('eventos') // api/eventos-por-partido/:idPartido
       .then(function (partido) {
         // res, status, data, messager, error
-        return sendRes(res, 200, partido, "Success", null);
+        return sendRes(res, 200, partido || [], "Success", null);
       })
       .catch(function (err) {
         // res, status, data, messager, error
