@@ -7,8 +7,8 @@ const TorneoSchema = new Schema({
     type: String
   },
   partidos: [{
-    type: Schema.ObjectId,
-    ref: 'partidos'
+    type: Schema.Types.ObjectId,
+    ref: 'Partidos'
   }],
   fechaInicio: {
     type: Date
@@ -18,6 +18,6 @@ const TorneoSchema = new Schema({
   }
 });
 
-const Torneo = mongoose.model('torneos', TorneoSchema);
+const Torneo = mongoose.model('Torneos', TorneoSchema);
 
 module.exports = Torneo;

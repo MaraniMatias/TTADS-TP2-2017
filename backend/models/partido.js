@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 // Creo el modelo y schema del partidos
 const PartidoSchema = new Schema({
   equipos: [{
-    type: Schema.ObjectId,
-    ref: 'equipos'
+    type: Schema.Types.ObjectId,
+    ref: 'Equipos'
   }],
   // El estado contendrá valores para 'Programado','En curso','Entretiempo','Terminado'
   estado: {
@@ -13,12 +13,12 @@ const PartidoSchema = new Schema({
   },
   marcador: {
     type: Schema.Types.ObjectId,
-    ref: 'marcadores'
+    ref: 'Marcadores'
   },
   eventos: [{
     evento: {
       type: Schema.Types.ObjectId,
-      ref: 'tiposEvento'
+      ref: 'TiposEvento'
     },
     fechaYhora: {
       type: Date,
@@ -47,4 +47,4 @@ const PartidoSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model('partidos', PartidoSchema);
+module.exports = mongoose.model('Partidos', PartidoSchema);

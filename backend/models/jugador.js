@@ -35,4 +35,4 @@ const JugadorSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model('jugadores', JugadorSchema);
+module.exports = mongoose.model('Jugadores', JugadorSchema);

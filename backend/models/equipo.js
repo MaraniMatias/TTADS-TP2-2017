@@ -13,7 +13,7 @@ const EquipoSchema = new Schema({
   },
   jugadores: [{
     type: Schema.Types.ObjectId,
-    ref: 'jugadores'
+    ref: 'Jugadores'
   }],
   goles: {
     type: Number,
@@ -21,8 +21,8 @@ const EquipoSchema = new Schema({
   },
   cuerpoTecnico: [{
     type: Schema.Types.ObjectId,
-    ref: 'miembrosCuerpoTecnico'
+    ref: 'MiembrosCuerpoTecnico'
   }]
 });
 
-module.exports = mongoose.model('equipos', EquipoSchema);
+module.exports = mongoose.model('Equipos', EquipoSchema);
