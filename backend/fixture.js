@@ -69,10 +69,7 @@ mongoose.connect('mongodb://localhost/handballdb', function (err, res) {
             if (err || !equipo2_db) {
               return new Error("Error");
             }
-            const equipos = [];
-            equipos.push(equipo1_db);
-            equipos.push(equipo2_db);
-            let marcador = new Marcador({
+            const marcador = new Marcador({
               golesEquipoA: getRandomInt(10),
               golesEquipoB: getRandomInt(10)
             });
@@ -97,7 +94,8 @@ mongoose.connect('mongodb://localhost/handballdb', function (err, res) {
                     return new Error("Error");
                   }
                   const partido1 = new Partido({
-                    equipos: equipos,
+                    equipoB: equipo1_db,
+                    equipoA: equipo2_db,
                     estado: "Iniciado",
                     marcador: marcador_db,
                     eventos: [{
@@ -116,13 +114,14 @@ mongoose.connect('mongodb://localhost/handballdb', function (err, res) {
                   });
 
                   const partido2 = new Partido({
-                    equipos: equipos,
+                    equipoA: equipo1_db,
+                    equipoB: equipo2_db,
                     estado: "Programado",
                     marcador: marcador_db,
                     eventos: [{
                       evento: eventoGool_db,
                       fechaYhora: new Date(new Date().getTime() + 3000422)
-                                  }],
+                    }],
                     fechaInicio: new Date('2-10-2030'),
                     msDescanso: 0,
                     estadio: "Malvinas Argentinas",
@@ -146,7 +145,6 @@ mongoose.connect('mongodb://localhost/handballdb', function (err, res) {
 
                       const torneo = new Torneo({
                         nombre: "Torneo " + getRandomInt(10),
-                        equipos: equipos,
                         partidos: partidos,
                         fechaInicio: new Date(),
                         fechaFin: new Date(new Date().getTime() + 1236434)

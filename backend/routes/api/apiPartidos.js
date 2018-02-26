@@ -33,7 +33,12 @@ router.get('/partidos',
   function (req, res) {
     Partido.find({})
       .populate({
-        path: 'equipos',
+        path: 'equipoA',
+        select: 'nombre escudoURL',
+        model: Equipo
+      })
+      .populate({
+        path: 'equipoB',
         select: 'nombre escudoURL',
         model: Equipo
       })
@@ -62,7 +67,12 @@ router.get('/partidos/:id', function (req, res) {
   if (id) {
     Partido.findById(id)
       .populate({
-        path: 'equipos',
+        path: 'equipoA',
+        select: 'nombre escudoURL',
+        model: Equipo
+      })
+      .populate({
+        path: 'equipoB',
         select: 'nombre escudoURL',
         model: Equipo
       })

@@ -3,10 +3,14 @@ const Schema = mongoose.Schema;
 
 // Creo el modelo y schema del partidos
 const PartidoSchema = new Schema({
-  equipos: [{
+  equipoA: {
     type: Schema.Types.ObjectId,
     ref: 'Equipos'
-  }],
+  },
+  equipoB: {
+    type: Schema.Types.ObjectId,
+    ref: 'Equipos'
+  },
   // El estado contendrá valores para 'Programado','En curso','Entretiempo','Terminado'
   estado: {
     type: String
