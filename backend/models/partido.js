@@ -11,9 +11,10 @@ const PartidoSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Equipos'
   },
-  // El estado contendrá valores para 'Programado','En curso','Entretiempo','Terminado'
   estado: {
-    type: String
+    type: String,
+    enum: ['Programado','En curso','Entretiempo','Terminado'],
+    default: 'Programado'
   },
   marcador: {
     type: Schema.Types.ObjectId,
