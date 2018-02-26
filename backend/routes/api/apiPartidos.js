@@ -3,6 +3,9 @@ const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
 const Partido = require('../../models/partido');
+const Marcador = require('../../models/marcador');
+const Equipo = require('../../models/equipo');
+const TipoEvento = require('../../models/tipoEvento.js');
 
 // Solo con el objetivo de enviar siempre una misma respuesta
 function sendRes(res, cod, data, message, error) {
@@ -27,23 +30,30 @@ function queryPage(req, res, next) {
 // http://localhost:3000/api/partido/?skip=1&limit=1
 router.get('/partidos',
   queryPage, // interceptor para completar el paginado
-  function(req,res){
+  function (req, res) {
     Partido.find({})
-    .populate('equipos', 'nombre escudoURL')
-    // .populate('marcador')
-    .sort('fechaInicio')
-    .skip(req.query.skip)
-    .limit(req.query.limit)
-    .exec(function (err, partidos) {
-      if (err || !partidos) {
-        // res, status, data, messager, error
-        return sendRes(res, 500, [], "Ha ocurrido un error", err);
-      } else {
-        // res, status, data, messager, error
-        return sendRes(res, 200, partidos, "Success", null);
-      }
-    });
-});
+      .populate({
+        path: 'equipos',
+        select: 'nombre escudoURL',
+        model: Equipo
+      })
+      .populate({
+        path: 'marcador',
+        model: Marcador
+      })
+      .sort('fechaInicio')
+      .skip(req.query.skip)
+      .limit(req.query.limit)
+      .exec(function (err, partidos) {
+        if (err || !partidos) {
+          // res, status, data, messager, error
+          return sendRes(res, 500, [], "Ha ocurrido un error", err);
+        } else {
+          // res, status, data, messager, error
+          return sendRes(res, 200, partidos, "Success", null);
+        }
+      });
+  });
 
 // Recupera un partido
 router.get('/partidos/:id', function (req, res) {
@@ -51,9 +61,16 @@ router.get('/partidos/:id', function (req, res) {
   const id = _.get(req, 'params.id', false) || false;
   if (id) {
     Partido.findById(id)
-      .populate('equipos', 'nombre escudoURL')
-      .populate('marcador')
-      // .populate('eventos') // /eventos-por-partido/:idPartido
+      .populate({
+        path: 'equipos',
+        select: 'nombre escudoURL',
+        model: Equipo
+      })
+      .populate({
+        path: 'marcador',
+        model: Marcador
+      })
+      // .populate('eventos') // api/eventos-por-partido/:idPartido
       .then(function (partido) {
         // res, status, data, messager, error
         return sendRes(res, 200, partido, "Success", null);
@@ -80,7 +97,10 @@ router.get('/eventos-por-partido/:idPartido',
     const id = _.get(req, 'params.idPartido', false) || false;
     if (id) {
       Partido.findById(id)
-        .populate('eventos')
+        .populate({
+          path: 'eventos',
+          model: TipoEvento
+        })
         .select('eventos')
         .skip(req.query.skip)
         .limit(req.query.limit)
@@ -100,32 +120,32 @@ router.get('/eventos-por-partido/:idPartido',
 
 
 //Agrega un partido a la bd
-router.post('/partidos',function(req,res,next){
-  Partido.create(req.body).then(function(partido){
+router.post('/partidos', function (req, res, next) {
+  Partido.create(req.body).then(function (partido) {
     res.status(200).send(partido);
   }).catch(next);
 });
 
 //Modifica un partido en la bd
-router.put('/partidos/:id',function(req,res){
-  Partido.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(){
-    Partido.findOne({_id: req.params.id})
-    .populate('equipos')
-    .populate('eventos')
-    .populate('marcador')
-    .exec(function (err, partido) {
-      if (err || !partido) {
-        return res.status(500).send({ msg: 'Ha ocurrido un error al popular', err: err });
-      } else {
-        return res.status(200).send(partido);
-      }
-    });
+router.put('/partidos/:id', function (req, res) {
+  Partido.findByIdAndUpdate({ _id: req.params.id }, req.body).then(function () {
+    Partido.findOne({ _id: req.params.id })
+      .populate('equipos')
+      .populate('eventos')
+      .populate('marcador')
+      .exec(function (err, partido) {
+        if (err || !partido) {
+          return res.status(500).send({ msg: 'Ha ocurrido un error al popular', err: err });
+        } else {
+          return res.status(200).send(partido);
+        }
+      });
   });
 });
 
 //Borra un partido de la bd
-router.delete('/partidos/:id',function(req,res){
-  Partido.findByIdAndRemove({_id: req.params.id}).then(function(partido){
+router.delete('/partidos/:id', function (req, res) {
+  Partido.findByIdAndRemove({ _id: req.params.id }).then(function (partido) {
     res.status(200).send(partido);
   });
 });
