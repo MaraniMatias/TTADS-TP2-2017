@@ -14,7 +14,7 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-mongoose.connect('mongodb://localhost/handballdb', { useMongoClient: true }, function (err, res) {
+mongoose.connect('mongodb://localhost/handballdb', function (err, res) {
   if (err) {
     return console.error("Error al conectar a la base de datos: " + err);
   }
@@ -99,7 +99,7 @@ mongoose.connect('mongodb://localhost/handballdb', { useMongoClient: true }, fun
                   const partido1 = new Partido({
                     equipos: equipos,
                     estado: "Iniciado",
-                    marcador: marcador,
+                    marcador: marcador_db,
                     eventos: [{
                       evento: eventoGool_db,
                       fechaYhora: new Date(new Date().getTime() + 3000422)
@@ -118,7 +118,7 @@ mongoose.connect('mongodb://localhost/handballdb', { useMongoClient: true }, fun
                   const partido2 = new Partido({
                     equipos: equipos,
                     estado: "Programado",
-                    marcador: marcador,
+                    marcador: marcador_db,
                     eventos: [{
                       evento: eventoGool_db,
                       fechaYhora: new Date(new Date().getTime() + 3000422)
