@@ -71,7 +71,7 @@ router.get('/equipos/:id', function (req, res) {
       });
   } else {
     // res, status, data, messager, error
-    return sendRes(res, 402, null, "Parametro 'jugador' es requerido", null);
+    return sendRes(res, 402, null, "Parametro ID del evento es requerido", null);
   }
 });
 

@@ -1,54 +1,103 @@
-var express = require('express');
-var router = express.Router();
-var Partido = require('../../models/partido');
+"use strict";
+const express = require('express');
+const router = express.Router();
+const _ = require('lodash');
+const Partido = require('../../models/partido');
 
+// Solo con el objetivo de enviar siempre una misma respuesta
+function sendRes(res, cod, data, message, error) {
+  res.status(cod);
+  return res.json({ data, message, error });
+}
 
-//Recupera un partido
-router.get('/partidos/:id',function(req,res){
-  Partido.findById({_id: req.params.id})
-  .populate('equipos')
-  .populate('eventos')
-  .populate('marcador')
-  .exec(function (err, partido) {
-    if (err || !partido) {
-      return res.status(500).send({ msg: 'Ha ocurrido un error al popular', err: err });
-    } else {
-      return res.status(200).send(partido);
-    }
-  });
+// Normalizar parametros para el paginado
+function queryPage(req, res, next) {
+  // en caso de no estar definido se fuersa a 0
+  const skip = _.get(req, 'query.skip', 0) || 0;
+  // en caso de no estar definido se fuersa a 15
+  let limit = _.get(req, 'query.limit', 15) || 15;
+  limit = parseInt(limit, 10);
+  req.query.skip = parseInt(skip, 10);
+  req.query.limit = limit > 0 ? limit : 15;
+  // Continuar con la consulta ala API
+  next();
+}
+
+// Recupera todos los partidos
+// http://localhost:3000/api/partido/?skip=1&limit=1
+router.get('/partidos',
+  queryPage, // interceptor para completar el paginado
+  function(req,res){
+    Partido.find({})
+    .populate('equipos', 'nombre escudoURL')
+    // .populate('eventos')
+    .populate('marcador')
+    .sort('fechaInicio')
+    .skip(req.query.skip)
+    .limit(req.query.limit)
+    .exec(function (err, partidos) {
+      if (err) {
+        // res, status, data, messager, error
+        return sendRes(res, 500, [], "Ha ocurrido un error", err);
+      } else {
+        // res, status, data, messager, error
+        return sendRes(res, 200, partidos, "Success", null);
+      }
+    });
 });
 
-//Recupera todos los partidos
-router.get('/partidos',function(req,res){
-  if(req.query.equipo === undefined){
-    console.log(req.query.equipo);
-    Partido.find({})
-    .populate('equipos')
-    .populate('eventos')
-    .populate('marcador')
-    .exec(function (err, partidos) {
-      if (err || !partidos) {
-        return res.status(500).send({ msg: 'Ha ocurrido un error al popular', err: err });
-      } else {
-        return res.status(200).send(partidos);
-      }
-    });
-  }else{
-    console.log(req.query.equipo);
-    Partido.find({"equipos":{"_id": req.query.equipo }})
-    .populate('equipos')
-    .populate('eventos')
-    .populate('marcador')
-    .exec(function (err, partidos) {
-      if (err || !partidos) {
-        return res.status(500).send({ msg: 'Ha ocurrido un error al popular', err: err });
-      } else {
-        return res.status(200).send(partidos);
-      }
-    });
+// Recupera un partido
+router.get('/partidos/:id', function (req, res) {
+  // Validar parámetro de la consulta
+  const id = _.get(req, 'params.id', false) || false;
+  if (id) {
+    Partido.findById(id)
+      .populate('equipos', 'nombre escudoURL')
+      .populate('marcador')
+      // .populate('eventos') // /eventos-por-partido/:idPartido
+      .then(function (partido) {
+        // res, status, data, messager, error
+        return sendRes(res, 200, partido, "Success", null);
+      })
+      .catch(function (err) {
+        // res, status, data, messager, error
+        return sendRes(res, 500, null, "Ha ocurrido un error", err);
+      });
+  } else {
+    // res, status, data, messager, error
+    return sendRes(res, 402, null, "Parametro id del evento es requerido", null);
   }
 });
 
+// Listado de eventos por partido
+// buscar partido con el id
+// filtrar solos los evento
+// ordenar con fechaYhora
+// usar paginado para obtener una lista controlablee
+router.get('/eventos-por-partido/:idPartido',
+  queryPage, // interceptor para completar el paginado
+  function (req, res) {
+    // Validar parámetro de la consulta
+    const id = _.get(req, 'params.idPartido', false) || false;
+    if (id) {
+      Partido.findById(id)
+        .populate('eventos')
+        .select('eventos')
+        .skip(req.query.skip)
+        .limit(req.query.limit)
+        .then(function (eventos) {
+          // res, status, data, messager, error
+          return sendRes(res, 200, eventos, "Success", null);
+        })
+        .catch(function (err) {
+          // res, status, data, messager, error
+          return sendRes(res, 500, null, "Ha ocurrido un error", err);
+        });
+    } else {
+      // res, status, data, messager, error
+      return sendRes(res, 402, null, "Parametro ID del partido es requerido", null);
+    }
+  });
 
 
 //Agrega un partido a la bd
