@@ -12,14 +12,21 @@ const PartidoSchema = new Schema({
     type: String
   },
   eventos: [{
-    type: Schema.ObjectId,
-    ref: 'tipoEvento'
+    eventoId: {
+      type: Schema.ObjectId,
+      ref: 'tipoEvento'
+    },
+    fechaYhora: {
+      type: Date,
+      default: new Date()
+    }
   }],
   fechaInicio: {
     type: Date
   },
   msDescanso: {
-    type: Number
+    type: Number,
+    default: 0
   },
   estadio: {
     type: String
