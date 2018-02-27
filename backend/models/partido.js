@@ -1,44 +1,62 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-require('../models/marcador');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-//Creo el modelo y schema del partidos
-var PartidoSchema = new Schema({
-  equipos: [{
-    type : Schema.ObjectId, ref: 'equipos'
-  }],
-  //El estado contendrá valores para 'Programado','En curso','Entretiempo','Terminado'
+// Creo el modelo y schema del partidos
+const PartidoSchema = new Schema({
+  // Es redundante pero ganamos rendimiento.
+  torneo: {
+    type: Schema.Types.ObjectId,
+    ref: 'Torneos'
+  },
+  equipoA: {
+    type: Schema.Types.ObjectId,
+    ref: 'Equipos'
+  },
+  equipoB: {
+    type: Schema.Types.ObjectId,
+    ref: 'Equipos'
+  },
   estado: {
-    type: String
+    type: String,
+    enum: ['Programado','En curso','Entretiempo','Terminado', 'Iniciado'],
+    default: 'Programado'
+  },
+  marcador: {
+    type: Schema.Types.ObjectId,
+    ref: 'Marcadores'
   },
   eventos: [{
-    type : Schema.ObjectId, ref: 'jugador'
+    evento: {
+      type: Schema.Types.ObjectId,
+      ref: 'TiposEvento'
+    },
+    descripcion: String,
+    fecha: {
+      type: Date,
+      default: new Date()
+    }
   }],
-  fechaInicio:{
+  fechaInicio: {
     type: Date
   },
-  msDescanso:{
-    type: Number
+  msDescanso: {
+    type: Number,
+    default: 0
   },
-  estadio:{
+  estadio: {
     type: String
   },
-  categoria:{
+  categoria: {
     type: String
   },
-  arbitros:{
+  arbitros: {
     type: [String]
   },
+  // XXX para que es esto??
   destacado: {
     type: Boolean,
     default: false
-  },
-  marcador: {
-    type : Schema.Types.ObjectId,
-    ref: 'marcador'
   }
 });
 
-var Partido = mongoose.model('partido',PartidoSchema);
-
-module.exports = Partido;
+module.exports = mongoose.model('Partidos', PartidoSchema);

@@ -1,10 +1,10 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var EquipoSchema = new Schema({
+const EquipoSchema = new Schema({
   nombre: {
     type: String,
-    //Si no esta este campo en la consola aparece este error.
+    // Si no esta este campo en la consola aparece este error.
     required: [true, 'El nombre del equipo es requerido']
   },
   escudoURL: {
@@ -13,7 +13,7 @@ var EquipoSchema = new Schema({
   },
   jugadores: [{
     type: Schema.Types.ObjectId,
-    ref: 'jugador'
+    ref: 'Jugadores'
   }],
   goles: {
     type: Number,
@@ -21,8 +21,8 @@ var EquipoSchema = new Schema({
   },
   cuerpoTecnico: [{
     type: Schema.Types.ObjectId,
-    ref: 'miembroCuerpoTecnico'
+    ref: 'MiembrosCuerpoTecnico'
   }]
 });
 
-module.exports = mongoose.model('equipos', EquipoSchema);
+module.exports = mongoose.model('Equipos', EquipoSchema);

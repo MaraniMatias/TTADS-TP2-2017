@@ -26,23 +26,24 @@ app.use(cors());
 app.use(bodyParser.json());
 
 //Middleware. Esta funcion me permite hacer peticiones http de localhost a localhost
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
 //Inicializo las rutas
-app.use('/api',require('./routes/api/apiMiembrosCuerpoTecnico'));
-app.use('/api',require('./routes/api/apiJugadores'));
-app.use('/api',require('./routes/api/apiPartidos'));
-app.use('/api',require('./routes/api/apiEquipos'));
-app.use('/api',require('./routes/api/apiTiposEvento'));
-app.use('/api',require('./routes/api/apiTorneos'));
+app.use('/api', require('./routes/api/apiMiembrosCuerpoTecnico'));
+app.use('/api', require('./routes/api/apiJugadores'));
+app.use('/api', require('./routes/api/apiPartidos'));
+app.use('/api', require('./routes/api/apiEquipos'));
+app.use('/api', require('./routes/api/apiTiposEvento'));
+app.use('/api', require('./routes/api/apiTorneos'));
+app.use('/api', require('./routes/api/apiFixture'));
 
 //Middleware
-app.use(function(err,req,res,next){
-  res.status().send({error: err.message})
+app.use(function (err, req, res, next) {
+  res.status().send({ error: err.message })
 })
 
 //process.env.port es usado por el servidor donde se publique la aplicacion
@@ -55,12 +56,12 @@ function getLocalIP() {
   }
 }
 
-mongoose.connect('mongodb://localhost/handballdb', { useMongoClient: true }, function(err, res) {
+mongoose.connect('mongodb://localhost/handballdb', function (err, res) {
   if (err) {
     return console.error("Error al conectar a la base de datos: " + err);
   } else {
     console.log("Conexón a la base de datos establecida correctamente.");
-    app.listen(port, function(){
+    app.listen(port, function () {
       getLocalIP();
       console.log('Escuchando en el puerto: ' + port);
     });

@@ -2,25 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
+const util = require('../utilities');
+const queryPage = util.queryPage;
+const sendRes = util.sendRes;
+
 const Jugador = require('../../models/jugador');
-
-// Solo con el objetivo de enviar siempre una misma respuesta
-function sendRes(res, cod, data, message, error) {
-  res.status(cod);
-  return res.json({ data, message, error });
-}
-
-// Normalizar parametros para el paginado
-function queryPage(req, res, next) {
-  // en caso de no estar definido se fuersa a 0
-  const skip = _.get(req, 'query.skip', 0) || 0;
-  // en caso de no estar definido se fuersa a 15
-  const limit = _.get(req, 'query.limit', 15) || 15;
-  req.query.skip = parseInt(skip, 10);
-  req.query.limit = parseInt(limit, 10);
-  // Continuar con la consulta ala API
-  next();
-}
 
 // Recupera todos los jugadores
 // Buscar jugadores por nomnbre o apellido
@@ -30,13 +16,13 @@ router.get('/jugadores',
   queryPage, // interceptor para completar el paginado
   function (req, res) {
     // Validar parámetro de la consulta
-    const player = _.get(req, 'query.jugador', false) || false;
+    const nombre = _.get(req, 'query.jugador', false) || false;
 
-    if (player) {
+    if (nombre) {
       Jugador.find({
           $or: [
-            { nombre: { $regex: player, $options: 'i' } },
-            { apellido: { $regex: player, $options: 'i' } }
+            { nombre: { $regex: nombre, $options: 'i' } },
+            { apellido: { $regex: nombre, $options: 'i' } }
           ]
         })
         .select('nombre apellido')
@@ -46,15 +32,15 @@ router.get('/jugadores',
         .exec(function (err, jugadores) {
           if (err) {
             // res, status, data, messager, error
-            return sendRes(res, 500, null, "Ha ocurrido un error", err);
+            return sendRes(res, 500, [], "Ha ocurrido un error", err);
           } else {
             // res, status, data, messager, error
-            return sendRes(res, 200, jugadores, "Success", null);
+            return sendRes(res, 200, jugadores || [], "Success", null);
           }
         });
     } else {
       // res, status, data, messager, error
-      return sendRes(res, 402, null, "Parametro 'jugador' es requerido", null);
+      return sendRes(res, 402, [], "Parametro 'jugador' es requerido", null);
     }
   });
 
@@ -63,9 +49,9 @@ router.get('/jugadores/:id', function (req, res) {
   const id = _.get(req, 'params.id', false) || false;
   if (id) {
     Jugador.findById(id)
-      .then(function (jugadores) {
+      .then(function (jugador) {
         // res, status, data, messager, error
-        return sendRes(res, 200, jugadores, "Success", null);
+        return sendRes(res, 200, jugador, "Success", null);
       })
       .catch(function (err) {
         // res, status, data, messager, error
@@ -73,7 +59,7 @@ router.get('/jugadores/:id', function (req, res) {
       });
   } else {
     // res, status, data, messager, error
-    return sendRes(res, 402, null, "Parametro 'jugador' es requerido", null);
+    return sendRes(res, 402, null, "Parametro id del evento es requerido", null);
   }
 });
 

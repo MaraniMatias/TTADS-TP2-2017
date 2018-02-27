@@ -1,6 +1,10 @@
-var express = require('express');
-var router = express.Router();
-Torneo = require('../../models/torneo');
+const express = require('express');
+const router = express.Router();
+const util = require('../utilities');
+const queryPage = util.queryPage;
+const sendRes = util.sendRes;
+
+const Torneo = require('../../models/torneo');
 
 //Recupera todos los tipos de evento
 router.get('/torneos',function(req,res){

@@ -1,48 +1,63 @@
-var express = require('express');
-var router = express.Router();
-var Equipo = require('../../models/equipo');
+"use strict";
+const express = require('express');
+const router = express.Router();
+const _ = require('lodash');
+const util = require('../utilities');
+const queryPage = util.queryPage;
+const sendRes = util.sendRes;
+
+const Equipo = require('../../models/equipo');
 
 // Recupera todos los equipos
-router.get('/equipos', function (req, res) {
-  if(req.query.nombre != undefined){
-    Equipo.find({nombre: {$regex: req.query.nombre }})
-      .populate('jugadores')
-      .populate('cuerpoTecnico')
-      .exec(function (err, equipos) {
-        if (err || !equipos) {
-          return res.status(500).send({ msg: 'Ha ocurrido un error al popular', err: err });
-        } else {
-          return res.status(200).send(equipos);
-        }
-      });
-  }else{
-    Equipo.find({})
-      .populate('jugadores')
-      .populate('cuerpoTecnico')
-      .exec(function (err, equipos) {
-        if (err || !equipos) {
-          return res.status(500).send({ msg: 'Ha ocurrido un error al popular', err: err });
-        } else {
-          return res.status(200).send(equipos);
-        }
-      });
-  }
-
-});
-
-
-
-router.get('/equipos/:id',function(req,res){
-  Equipo.findById({_id: req.params.id})
-  .populate('jugadores')
-  .populate('cuerpoTecnico')
-  .exec(function (err, equipos) {
-    if (err || !equipos) {
-      return res.status(500).send({ msg: 'Ha ocurrido un error al popular', err: err });
+// query parameter skip limit player
+// http://localhost:3000/api/equipos?jugador=a&skip=1&limit=1
+router.get('/equipos',
+  queryPage, // interceptor para completar el paginado
+  function (req, res) {
+    // Validar parámetro de la consulta
+    const nombre = _.get(req, 'query.nombre', false) || false;
+    if (nombre) {
+      Equipo.find({
+          nombre: { $regex: nombre, $options: 'i' }
+        })
+        .select('nombre')
+        .sort('nombre')
+        .skip(req.query.skip)
+        .limit(req.query.limit)
+        .exec(function (err, equipos) {
+          if (err) {
+            // res, status, data, messager, error
+            return sendRes(res, 500, [], "Ha ocurrido un error", err);
+          } else {
+            // res, status, data, messager, error
+            return sendRes(res, 200, equipos || [], "Success", null);
+          }
+        });
     } else {
-      return res.status(200).send(equipos);
+      // res, status, data, messager, error
+      return sendRes(res, 402, [], "Parametro 'nombre' es requerido", null);
     }
   });
+
+router.get('/equipos/:id', function (req, res) {
+  // Validar parámetro de la consulta
+  const id = _.get(req, 'params.id', false) || false;
+  if (id) {
+    Equipo.findById(id)
+      .populate('jugadores', 'nombre apellido')
+      .populate('cuerpoTecnico', 'nombre apellido')
+      .then(function (equipo) {
+        // res, status, data, messager, error
+        return sendRes(res, 200, equipo, "Success", null);
+      })
+      .catch(function (err) {
+        // res, status, data, messager, error
+        return sendRes(res, 500, null, "Ha ocurrido un error", err);
+      });
+  } else {
+    // res, status, data, messager, error
+    return sendRes(res, 402, null, "Parametro ID del evento es requerido", null);
+  }
 });
 
 //Agrega un equipo a la bd
