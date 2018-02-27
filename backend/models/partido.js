@@ -3,6 +3,11 @@ const Schema = mongoose.Schema;
 
 // Creo el modelo y schema del partidos
 const PartidoSchema = new Schema({
+  // Es redundante pero ganamos rendimiento.
+  torneo: {
+    type: Schema.Types.ObjectId,
+    ref: 'Torneos'
+  },
   equipoA: {
     type: Schema.Types.ObjectId,
     ref: 'Equipos'
@@ -13,7 +18,7 @@ const PartidoSchema = new Schema({
   },
   estado: {
     type: String,
-    enum: ['Programado','En curso','Entretiempo','Terminado'],
+    enum: ['Programado','En curso','Entretiempo','Terminado', 'Iniciado'],
     default: 'Programado'
   },
   marcador: {
@@ -25,7 +30,7 @@ const PartidoSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'TiposEvento'
     },
-    fechaYhora: {
+    fecha: {
       type: Date,
       default: new Date()
     }
@@ -46,6 +51,7 @@ const PartidoSchema = new Schema({
   arbitros: {
     type: [String]
   },
+  // XXX para que es esto??
   destacado: {
     type: Boolean,
     default: false

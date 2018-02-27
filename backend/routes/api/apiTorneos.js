@@ -6,13 +6,6 @@ const sendRes = util.sendRes;
 
 const Torneo = require('../../models/torneo');
 
-// Fixture, usado en la pantalla principal paa listar los partidos
-router.get('/fixture-activos',
-  queryPage, // interceptor para completar el paginado
-  function (req, res) {
-
-  });
-
 //Recupera todos los tipos de evento
 router.get('/torneos',function(req,res){
   if(req.query.nombre === undefined){

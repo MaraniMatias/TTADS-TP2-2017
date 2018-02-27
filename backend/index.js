@@ -39,6 +39,7 @@ app.use('/api', require('./routes/api/apiPartidos'));
 app.use('/api', require('./routes/api/apiEquipos'));
 app.use('/api', require('./routes/api/apiTiposEvento'));
 app.use('/api', require('./routes/api/apiTorneos'));
+app.use('/api', require('./routes/api/apiFixture'));
 
 //Middleware
 app.use(function (err, req, res, next) {

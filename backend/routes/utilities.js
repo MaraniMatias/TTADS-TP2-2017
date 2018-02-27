@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 // Solo con el objetivo de enviar siempre una misma respuesta
 module.exports.sendRes = function (res, cod, data, message, error) {
   res.status(cod);
