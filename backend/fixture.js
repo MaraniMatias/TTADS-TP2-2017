@@ -99,9 +99,11 @@ mongoose.connect('mongodb://localhost/handballdb', function (err, res) {
                     marcador: marcador_db,
                     eventos: [{
                       evento: eventoGool_db,
+                      descripcion: 'Gool gracias a ' + jugadorB_db.nombre,
                       fecha: new Date(new Date().getTime() + 3000422)
                     }, {
                       evento: eventoTiroLibre_db,
+                      descripcion: 'Tiro libre :D a vavor de ' + equipoB.nombre,
                       fecha: new Date(new Date().getTime() + 3000231422)
                     }],
                     fechaInicio: new Date(),
@@ -119,6 +121,7 @@ mongoose.connect('mongodb://localhost/handballdb', function (err, res) {
                     marcador: marcador_db,
                     eventos: [{
                       evento: eventoGool_db,
+                      descripcion: 'Gool gracias a ' + jugadorA_db.nombre,
                       fecha: new Date(new Date().getTime() + 3000422)
                     }],
                     fechaInicio: new Date('2-10-2030'),

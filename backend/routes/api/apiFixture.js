@@ -51,4 +51,44 @@ router.get('/fixture-activos',
       });
   });
 
+// Fixture, usado en la pantalla principal paa listar los partidos
+router.get('/fixture-pasados',
+  queryPage, // interceptor para completar el paginado
+  function (req, res) {
+    Partido.find({
+        fechaInicio: { "$gl": new Date() }
+      })
+      .select('torneo equipoA equipoB estado marcador fechaInicio categoria')
+      .populate({
+        path: 'equipoA',
+        select: 'nombre escudoURL',
+        model: Equipo
+      })
+      .populate({
+        path: 'equipoB',
+        select: 'nombre escudoURL',
+        model: Equipo
+      })
+      .populate({
+        path: 'marcador',
+        model: Marcador
+      })
+      .populate({
+        path: 'torneo',
+        select: 'nombre',
+        model: Torneo
+      })
+      .skip(req.query.skip)
+      .limit(req.query.limit)
+      .exec(function (err, partidos) {
+        if (err) {
+          // res, status, data, messager, error
+          return sendRes(res, 500, [], "Ha ocurrido un error", err);
+        } else {
+          // res, status, data, messager, error
+          return sendRes(res, 200, partidos || [], "Success", null);
+        }
+      });
+  });
+
 module.exports = router;

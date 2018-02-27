@@ -30,6 +30,7 @@ const PartidoSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'TiposEvento'
     },
+    descripcion: String,
     fecha: {
       type: Date,
       default: new Date()
