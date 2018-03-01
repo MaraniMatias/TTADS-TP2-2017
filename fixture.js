@@ -10,7 +10,7 @@ const Torneo = require('./models/torneo')
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000,
   ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
-  mongoURLLabel = 'mongodb://localhost/' + (process.env.OPENSHIFT_APP_NAME || ' handballdb');
+  mongoURLLabel = 'mongodb://localhost/' + (process.env.OPENSHIFT_APP_NAME || 'handballdb');
 
 console.log(mongoURLLabel, process.env);
 
