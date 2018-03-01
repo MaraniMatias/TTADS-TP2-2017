@@ -70,9 +70,11 @@ mongoose.connect(mongoURLLabel, function (err, res) {
     return console.error("Error al conectar a la base de datos: " + err);
   } else {
     console.log("Conexón a la base de datos establecida correctamente.");
-    app.listen(port, function () {
-      getLocalIP();
-      console.log('Escuchando en el puerto: ' + port);
-    });
+    getLocalIP();
   }
 });
+
+app.listen(port, ip);
+console.log('Server running on http://%s:%s', ip, port);
+
+module.exports = app ;
