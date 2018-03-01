@@ -6,8 +6,13 @@ const os = require('os');
 const ifaces = os.networkInterfaces();
 
 var app = express();
-var port = process.env.port || 3000;
+const port = process.env.PORT || 3000,
+  ip = process.env.IP || '0.0.0.0';
+var mongoURLLabel = 'mongodb://localhost/handballdb';
 
+if (process.env.OPENSHIFT_BUILD_NAME) {
+  mongoURLLabel = 'mongodb://matias:M4t7iAs18@172.30.150.143:27017/handballdb';
+}
 //Creo la conexion con MongoDB. Si no existe, la crea.
 
 /*Mongoose's default connection logic is deprecated as of 4.11.0.
@@ -60,7 +65,7 @@ function getLocalIP() {
   }
 }
 
-mongoose.connect('mongodb://localhost/handballdb', function (err, res) {
+mongoose.connect(mongoURLLabel, function (err, res) {
   if (err) {
     return console.error("Error al conectar a la base de datos: " + err);
   } else {

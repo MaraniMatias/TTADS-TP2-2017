@@ -14,7 +14,6 @@ var mongoURLLabel = 'mongodb://localhost/handballdb';
 
 if (process.env.OPENSHIFT_BUILD_NAME) {
   mongoURLLabel = 'mongodb://matias:M4t7iAs18@172.30.150.143:27017/handballdb';
-  console.log(process.env.MONGODB_DATABASE, process.env.MONGODB_PASSWORD);
 }
 
 mongoose.Promise = global.Promise;
