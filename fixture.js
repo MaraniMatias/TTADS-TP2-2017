@@ -8,13 +8,13 @@ const Jugador = require('./models/jugador');
 const Marcador = require('./models/marcador');
 const Torneo = require('./models/torneo')
 
-var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000,
-  ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
-  mongoURLLabel = 'mongodb://localhost/handballdb';
+const port = process.env.PORT || 3000,
+  ip = process.env.IP || '0.0.0.0';
+var mongoURLLabel = 'mongodb://localhost/handballdb';
 
 if (process.env.OPENSHIFT_BUILD_NAME) {
-  mongoURLLabel = 'mongodb://172.30.150.143/handballdb';
-  console.log(mongoURLLabel, process.env);
+  mongoURLLabel = 'mongodb://matias:M4t7iAs18@172.30.150.143:27017/handballdb';
+  console.log(process.env.MONGODB_DATABASE, process.env.MONGODB_PASSWORD);
 }
 
 mongoose.Promise = global.Promise;
