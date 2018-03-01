@@ -16,7 +16,6 @@ const TipoEvento = require('../../models/tipoEvento.js');
 router.get('/partidos',
   queryPage, // interceptor para completar el paginado
   function (req, res) {
-    const filter = _.get(req, 'query.torneos', [] ) || [];
     Partido.find({})
       .populate({
         path: 'equipoA',

@@ -15,9 +15,14 @@ const Marcador = require('../../models/marcador');
 router.get('/fixture-activos',
   queryPage, // interceptor para completar el paginado
   function (req, res) {
-    Partido.find({
-        fechaInicio: { "$gte": new Date() }
-      })
+    const filter = _.get(req, 'query.torneos', false) || false;
+    var query = {
+        fechaInicio: { "$gte": new Date() },
+    };
+    if (filter) {
+      query.torneo = filter ;
+    }
+    Partido.find(query)
       .select('torneo equipoA equipoB estado marcador fechaInicio categoria')
       .populate({
         path: 'equipoA',
