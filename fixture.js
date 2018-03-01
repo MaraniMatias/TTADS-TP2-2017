@@ -11,7 +11,8 @@ const Torneo = require('./models/torneo')
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000,
   ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
   mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL
-  mongoURLLabel = 'mongodb://localhost/handballdb';
+mongoURLLabel = 'mongodb://localhost/' + (process.env.OPENSHIFT_APP_NAME || ' handballdb');
+
 console.log(port, ip, mongoURL, process.env);
 
 mongoose.Promise = global.Promise;
