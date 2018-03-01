@@ -8,13 +8,17 @@ const Jugador = require('./models/jugador');
 const Marcador = require('./models/marcador');
 const Torneo = require('./models/torneo')
 
+var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000,
+  ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
+  mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL || 'mongodb://localhost/handballdb';
+
 mongoose.Promise = global.Promise;
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-mongoose.connect('mongodb://localhost/handballdb', function (err, res) {
+mongoose.connect(mongoURL, function (err, res) {
   if (err) {
     return console.error("Error al conectar a la base de datos: " + err);
   }
@@ -103,7 +107,7 @@ mongoose.connect('mongodb://localhost/handballdb', function (err, res) {
                       fecha: new Date(new Date().getTime() + 3000422)
                     }, {
                       evento: eventoTiroLibre_db,
-                      descripcion: 'Tiro libre :D a vavor de ' + equipoB.nombre,
+                      descripcion: 'Tiro libre :D a vavor de ' + equipo2_db.nombre,
                       fecha: new Date(new Date().getTime() + 3000231422)
                     }],
                     fechaInicio: new Date(),
