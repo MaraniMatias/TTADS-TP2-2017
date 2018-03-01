@@ -10,7 +10,9 @@ const Torneo = require('./models/torneo')
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000,
   ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
-  mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL || 'mongodb://localhost/handballdb';
+  mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL
+  mongoURLLabel = 'mongodb://localhost/handballdb';
+console.log(port, ip, mongoURL, process.env);
 
 mongoose.Promise = global.Promise;
 
@@ -18,7 +20,8 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-mongoose.connect(mongoURL, function (err, res) {
+
+mongoose.connect(mongoURLLabel, function (err, res) {
   if (err) {
     return console.error("Error al conectar a la base de datos: " + err);
   }
