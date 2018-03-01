@@ -32,7 +32,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-//Inicializo las rutas
+// Inicializo las rutas
 app.use('/api', require('./routes/api/apiMiembrosCuerpoTecnico'));
 app.use('/api', require('./routes/api/apiJugadores'));
 app.use('/api', require('./routes/api/apiPartidos'));
@@ -41,7 +41,11 @@ app.use('/api', require('./routes/api/apiTiposEvento'));
 app.use('/api', require('./routes/api/apiTorneos'));
 app.use('/api', require('./routes/api/apiFixture'));
 
-//Middleware
+// Static, FronEnd
+app.use('/', express.static('public/cliente'));
+app.use('/admin', express.static('public/gestor'));
+
+// Middleware
 app.use(function (err, req, res, next) {
   res.status().send({ error: err.message })
 })
