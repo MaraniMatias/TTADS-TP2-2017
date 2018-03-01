@@ -10,16 +10,18 @@ const Torneo = require('./models/torneo')
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000,
   ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
-  mongoURLLabel = 'mongodb://localhost/' + (process.env.OPENSHIFT_APP_NAME || 'handballdb');
+  mongoURLLabel = 'mongodb://localhost/handballdb';
 
-console.log(mongoURLLabel, process.env);
+if (process.env.OPENSHIFT_BUILD_NAME) {
+  mongoURLLabel = 'mongodb://172.30.150.143/handballdb';
+  console.log(mongoURLLabel, process.env);
+}
 
 mongoose.Promise = global.Promise;
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
-
 
 mongoose.connect(mongoURLLabel, function (err, res) {
   if (err) {
