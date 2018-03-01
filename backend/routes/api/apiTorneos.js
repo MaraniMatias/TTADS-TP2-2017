@@ -8,29 +8,17 @@ const Torneo = require('../../models/torneo');
 
 //Recupera todos los tipos de evento
 router.get('/torneos',function(req,res){
-  if(req.query.nombre === undefined){
-    Torneo.find({})
-      .populate('equipos')
-      .populate('partidos')
-      .exec(function (err, torneos) {
-        if (err || !torneos) {
-          return res.status(500).send({ msg: 'Ha ocurrido un error al popular', err: err });
-        } else {
-          return res.status(200).send(torneos);
-        }
-      });
-  }else{
-    Torneo.find({nombre: {$regex: req.query.nombre }})
-      .populate('equipos')
-      .populate('partidos')
-      .exec(function (err, torneos) {
-        if (err || !torneos) {
-          return res.status(500).send({ msg: 'Ha ocurrido un error al popular', err: err });
-        } else {
-          return res.status(200).send(torneos);
-        }
-      });
-  }
+  Torneo.find({})
+    .select('nombre')
+    .exec(function (err, equipos) {
+      if (err) {
+        // res, status, data, messager, error
+        return sendRes(res, 500, [], "Ha ocurrido un error", err);
+      } else {
+        // res, status, data, messager, error
+        return sendRes(res, 200, equipos || [], "Success", null);
+      }
+    });
 });
 
 router.get('/torneos/:id',function(req,res){
