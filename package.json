@@ -4,6 +4,7 @@
   "description": "Segundo trabajo práctico de la materia TTADS",
   "main": "index.js",
   "scripts": {
+    "postinstall": "node ./fixture.js",
     "start": "node ./index.js",
     "fixture": "node ./fixture.js",
     "dev": "nodemon index.js",
