@@ -10,8 +10,8 @@ var app = express();
 // process.env.port es usado por el servidor donde se publique la aplicacion
 // para proveer el puerto donde escuchara, si no lo tiene especificado escuchara
 // en el puerto 3000
-var port = process.env.PORT || 3000,
-  ip = process.env.IP || '0.0.0.0',
+const port = process.env.PORT || process.env.NODEJS_MONGO_PERSISTENT_SERVICE_PORT || 3000,
+  ip = process.env.IP || process.env.NODEJS_MONGO_PERSISTENT_SERVICE_HOST || "0.0.0.0",
   mongoURLLabel = 'mongodb://localhost/handballdb';
 
 // Error
@@ -22,8 +22,7 @@ process.on('uncaughtException', function (err) {
 if (process.env.NODE_ENV && process.env.NODE_ENV === 'production') {
   // Creo la conexion para MongoDB corriendo en el servidor
   mongoURLLabel = `mongodb://matias:M4t7iAs18@${process.env.MONGODB_SERVICE_HOST}:${process.env.MONGODB_SERVICE_PORT}/handballdb`;
-  prot = 8080;
-  console.log(process.env);
+  // console.log(process.env);
 }
 
 mongoose.Promise = global.Promise;
