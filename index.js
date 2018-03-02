@@ -11,8 +11,8 @@ var app = express();
 // para proveer el puerto donde escuchara, si no lo tiene especificado escuchara
 // en el puerto 3000
 const port = process.env.PORT || process.env.NODEJS_MONGO_PERSISTENT_SERVICE_PORT || 3000,
-  ip = process.env.IP || process.env.NODEJS_MONGO_PERSISTENT_SERVICE_HOST || "0.0.0.0",
-  mongoURLLabel = 'mongodb://localhost/handballdb';
+  ip = process.env.IP || process.env.NODEJS_MONGO_PERSISTENT_SERVICE_HOST || "0.0.0.0";
+var mongoURLLabel = 'mongodb://localhost/handballdb';
 
 // Error
 process.on('uncaughtException', function (err) {
