@@ -6,31 +6,35 @@ const os = require('os');
 const ifaces = os.networkInterfaces();
 
 var app = express();
-const port = process.env.PORT || 3000,
-  ip = process.env.IP || '0.0.0.0';
-var mongoURLLabel = 'mongodb://localhost/handballdb';
+
+// process.env.port es usado por el servidor donde se publique la aplicacion
+// para proveer el puerto donde escuchara, si no lo tiene especificado escuchara
+// en el puerto 3000
+var port = process.env.PORT || 3000,
+  ip = process.env.IP || '0.0.0.0',
+  mongoURLLabel = 'mongodb://localhost/handballdb';
+
+// Error
+process.on('uncaughtException', function (err) {
+  console.log("Exception", err.stack);
+});
 
 if (process.env.OPENSHIFT_BUILD_NAME) {
+  // Creo la conexion para MongoDB corriendo en el servidor
   mongoURLLabel = 'mongodb://matias:M4t7iAs18@172.30.150.143:27017/handballdb';
+  prot = 8080;
+  console.log(process.env);
 }
-//Creo la conexion con MongoDB. Si no existe, la crea.
 
-/*Mongoose's default connection logic is deprecated as of 4.11.0.
-Please opt in to the new connection logic using the useMongoClient option,
-but make sure you test your connections first if you're upgrading an existing codebase!
+mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb://localhost/handballdb', {
-  useMongoClient: true
-});*/
-mongoose.Promise = global.Promise; //TODO:Ver esto  <-- Que se supone que es?
-
-//Permito el acceso a los recursos del servidor desde otros dominios
+// Permito el acceso a los recursos del servidor desde otros dominios
 app.use(cors());
 
-//Middleware
+// Middleware
 app.use(bodyParser.json());
 
-//Middleware. Esta funcion me permite hacer peticiones http de localhost a localhost
+// Middleware. Esta funcion me permite hacer peticiones http de localhost a localhost
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -47,7 +51,10 @@ app.use('/api', require('./routes/api/apiTorneos'));
 app.use('/api', require('./routes/api/apiFixture'));
 
 // Static, FronEnd
-app.use('/', express.static('public/cliente'));
+app.use('/', function (req, res) {
+  res.send('Server runing :D');
+});
+app.use('/cliente', express.static('public/cliente'));
 app.use('/admin', express.static('public/gestor'));
 
 // Middleware
@@ -55,10 +62,7 @@ app.use(function (err, req, res, next) {
   res.status().send({ error: err.message })
 })
 
-//process.env.port es usado por el servidor donde se publique la aplicacion
-//para proveer el puerto donde escuchara, si no lo tiene especificado escuchara
-//en el puerto 3000
-
+// Listar las IP de las interfaces de red.
 function getLocalIP() {
   for (key in ifaces) {
     console.log(`IP ${key}: ${ifaces[key][0].address}`);
@@ -70,11 +74,11 @@ mongoose.connect(mongoURLLabel, function (err, res) {
     return console.error("Error al conectar a la base de datos: " + err);
   } else {
     console.log("Conexón a la base de datos establecida correctamente.");
-    getLocalIP();
+    app.listen(port, ip, function () {
+      getLocalIP();
+      console.log('Server running on http://%s:%s', ip, port);
+    });
   }
 });
 
-app.listen(port, ip);
-console.log('Server running on http://%s:%s', ip, port);
-
-module.exports = app ;
+module.exports = app;
