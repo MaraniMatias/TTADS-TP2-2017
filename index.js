@@ -19,9 +19,9 @@ process.on('uncaughtException', function (err) {
   console.log("Exception", err.stack);
 });
 
-if (process.env.OPENSHIFT_BUILD_NAME) {
+if (process.env.NODE_ENV && process.env.NODE_ENV === 'production') {
   // Creo la conexion para MongoDB corriendo en el servidor
-  mongoURLLabel = 'mongodb://matias:M4t7iAs18@172.30.150.143:27017/handballdb';
+  mongoURLLabel = `mongodb://matias:M4t7iAs18@${process.env.MONGODB_SERVICE_HOST}:${process.env.MONGODB_SERVICE_PORT}/handballdb`;
   prot = 8080;
   console.log(process.env);
 }
