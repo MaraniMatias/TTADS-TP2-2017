@@ -61,7 +61,7 @@ mongoose.connect(mongoURLLabel, function (err, res) {
         const equipo1 = new Equipo({
           nombre: "equipo1 teting " + getRandomInt(10),
           jugadores: jugadores,
-          escudoURL: `https://api.adorable.io/avatars/128/${getRandomInt(1000)}.png`
+          escudoURL: `https://api.adorable.io/avatars/128/${getRandomInt(1000)}.png`,
           goles: getRandomInt(10),
           cuerpoTecnico: cuerpoTecnico
         });
@@ -69,7 +69,7 @@ mongoose.connect(mongoURLLabel, function (err, res) {
         const equipo2 = new Equipo({
           nombre: "equipo2 teting " + getRandomInt(10),
           jugadores: jugadores,
-          escudoURL: `https://api.adorable.io/avatars/128/${getRandomInt(1000)}.png`
+          escudoURL: `https://api.adorable.io/avatars/128/${getRandomInt(1000)}.png`,
           goles: getRandomInt(10),
           cuerpoTecnico: cuerpoTecnico
         });
