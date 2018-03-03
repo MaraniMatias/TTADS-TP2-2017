@@ -61,7 +61,7 @@ router.get('/fixture-pasados',
   queryPage, // interceptor para completar el paginado
   function (req, res) {
     Partido.find({
-        fechaInicio: { "$gl": new Date() }
+        fechaInicio: { "$lt": new Date() }
       })
       .select('torneo equipoA equipoB estado marcador fechaInicio categoria')
       .populate({
