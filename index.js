@@ -21,7 +21,8 @@ process.on('uncaughtException', function (err) {
 
 if (process.env.NODE_ENV && process.env.NODE_ENV === 'production') {
   // Creo la conexion para MongoDB corriendo en el servidor
-  mongoURLLabel = `mongodb://dXNlck5UQQ==:WFc2eWpIa01ZNmkzNDM1Tg==@${process.env.MONGODB_SERVICE_HOST}:${process.env.MONGODB_SERVICE_PORT}/handballdb`;
+  // mongoURLLabel = `mongodb://dXNlck5UQQ==:WFc2eWpIa01ZNmkzNDM1Tg==@${process.env.MONGODB_SERVICE_HOST}:${process.env.MONGODB_SERVICE_PORT}/handballdb`;
+  mongoURLLabel = `mongodb://matias:M4t7iAs18@${process.env.MONGODB_SERVICE_HOST}:${process.env.MONGODB_SERVICE_PORT}/handballdb`;
   // console.log(process.env);
 }
 
