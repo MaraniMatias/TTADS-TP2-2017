@@ -51,7 +51,7 @@ app.use('/api', require('./routes/api/apiFixture'));
 
 // Static, FronEnd
 app.use('/', function (req, res) {
-  res.send('Server runing :D');
+  res.end('Server runing :D');
 });
 app.use('/cliente', express.static('public/cliente'));
 app.use('/admin', express.static('public/gestor'));
