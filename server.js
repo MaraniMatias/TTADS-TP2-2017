@@ -12,11 +12,11 @@ Object.assign = require('object-assign')
 app.use(morgan('combined'))
 
 // Las variables de entorno deben configurarse
-const port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
+const port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000,
   ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
   mongodbUser = process.env.MONGODB_USER || process.env.MONGO_USER || '',
   mongoPass = process.env.MONGODB_PASSWORD || process.env.MONGO_PASS ||''
-  mongodbName = process.env.MONGODB_DATABASE || 'hamdballdb';
+  mongodbName = process.env.MONGODB_DATABASE || 'handballdb';
 var mongoURLLabel = 'mongodb://localhost/' + mongodbName;
 
 if (process.env.NODE_ENV && process.env.NODE_ENV === 'production') {

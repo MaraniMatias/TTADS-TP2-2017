@@ -16,27 +16,25 @@ router.get('/equipos',
   function (req, res) {
     // Validar parámetro de la consulta
     const nombre = _.get(req, 'query.nombre', false) || false;
+    let query = {}
     if (nombre) {
-      Equipo.find({
-          nombre: { $regex: nombre, $options: 'i' }
-        })
-        .select('nombre')
-        .sort('nombre')
-        .skip(req.query.skip)
-        .limit(req.query.limit)
-        .exec(function (err, equipos) {
-          if (err) {
-            // res, status, data, messager, error
-            return sendRes(res, 500, [], "Ha ocurrido un error", err);
-          } else {
-            // res, status, data, messager, error
-            return sendRes(res, 200, equipos || [], "Success", null);
-          }
-        });
-    } else {
-      // res, status, data, messager, error
-      return sendRes(res, 402, [], "Parametro 'nombre' es requerido", null);
+      query.nombre = { $regex: nombre, $options: 'i' };
     }
+    Equipo
+      .find(query)
+      .select('nombre')
+      .sort('nombre')
+      .skip(req.query.skip)
+      .limit(req.query.limit)
+      .exec(function (err, equipos) {
+        if (err) {
+          // res, status, data, messager, error
+          return sendRes(res, 500, [], "Ha ocurrido un error", err);
+        } else {
+          // res, status, data, messager, error
+          return sendRes(res, 200, equipos || [], "Success", null);
+        }
+      });
   });
 
 router.get('/equipos/:id', function (req, res) {

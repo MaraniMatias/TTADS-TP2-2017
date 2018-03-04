@@ -16,31 +16,28 @@ router.get('/miembros-cuerpo-tecnico',
   function (req, res) {
     // Validar parámetro de la consulta
     const nombre = _.get(req, 'query.nombre', false) || false;
-
+    let query = {}
     if (nombre) {
-      MiembroCuerpoTecnico.find({
-          $or: [
-            { nombre: { $regex: nombre, $options: 'i' } },
-            { apellido: { $regex: nombre, $options: 'i' } }
-          ]
-        })
-        .select('nombre apellido')
-        .sort('apellido')
-        .skip(req.query.skip)
-        .limit(req.query.limit)
-        .exec(function (err, miembrosCuerpoTecnico) {
-          if (err) {
-            // res, status, data, messager, error
-            return sendRes(res, 500, [], "Ha ocurrido un error", err);
-          } else {
-            // res, status, data, messager, error
-            return sendRes(res, 200, miembrosCuerpoTecnico, "Success", null);
-          }
-        });
-    } else {
-      // res, status, data, messager, error
-      return sendRes(res, 402, [], "Parametro 'nombre' es requerido", null);
+      query.$or = [
+        { nombre: { $regex: nombre, $options: 'i' } },
+        { apellido: { $regex: nombre, $options: 'i' } }
+      ];
     }
+    MiembroCuerpoTecnico
+      .find(query)
+      .select('nombre apellido')
+      .sort('apellido')
+      .skip(req.query.skip)
+      .limit(req.query.limit)
+      .exec(function (err, miembrosCuerpoTecnico) {
+        if (err) {
+          // res, status, data, messager, error
+          return sendRes(res, 500, [], "Ha ocurrido un error", err);
+        } else {
+          // res, status, data, messager, error
+          return sendRes(res, 200, miembrosCuerpoTecnico, "Success", null);
+        }
+      });
   });
 
 router.get('/miembros-cuerpo-tecnico/:id', function (req, res) {
@@ -63,24 +60,24 @@ router.get('/miembros-cuerpo-tecnico/:id', function (req, res) {
 });
 
 //Agrega un miembro de cuerpo tecnico a la bd
-router.post('/miembros-cuerpo-tecnico',function(req,res,next){
-  MiembroCuerpoTecnico.create(req.body).then(function(miembrosCuerpoTecnico){
+router.post('/miembros-cuerpo-tecnico', function (req, res, next) {
+  MiembroCuerpoTecnico.create(req.body).then(function (miembrosCuerpoTecnico) {
     res.status(200).send(miembrosCuerpoTecnico);
   }).catch(next);
 });
 
 //Modifica un miembro de cuerpo tecnico en la bd
-router.put('/miembros-cuerpo-tecnico/:id',function(req,res){
-  MiembroCuerpoTecnico.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(){
-    MiembroCuerpoTecnico.findOne({_id: req.params.id}).then(function(miembrosCuerpoTecnico){
+router.put('/miembros-cuerpo-tecnico/:id', function (req, res) {
+  MiembroCuerpoTecnico.findByIdAndUpdate({ _id: req.params.id }, req.body).then(function () {
+    MiembroCuerpoTecnico.findOne({ _id: req.params.id }).then(function (miembrosCuerpoTecnico) {
       res.status(200).send(miembrosCuerpoTecnico);
     });
   });
 });
 
 //Borra un miembro de cuerpo tecnico de la bd
-router.delete('/miembros-cuerpo-tecnico/:id',function(req,res){
-  MiembroCuerpoTecnico.findByIdAndRemove({_id: req.params.id}).then(function(miembrosCuerpoTecnico){
+router.delete('/miembros-cuerpo-tecnico/:id', function (req, res) {
+  MiembroCuerpoTecnico.findByIdAndRemove({ _id: req.params.id }).then(function (miembrosCuerpoTecnico) {
     res.status(200).send(miembrosCuerpoTecnico);
   });
 });
