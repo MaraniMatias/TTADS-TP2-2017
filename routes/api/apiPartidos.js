@@ -12,7 +12,7 @@ const Equipo = require('../../models/equipo');
 const TipoEvento = require('../../models/tipoEvento.js');
 
 // Recupera todos los partidos
-// http://localhost:3000/api/partido/?skip=1&limit=1
+// http://localhost:3000/api/partido/?skip=1&limit=1&torneos=['nombreTorneo']
 router.get('/partidos',
   queryPage, // interceptor para completar el paginado
   function (req, res) {

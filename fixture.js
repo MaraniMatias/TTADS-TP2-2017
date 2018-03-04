@@ -8,13 +8,21 @@ const Jugador = require('./models/jugador');
 const Marcador = require('./models/marcador');
 const Torneo = require('./models/torneo')
 
+const port = process.env.PORT || 3000,
+  ip = process.env.IP || '0.0.0.0';
+var mongoURLLabel = 'mongodb://localhost/handballdb';
+
+if (process.env.OPENSHIFT_BUILD_NAME) {
+  mongoURLLabel = 'mongodb://matias:M4t7iAs18@172.30.150.143:27017/handballdb';
+}
+
 mongoose.Promise = global.Promise;
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-mongoose.connect('mongodb://localhost/handballdb', function (err, res) {
+mongoose.connect(mongoURLLabel, function (err, res) {
   if (err) {
     return console.error("Error al conectar a la base de datos: " + err);
   }
@@ -53,6 +61,7 @@ mongoose.connect('mongodb://localhost/handballdb', function (err, res) {
         const equipo1 = new Equipo({
           nombre: "equipo1 teting " + getRandomInt(10),
           jugadores: jugadores,
+          escudoURL: `https://api.adorable.io/avatars/128/${getRandomInt(1000)}.png`,
           goles: getRandomInt(10),
           cuerpoTecnico: cuerpoTecnico
         });
@@ -60,6 +69,7 @@ mongoose.connect('mongodb://localhost/handballdb', function (err, res) {
         const equipo2 = new Equipo({
           nombre: "equipo2 teting " + getRandomInt(10),
           jugadores: jugadores,
+          escudoURL: `https://api.adorable.io/avatars/128/${getRandomInt(1000)}.png`,
           goles: getRandomInt(10),
           cuerpoTecnico: cuerpoTecnico
         });
@@ -103,7 +113,7 @@ mongoose.connect('mongodb://localhost/handballdb', function (err, res) {
                       fecha: new Date(new Date().getTime() + 3000422)
                     }, {
                       evento: eventoTiroLibre_db,
-                      descripcion: 'Tiro libre :D a vavor de ' + equipoB.nombre,
+                      descripcion: 'Tiro libre :D a vavor de ' + equipo2_db.nombre,
                       fecha: new Date(new Date().getTime() + 3000231422)
                     }],
                     fechaInicio: new Date(),
