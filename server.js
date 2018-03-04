@@ -61,11 +61,12 @@ app.use('/api', require('./routes/api/apiTorneos'));
 app.use('/api', require('./routes/api/apiFixture'));
 
 // Static, FronEnd
+// NOTE: Por ahora no tocar, la uso en el serve
 app.use('/', function (req, res) {
-  res.end('Server runing :D v0.0.6');
+  res.end('Server runing :D v0.0.7');
 });
-app.use('/cliente', express.static('./public/cliente'));
-app.use('/admin', express.static('./public/gestor'));
+// app.use('/cliente', express.static('./public/cliente'));
+// app.use('/admin', express.static('./public/gestor'));
 
 // Middleware
 app.use(function (err, req, res, next) {
