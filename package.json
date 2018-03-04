@@ -2,24 +2,36 @@
   "name": "ttads-tp2-2017",
   "version": "1.0.0",
   "description": "Segundo trabajo práctico de la materia TTADS",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "fixture": "node ./fixture.js",
-    "start": "node ./index.js",
-    "test": "node ./fixture.js"
+    "start": "node server.js",
+    "test": "IP=0.0.0.0 PORT=3030 mocha --timeout 5000 tests/*_test.js",
+    "fixture": "node ./fixture.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/andres1790/TTADS-TP2-2017.git"
   },
-  "author": "Andrés de la Grana",
+  "authors": [
+    {
+      "name": "Andrés de la Grana"
+    },
+    {
+      "name": "Marani Matias Ezequiel",
+      "email": "maranimatias@gmail.com"
+    }
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/andres1790/TTADS-TP2-2017/issues"
+    "url": "https://github.com/MaraniMatias/TTADS-TP2-2017/issues"
   },
-  "homepage": "https://github.com/andres1790/TTADS-TP2-2017#readme",
+  "homepage": "https://github.com/MaraniMatias/TTADS-TP2-2017#readme",
   "dependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^2.0.1",
+    "mocha": "^2.4.5",
+    "morgan": "^1.7.0",
+    "object-assign": "4.1.0",
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
     "express": "^4.16.2",
@@ -28,5 +40,9 @@
   },
   "devDependencies": {
     "nodemon": "^1.15.1"
+  },
+  "engine": {
+    "node": "*",
+    "npm": "*"
   }
 }
