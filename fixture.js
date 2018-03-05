@@ -1,5 +1,4 @@
 // TODO Usar Bluebirdjs
-const mongoose = require('mongoose');
 const Equipo = require('./models/equipo');
 const TipoEvento = require('./models/tipoEvento');
 const Partido = require('./models/partido');
@@ -8,26 +7,11 @@ const Jugador = require('./models/jugador');
 const Marcador = require('./models/marcador');
 const Torneo = require('./models/torneo')
 
-const port = process.env.PORT || 3000,
-  ip = process.env.IP || '0.0.0.0';
-var mongoURLLabel = 'mongodb://localhost/handballdb';
-
-if (process.env.OPENSHIFT_BUILD_NAME) {
-  mongoURLLabel = 'mongodb://matias:M4t7iAs18@172.30.150.143:27017/handballdb';
-}
-
-mongoose.Promise = global.Promise;
-
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-mongoose.connect(mongoURLLabel, function (err, res) {
-  if (err) {
-    return console.error("Error al conectar a la base de datos: " + err);
-  }
-  console.log("Conexón a la base de datos establecida correctamente.");
-
+exports.load = function (cb) {
   const jugadorA = new Jugador({
     nombre: "jugador " + getRandomInt(100),
     apellido: "A " + getRandomInt(100),
@@ -171,9 +155,9 @@ mongoose.connect(mongoURLLabel, function (err, res) {
                           partido2_db.save((err, partido2_tdb) => {
                             if (err || !partido2_tdb) { return console.error(err); }
                             console.log("Agregar torneo al partido 2");
-
-                            console.log("DB poblada :D");
-                            mongoose.connection.close();
+                            if (typeof cb === 'function') {
+                              cb();
+                            }
                           });
                         });
                       });
@@ -187,4 +171,4 @@ mongoose.connect(mongoURLLabel, function (err, res) {
       });
     });
   });
-});
+}
