@@ -17,7 +17,8 @@ exports.load = function (cb) {
     nombre: "Nombre Admin",
     apellido: "Apellido Admin",
     username: 'admin',
-    password: '123456'
+    password: '123456',
+    role: 'admin'
   });
 
   admin.save(function (err, admin_db) {

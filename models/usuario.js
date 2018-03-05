@@ -21,6 +21,11 @@ const JugadorSchema = new Schema({
     type: String,
     // Si no esta este campo en la consola aparece este error.
     required: [true, 'El campo password es requerido']
+  },
+  role: {
+    type: String,
+    enum: ['admin', 'user'],
+    default: 'admin'
   }
 });
 
