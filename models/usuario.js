@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const crypto = require('crypto');
 
 const JugadorSchema = new Schema({
   nombre: {
@@ -29,6 +30,17 @@ const JugadorSchema = new Schema({
   }
 });
 
-// TODO: pre save, encriptar pasword
+JugadorSchema.pre("save", function (next) {
+  if (this.isModified('password'))
+    this.password = crypto.createHash('sha256')
+    .update(this.password)
+    .digest("hex");
+  next();
+});
+
+// Checks password match
+JugadorSchema.method('authenticate', function(password) {
+    return crypto.createHash('sha256').update(password).digest("hex") === this.password;
+});
 
 module.exports = mongoose.model('Ususarios', JugadorSchema);
