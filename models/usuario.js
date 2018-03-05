@@ -31,10 +31,14 @@ const JugadorSchema = new Schema({
 });
 
 JugadorSchema.pre("save", function (next) {
-  if (this.isModified('password'))
+  if (this.isModified('password')) {
     this.password = crypto.createHash('sha256')
     .update(this.password)
     .digest("hex");
+  }
+  if (this.isModified('username')) {
+    this.username = this.username.toLowerCase();
+  }
   next();
 });
 
