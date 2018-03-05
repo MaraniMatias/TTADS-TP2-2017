@@ -1,13 +1,22 @@
+const SECRET_KEY_SESSION = 'my key secret';
 const pkg = require('./package');
 const express = require('express'),
   app = express(),
   morgan = require('morgan');
 const bodyParser = require('body-parser');
+const cookieParse = require('cookie-parser');
+const session = require('express-session');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const fixture = require('./fixture');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
 const os = require('os');
 const ifaces = os.networkInterfaces();
+
+// Models
+const Users = require('./models/usuario');
 
 Object.assign = require('object-assign');
 
@@ -28,6 +37,38 @@ if (process.env.NODE_ENV && process.env.NODE_ENV === 'production') {
   // console.log(process.env);
 }
 
+// Config passport
+passport.use(new LocalStrategy({
+  // usernameField: 'email',
+  // passwordField: 'passwd'
+}, function (username, password, done) {
+  //TODO: Usar metodo para valiar :D
+  Users
+    .findOne({
+      username,
+      password
+    })
+    .select('-password') // Seleciona todos los campos menos password
+    .exec(function (err, admin) {
+      if (err) { return done(err); }
+      if (!admin) { return done(null, false); }
+      return done(null, admin);
+    });
+}));
+
+passport.serializeUser(function (user, cb) {
+  // console.log('serializeUser', user);
+  cb(null, user._id);
+});
+
+passport.deserializeUser(function (id, cb) {
+  // console.log('deserializeUser', id);
+  Users.findById(id, function (err, user) {
+    if (err) { return cb(err); }
+    cb(null, user);
+  });
+});
+
 // error handling
 app.use(function (err, req, res, next) {
   console.error(err.stack);
@@ -44,15 +85,29 @@ mongoose.Promise = global.Promise;
 // Permito el acceso a los recursos del servidor desde otros dominios
 app.use(cors());
 
-// Middleware
+app.use(cookieParse());
+// Parsear el cueropo de dato en POST
 app.use(bodyParser.json());
+app.use(session({
+  secret: SECRET_KEY_SESSION,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}));
+
+// Initialize Passport and restore authentication state, if any, from the session.
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Middleware. Esta funcion me permite hacer peticiones http de localhost a localhost
+// TODO: Probar el if
+// if (process.env.NODE_ENV && process.env.NODE_ENV !== 'production') {
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+//}
 
 // Inicializo las rutas
 app.use('/api', require('./routes/api/apiMiembrosCuerpoTecnico'));
@@ -82,10 +137,30 @@ app.use('/load-db', function (req, res) {
   });
 });
 
-// Middleware
-app.use(function (err, req, res, next) {
-  res.status().send({ error: err.message })
-})
+// Define routes.
+// /login username password
+// curl 'http://192.168.1.6:3000/login' -H 'content-type: application/json' --data '{"username":"admin","password":"123456"}'
+app.post('/login',
+  passport.authenticate('local'),
+  function (req, res) {
+    console.log(req.user);
+    res.end('ok');
+  });
+app.get('/logout',
+  function (req, res) {
+    req.logout();
+    res.end('Logut');
+  });
+app.get('/faild',
+  passport.authenticate('local'),
+  function (req, res) {
+    res.end('Faild :(');
+  });
+app.get('/me',
+  function (req, res) {
+    console.log(req.user);
+    res.json(req.user);
+  });
 
 // Listar las IP de las interfaces de red.
 function getLocalIP() {
