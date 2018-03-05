@@ -1,17 +1,23 @@
 const SECRET_KEY_SESSION = 'my key secret';
 const pkg = require('./package');
 const path = require('path');
+
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParse = require('cookie-parser');
-const session = require('express-session');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const fixture = require('./fixture');
+
+const session = require('express-session');
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
+const passportJWT = require("passport-jwt");
 const LocalStrategy = require('passport-local').Strategy;
+
+const ExtractJwt = passportJWT.ExtractJwt;
+const JwtStrategy = passportJWT.Strategy;
 
 const os = require('os');
 const ifaces = os.networkInterfaces();
@@ -19,8 +25,11 @@ const ifaces = os.networkInterfaces();
 // Models
 const Users = require('./models/usuario');
 
+const fixture = require('./fixture');
+
 Object.assign = require('object-assign');
 
+// Lista las pediciones al servidor en consola
 // app.use(morgan('combined'));
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
@@ -42,19 +51,40 @@ if (process.env.NODE_ENV && process.env.NODE_ENV === 'production') {
 passport.use(new LocalStrategy({
   // usernameField: 'email',
   // passwordField: 'passwd'
-}, function (username, password, done) {
-  //TODO: Usar metodo para valiar :D
+}, function (username, password, next) {
+  // console.log(username, password);
   Users
-    .findOne({
-      username,
-      password
-    })
+    .findOne({ username: username })
+    // .select('-password') // Seleciona todos los campos menos password
+    .exec(function (err, admin) {
+      if (err || !admin) {
+        return next(err, false);
+      }
+      if (admin.authenticate(password)) {
+        return next(null, admin);
+      } else {
+        return next(null, false);
+      }
+    });
+}));
+
+passport.use(new JwtStrategy({
+  // Creates a new extractor that looks for the JWT in the authorization header with the scheme 'bearer'
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: SECRET_KEY_SESSION
+}, function (jwt_payload, next) {
+  // console.log('payload received', jwt_payload);
+  // usually this would be a database call:
+  Users
+    .findById(jwt_payload.id)
     .select('-password') // Seleciona todos los campos menos password
     .exec(function (err, admin) {
-      if (err) { return done(err); }
-      if (!admin) { return done(null, false); }
-      return done(null, admin);
+      if (err || !admin) {
+        return next(err, false);
+      }
+      return next(null, admin);
     });
+
 }));
 
 passport.serializeUser(function (user, cb) {
@@ -69,6 +99,15 @@ passport.deserializeUser(function (id, cb) {
     cb(null, user);
   });
 });
+
+// Initialize Passport and restore authentication state, if any, from the session.
+app.use(passport.initialize());
+app.use(passport.session());
+// # Using Passport
+// ## Login
+// $ curl 'http://192.168.1.6:3000/login' -H 'Host: 192.168.1.6:3000' -H 'content-type: application/json' --data '{"username":"admin","password":"123456"}'
+// ## Autentificacion
+// $ curl -H "Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhOWNiOThkMGRmMjdhNWEyNjBkMDUwMiIsImlhdCI6MTUyMDI1NzEwMX0.dIEVI-LJy4la9e1sJh--PTBAo2A7nQrXAtBn-Xpg5mc" 'http://192.168.1.6:3000/me'
 
 // error handling
 app.use(function (err, req, res, next) {
@@ -92,39 +131,36 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+// TODO: creo que no se utiliza
 app.use(session({
   secret: SECRET_KEY_SESSION,
   resave: false,
   saveUninitialized: true,
   cookie: {
     secure: true,
-    maxAge : 3600000
+    maxAge: 3600000
   }
 }));
-
-// Initialize Passport and restore authentication state, if any, from the session.
-app.use(passport.initialize());
-app.use(passport.session());
 
 // Middleware. Esta funcion me permite hacer peticiones http de localhost a localhost
 // TODO: Probar el if
 // if (process.env.NODE_ENV && process.env.NODE_ENV !== 'production') {
-  app.all('/*', function (req, res, next) {
-    // CORS headers
-    res.header('Access-Control-Allow-Origin', '*'); // restrict it to the required domain
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    // Set custom headers for CORS
-    res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key');
-    // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    // When performing a cross domain request, you will recieve
-    // a preflighted request first. This is to check if our the app
-    // is safe.
-    if (req.method == 'OPTIONS') {
-      res.status(200).end();
-    } else {
-      next();
-    }
-  });
+app.all('/*', function (req, res, next) {
+  // CORS headers
+  res.header('Access-Control-Allow-Origin', '*'); // restrict it to the required domain
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  // Set custom headers for CORS
+  res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key');
+  // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  // When performing a cross domain request, you will recieve
+  // a preflighted request first. This is to check if our the app
+  // is safe.
+  if (req.method == 'OPTIONS') {
+    res.status(200).end();
+  } else {
+    next();
+  }
+});
 //}
 
 // Inicializo las rutas
@@ -163,19 +199,17 @@ app.post('/login',
   passport.authenticate('local'),
   function (req, res) {
     console.log(req.user);
-    res.end('ok');
+    let token = jwt.sign({ id: req.user._id }, SECRET_KEY_SESSION);
+    res.status(200);
+    res.json({ data: null, message: "token", error: null, token });
   });
 app.get('/logout',
   function (req, res) {
     req.logout();
     res.end('Logut');
   });
-app.get('/faild',
-  function (req, res) {
-    res.end('Faild :(');
-  });
 app.get('/me',
-  passport.authenticate('local'),
+  passport.authenticate('jwt', { session: false }),
   function (req, res) {
     console.log(req.user);
     res.json(req.user);
