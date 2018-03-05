@@ -137,7 +137,7 @@ app.use(session({
   saveUninitialized: true,
   cookie: {
     secure: true,
-    maxAge: 3600000
+    // maxAge: 3600000
   }
 }));
 
@@ -179,7 +179,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/status', function (req, res) {
   res.json({
     // Variable del sel servidor
-    server: process.env.OPENSHIFT_BUILD_NAME ? 'Server runing :D' : 'localhost',
+    server: process.env.OPENSHIFT_BUILD_NAME ? 'OPENSHIFT' : 'localhost',
     version: `v${pkg.version}`
   });
 });
