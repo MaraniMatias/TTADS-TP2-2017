@@ -1,4 +1,4 @@
-const SECRET_KEY_SESSION = 'my key secret';
+const SECRET_KEY_SESSION = process.SECRET_KEY_SESSION || 'mYk3y5eC7e1';
 const pkg = require('./package');
 const path = require('path');
 
@@ -12,7 +12,6 @@ const cors = require('cors');
 
 const session = require('express-session');
 const passport = require('passport');
-const jwt = require('jsonwebtoken');
 const passportJWT = require("passport-jwt");
 const LocalStrategy = require('passport-local').Strategy;
 
@@ -105,9 +104,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 // # Using Passport
 // ## Login
-// $ curl 'http://192.168.1.6:3000/login' -H 'Host: 192.168.1.6:3000' -H 'content-type: application/json' --data '{"username":"admin","password":"123456"}'
+// $ curl 'http://192.168.1.6:3000/auth/login' -H 'Host: 192.168.1.6:3000' -H 'content-type: application/json' --data '{"username":"admin","password":"123456"}'
 // ## Autentificacion
-// $ curl -H "Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhOWNiOThkMGRmMjdhNWEyNjBkMDUwMiIsImlhdCI6MTUyMDI1NzEwMX0.dIEVI-LJy4la9e1sJh--PTBAo2A7nQrXAtBn-Xpg5mc" 'http://192.168.1.6:3000/me'
+// $ curl -H "Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhOWNiOThkMGRmMjdhNWEyNjBkMDUwMiIsImlhdCI6MTUyMDI1NzEwMX0.dIEVI-LJy4la9e1sJh--PTBAo2A7nQrXAtBn-Xpg5mc" 'http://192.168.1.6:3000/auth/me'
 
 // error handling
 app.use(function (err, req, res, next) {
@@ -172,6 +171,8 @@ app.use('/api', require('./routes/api/apiTiposEvento'));
 app.use('/api', require('./routes/api/apiTorneos'));
 app.use('/api', require('./routes/api/apiFixture'));
 
+app.use('/auth', require('./routes/auth'));
+
 // Static, FronEnd
 app.use(express.static(path.join(__dirname, 'public')));
 // NOTE: Por ahora no tocar, la uso en el serve
@@ -191,29 +192,6 @@ app.use('/load-db', function (req, res) {
     res.end('DB poblada');
   });
 });
-
-// Define routes.
-// /login username password
-// curl 'http://192.168.1.6:3000/login' -H 'content-type: application/json' --data '{"username":"admin","password":"123456"}'
-app.post('/login',
-  passport.authenticate('local'),
-  function (req, res) {
-    console.log(req.user);
-    let token = jwt.sign({ id: req.user._id }, SECRET_KEY_SESSION);
-    res.status(200);
-    res.json({ data: null, message: "token", error: null, token });
-  });
-app.get('/logout',
-  function (req, res) {
-    req.logout();
-    res.end('Logut');
-  });
-app.get('/me',
-  passport.authenticate('jwt', { session: false }),
-  function (req, res) {
-    console.log(req.user);
-    res.json(req.user);
-  });
 
 // Listar las IP de las interfaces de red.
 function getLocalIP() {
