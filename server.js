@@ -65,10 +65,6 @@ app.use('/api', require('./routes/api/apiFixture'));
 
 // Static, FronEnd
 // NOTE: Por ahora no tocar, la uso en el serve
-app.use('/', function (req, res) {
-  res.end('Server running');
-});
-
 app.use('/status', function (req, res) {
   res.json({
     // Variable del sel servidor
