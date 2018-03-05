@@ -1,6 +1,6 @@
 {
   "name": "ttads-tp2-2017",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Segundo trabajo práctico de la materia TTADS",
   "main": "server.js",
   "scripts": {
