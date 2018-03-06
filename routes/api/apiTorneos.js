@@ -41,9 +41,9 @@ router.post('/torneos',
   // Para validar la autenticación con el token
   passport.authenticate('jwt', { session: false }),
   function (req, res) {
-    const nombre = _.get(req, 'body.nombre', false) || false;
-    const fechaInicio = _.get(req, 'body.fechaInicio', false) || false;
-    const fechaFin = _.get(req, 'body.fechaFin', false) || false;
+    const nombre = _.get(req, 'body.torneo.nombre', false) || false;
+    const fechaInicio = _.get(req, 'body.torneo.fechaInicio', false) || false;
+    const fechaFin = _.get(req, 'body.torneo.fechaFin', false) || false;
 
     if (nombre && fechaInicio && fechaFin) {
       const torneo = new Torneo({
@@ -71,9 +71,9 @@ router.put('/torneos/:id',
   // Para validar la autenticación con el token
   passport.authenticate('jwt', { session: false }),
   function (req, res) {
-    const nombre = _.get(req, 'body.nombre', false) || false;
-    const fechaInicio = _.get(req, 'body.fechaInicio', false) || false;
-    const fechaFin = _.get(req, 'body.fechaFin', false) || false;
+    const nombre = _.get(req, 'body.torneo.nombre', false) || false;
+    const fechaInicio = _.get(req, 'body.torneo.fechaInicio', false) || false;
+    const fechaFin = _.get(req, 'body.torneo.fechaFin', false) || false;
     if (nombre && fechaInicio && fechaFin) {
       Torneo
         .findById(req.params.id)
@@ -82,8 +82,8 @@ router.put('/torneos/:id',
             return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el torneo :(");
           } else {
             torneo.nombre = nombre;
-            turno.fechaInicio = fechaInicio;
-            turno.fechaFin = fechaFin;
+            torneo.fechaInicio = fechaInicio;
+            torneo.fechaFin = fechaFin;
             torneo.seve(function (err, torneo_db) {
               if (err || !torneo_db) {
                 return sendRes(res, 500, null, 'Error', err || "No pudimos actualizar el torneo :(");
