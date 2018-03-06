@@ -18,3 +18,9 @@ var tp = {
 }
 console.log(tp.integrantes);
 ```
+
+
+# NOTAS
+
+Agregar variables de entorno las que se leen en `process.env.`.
+Y configurar para que openshift valide que el server esta andando con `/status` y no con `/pagecount`

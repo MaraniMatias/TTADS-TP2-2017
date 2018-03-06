@@ -23,7 +23,7 @@ router.get('/torneos', function (req, res) {
 
 router.get('/torneos/:id', function (req, res) {
   const id = _.get(req, 'params.id', false) || false;
-  if(id){
+  if (id) {
     Toreno.findById(id)
       .populate('partidos')
       .then(function (torneo) {
@@ -34,31 +34,34 @@ router.get('/torneos/:id', function (req, res) {
         // res, status, data, messager, error
         return sendRes(res, 500, null, "Ha ocurrido un error", err);
       });
-  }else{
+  } else {
     return sendRes(res, 402, null, "El parametro id es requerido", null);
   }
 });
 
-//Agrega un torneo a la bd
+// Agrega un torneo a la bd
 router.post('/torneos', function (req, res, next) {
-  const nombre = _.get(req,'req.body.nombre',false) || false;
-  const fechaInicio = _.get(req,'req.body.fechaInicio',false) || false;
-  const fechaFin = _.get(req,'req.body.fechaFin',false) || false;
-  if(nombre && fechaInicio && fechaFin){
+  const nombre = _.get(req, 'req.body.nombre', false) || false;
+  const fechaInicio = _.get(req, 'req.body.fechaInicio', false) || false;
+  const fechaFin = _.get(req, 'req.body.fechaFin', false) || false;
+  if (nombre && fechaInicio && fechaFin) {
     const torneo = new Torneo({
       nombre: nombre,
       fechaInicio: fechaInicio,
       fechaFin: fechaFin,
     });
-    torneo.save((error,torneo_db)=>{
+    torneo.save((error, torneo_db) => {
       if (error || !torneo_db) {
+        // res, status, data, messager, error
         return sendRes(res, 500, null, 'Error', error || "No pudimos crear el torneo :(");
-      }else{
+      } else {
+        // res, status, data, messager, error
         return sendRes(res, 200, torneo_db, "Success", null);
       }
     });
-  }else{
-    return sendRes(res, 402, null, "El parametro nombre es requerido", null);
+  } else {
+    // res, status, data, messager, error
+    return sendRes(res, 402, null, "Parameros requeridos: nombre, fechaInicio, fechaFin", null);
   }
 });
 

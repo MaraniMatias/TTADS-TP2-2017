@@ -52,7 +52,7 @@ const PartidoSchema = new Schema({
   arbitros: {
     type: [String]
   },
-  // XXX para que es esto??
+  // TODO: no implementado
   destacado: {
     type: Boolean,
     default: false
