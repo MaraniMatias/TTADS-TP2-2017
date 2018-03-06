@@ -9,7 +9,7 @@ const EquipoSchema = new Schema({
   },
   escudoURL: {
     type: String,
-    default: 'http://www.fgf-gff.org/pub/skin/img/equipos/default.png'
+    default: 'https://api.adorable.io/avatars/128/default.png'
   },
   jugadores: [{
     type: Schema.Types.ObjectId,
@@ -23,6 +23,13 @@ const EquipoSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'MiembrosCuerpoTecnico'
   }]
+});
+
+EquipoSchema.pre("save", function (next) {
+  if (typeof this.escudoURL === 'undefined' || this.escudoURL) {
+    this.escudoURL = `https://api.adorable.io/avatars/128/${Math.floor(Math.random() * Math.floor(100))}.png`
+  }
+  next();
 });
 
 module.exports = mongoose.model('Equipos', EquipoSchema);

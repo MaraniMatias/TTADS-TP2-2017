@@ -39,7 +39,7 @@ router.get('/torneos/:id', function (req, res) {
 router.post('/torneos',
   // Para validar la autenticación con el token
   passport.authenticate('jwt', { session: false }),
-  function (req, res, next) {
+  function (req, res) {
     const nombre = _.get(req, 'req.body.nombre', false) || false;
     const fechaInicio = _.get(req, 'req.body.fechaInicio', false) || false;
     const fechaFin = _.get(req, 'req.body.fechaFin', false) || false;
@@ -104,7 +104,7 @@ router.put('/torneos/:id',
 router.delete('/torneos/:id',
   // Para validar la autenticación con el token
   passport.authenticate('jwt', { session: false }),
-  function (req, res, next) {
+  function (req, res) {
     Torneo.deleteOne({ _id: req.params.id }, function (err, torneo_db) {
       if (err || !torneo_db) {
         return sendRes(res, 500, null, 'Error', err || "No pudimos borrar el torneo :(");
