@@ -17,19 +17,19 @@
         <tr v-for="(partido,index) in partidos">
           <th class="celda-equipos">
             <div class="escudo-tabla-container">
-              <img class="escudo-tabla" :src="partido.equipos[0].escudoURL"/>
+              <img class="escudo-tabla" :src="partido.equipoA.escudoURL"/>
             </div>
             <div style="display: inline-block;">
-              {{partido.equipos[0].nombre}}
+              {{partido.equipoA.nombre}}
             </div>
             <div style="display: inline-block; margin-left:5%; margin-right:5%">
               vs
             </div>
             <div style="display: inline-block;">
-              {{partido.equipos[1].nombre}}
+              {{partido.equipoB.nombre}}
             </div>
             <div class="escudo-tabla-container">
-              <img class="escudo-tabla" :src="partido.equipos[1].escudoURL"/>
+              <img class="escudo-tabla" :src="partido.equipoB.escudoURL"/>
             </div>
           </th>
           <th>{{formatDate(partido.fechaInicio)}} | {{formatTime(partido.fechaInicio)}}</th>
@@ -177,16 +177,16 @@ export default {
 
       if(this.modoAlta){
         var nuevoPartido = {
-          "equipos": [this.equipo1,this.equipo2],
-          "golesEquipo1": 0,
-          "golesEquipo2": 0,
-          "estado": 'Programado',
-          "eventos": [],
+          "equipoA": this.equipo1,
+          "equipoB": this.equipo2,
+          //"marcador":
+          //"estado": 'Programado',
+          //"eventos": [],
           "fechaInicio": fecha,
-          "fechaDescanso": null,
+          //"fechaDescanso": null,
           "estadio": 'Estadio Monumental',
           "categoria": 'Adultos',
-          "arbitros": [],
+          //"arbitros": [],
           "destacado": true
         };
         this.setPartido(nuevoPartido);
@@ -217,8 +217,8 @@ export default {
       this.modoAlta = false;
 
       //relleno el formulario
-      this.equipo1 = this.partidos[index].equipos[0];
-      this.equipo2 = this.partidos[index].equipos[1];
+      this.equipo1 = this.partidos[index].equipoA;
+      this.equipo2 = this.partidos[index].equipoB;
 
       this.index = index;
     },
@@ -237,7 +237,6 @@ export default {
     },
 
     formatDate: function(fecha){
-      console.log(fecha);
       return fecha.substring(0,10);
     },
 

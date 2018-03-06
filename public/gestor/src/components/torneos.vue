@@ -15,11 +15,11 @@
     <tbody>
       <tr v-for="(torneo,index) in torneos">
         <td>{{torneo.nombre}}</td>
-        <td>{{torneo.fechaInicio}}</td>
-        <td>{{torneo.fechaFin}}</td>
+        <td>{{formatDate(torneo.fechaInicio)}}</td>
+        <td>{{formatDate(torneo.fechaFin)}}</td>
         <td>
-          <button class="ui red basic button" @click="borrarEquipo(index)">Borrar</button>
-          <button class="ui blue basic button"@click="editarEquipo(index)">Editar</button>
+          <button class="ui red basic button" @click="borrarTorneo(index)">Borrar</button>
+          <button class="ui blue basic button"@click="editarTorneo(index)">Editar</button>
         </td>
       </tr>
     </tbody>
@@ -27,7 +27,7 @@
       <tr>
         <th colspan="4">
         <div class="ui left floated">
-          <button class="ui green basic button" @click="agregarEquipo">Agregar</button>
+          <button class="ui green basic button" @click="agregarTorneo">Agregar</button>
         </div>
       </th>
     </tr>
@@ -44,14 +44,14 @@
         </div>
         <div class="field">
           <label>Fecha Inicio</label>
-          <calendar :value="value" :disabled-days-of-week="disabled" :format="format" :clear-button="clear" :placeholder="placeholder" v-on:fechaintro="setFecha($event)"></calendar>
+          <calendar :value="valueFechaInicio" :disabled-days-of-week="disabled" :format="format" :clear-button="clear" :placeholder="placeholder" v-on:fechaintro="setFecha($event,1)"></calendar>
         </div>
         <div class="field">
           <label>Fecha Fin</label>
-          <calendar :value="value" :disabled-days-of-week="disabled" :format="format" :clear-button="clear" :placeholder="placeholder" v-on:fechaintro="setFecha($event)"></calendar>
+          <calendar :value="valueFechaFin" :disabled-days-of-week="disabled" :format="format" :clear-button="clear" :placeholder="placeholder" v-on:fechaintro="setFecha($event,2)"></calendar>
         </div>
       </div>
-      <button class="ui button" type="submit" @click="guardarEquipo">Guardar</button>
+      <button class="ui button" type="submit" @click="guardarTorneo">Guardar</button>
     </form>
   </div>
 </div>
@@ -71,54 +71,73 @@ data(){
     modoAlta: true,
     index: 0,
     nombre: '',
-    escudoURL: '',
+    fechaInicio: '',
+    fechaFin: '',
     add: false,
 
     disabled: [],
-    value: '',
-    format: 'dd/MM/yyyy',
+    valueFechaInicio: '',
+    valueFechaFin: '',
+    format: 'yyyy-MM-dd',
     clear: true,
     placeholder: 'Ingrese la fecha'
   }
 },
 
 methods: {
-  ...mapActions(['setEquipo','getTorneos','deleteEquipo','updateEquipo']),
+  ...mapActions(['setTorneo','getTorneos','deleteTorneo','updateTorneo']),
 
-  agregarEquipo: function(){
+  agregarTorneo: function(){
     this.add = !this.add
   },
 
-  guardarEquipo: function(){
+  guardarTorneo: function(){
     if(this.modoAlta){
-      this.setEquipo({
+      this.setTorneo({
         nombre: this.nombre,
-        escudoURL: this.escudoURL
+        fechaInicio: this.fechaInicio,
+        fechaFin: this.fechaFin,
        })
     }else{
-      this.updateEquipo({
-        id: this.equipos[this.index]._id,
+      this.updateTorneo({
+        _id: this.torneos[this.index]._id,
         nombre: this.nombre,
-        escudoURL: this.escudoURL
+        fechaInicio: this.fechaInicio,
+        fechaFin: this.fechaFin,
       });
       this.modoAlta = true;
     };
     this.add = !this.add;
   },
 
-  borrarEquipo: function(index){
-    this.deleteEquipo(this.equipos[index])
+  borrarTorneo: function(index){
+    this.deleteTorneo(this.torneos[index])
   },
 
-  editarEquipo: function(index){
+  editarTorneo: function(index){
     if(!this.add){
-      this.agregarEquipo();
+      this.agregarTorneo();
     }
     this.modoAlta = false;
-    this.nombre = this.equipos[index].nombre;
-    this.escudoURL = this.equipos[index].escudoURL;
+    this.nombre = this.torneos[index].nombre;
+    this.fechaInicio = this.torneos[index].fechaInicio;
+    this.fechaFin = this.torneos[index].fechaFin;
+    this.valueFechaInicio = this.formatDate(this.fechaInicio);
+    this.valueFechaFin = this.formatDate(this.fechaFin);
     this.index = index;
-  }
+  },
+
+  formatDate: function(fecha){
+    return fecha.substring(0,10);
+  },
+
+  setFecha(e,type){
+    if(type === 1){
+      this.fechaInicio = new Date(e.getFullYear(), e.getMonth(),e.getDate(), -3, 0, 0);
+    }else{
+      this.fechaFin = new Date(e.getFullYear(), e.getMonth(),e.getDate(), -3, 0, 0);
+    }
+  },
 
 },
 

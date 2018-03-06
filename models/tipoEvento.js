@@ -8,4 +8,4 @@ const TipoEventoSchema = new Schema({
   }
 });
 
-module.exports =  mongoose.model('TipsoEvento', TipoEventoSchema);
+module.exports =  mongoose.model('TiposEvento', TipoEventoSchema);

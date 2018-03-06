@@ -92,7 +92,7 @@ methods: {
        })
     }else{
       this.updateEquipo({
-        id: this.equipos[this.index]._id,
+        _id: this.equipos[this.index]._id,
         nombre: this.nombre,
         escudoURL: this.escudoURL
       });

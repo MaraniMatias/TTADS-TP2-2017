@@ -2,7 +2,7 @@
     <div class="card">
       <div class="content">
         <div class="header">
-          {{partido.equipos[0].nombre}} vs {{partido.equipos[1].nombre}}
+          {{partido.equipoA.nombre}} vs {{partido.equipoB.nombre}}
         </div>
         <div class="meta">
           {{partido.estadio}}
@@ -16,7 +16,7 @@
           <div v-if="partido.estado !=='Finalizado'" class="ui basic green button" @click="goPartidoInfo()">Ingresar</div>
           <div v-if="partido.estado ==='Finalizado'" class="ui red label">Partido finalizado</div>
           <div v-if="partido.estado ==='Finalizado'" class="ui blue label">
-            {{partido.golesEquipo1}} - {{partido.golesEquipo2}}
+            {{partido.marcador.golesEquipoA}} - {{partido.marcador.golesEquipoB}}
           </div>
         </div>
       </div>

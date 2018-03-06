@@ -116,33 +116,83 @@ router.get('/eventos-por-partido/:idPartido',
 
 //Agrega un partido a la bd
 router.post('/partidos', function (req, res, next) {
-  Partido.create(req.body).then(function (partido) {
-    res.status(200).send(partido);
-  }).catch(next);
+    const equipoA = _.get(req,'req.body.equipoA',false) || false;
+    const equipoB = _.get(req,'req.body.equipoB',false) || false;
+    const fechaInicio = _.get(req,'req.body.fechaInicio',false) || false;
+    const estadio = _.get(req,'req.body.estadio',false) || false;
+    const categoria = _.get(req,'req.body.categoria',false) || false;
+    const destacado = _.get(req,'req.body.destacado',false) || false;
+
+    if(equipoA && equipoB && fechaInicio && estadio && categoria && destacado){
+      const marcador = new Marcador({
+        golesEquipoA: 0,
+        golesEquipoB: 0
+      });
+      marcador.save(function (err, marcador_db) {
+        if (err || !marcador_db) { return console.error(err); }
+        console.log(req.body);
+        const partido = new Partido({
+          "equipoA": req.body.equipoA,
+          "equipoB": req.body.equipoB,
+          "marcador": marcador_db,
+          "estado": 'Programado',
+          "eventos": [],
+          "fechaInicio": req.body.fechaInicio,
+          "fechaDescanso": null,
+          "estadio": req.body.estadio,
+          "categoria": req.body.categoria,
+          "arbitros": [],
+          "destacado": req.body.destacado
+      });
+      partido.save((error,partido_db)=>{
+        if (err || !partido_db) {
+          return sendRes(res, 500, null, 'Error', err || "No pudimos crear el partido :(");
+        }else{
+          return sendRes(res, 200, partido_db, "Success", null);
+        }
+      });
+    });
+  }else{
+    return sendRes(res, 402, null, "Los parametros equipoA, equipoB, fechaInicio, estadio, categoria y destacado son requeridos", null);
+  }
 });
 
 //Modifica un partido en la bd
 router.put('/partidos/:id', function (req, res) {
-  Partido.findByIdAndUpdate({ _id: req.params.id }, req.body).then(function () {
-    Partido.findOne({ _id: req.params.id })
-      .populate('equipos')
-      .populate('eventos')
-      .populate('marcador')
-      .exec(function (err, partido) {
-        if (err || !partido) {
-          return res.status(500).send({ msg: 'Ha ocurrido un error al popular', err: err });
-        } else {
-          return res.status(200).send(partido);
-        }
-      });
-  });
+  const id = _.get(req, 'params.id', false) || false;
+  if(id){
+    Partido.findByIdAndUpdate({ _id: req.params.id }, req.body).then(function () {
+      Partido.findOne({ _id: req.params.id })
+        .populate('equipos')
+        .populate('eventos')
+        .populate('marcador')
+        .exec(function (err, partido_db) {
+          if (err || !partido_db) {
+            return sendRes(res, 500, null, 'Error', err || "No pudimos actualizar el partido :(");
+          } else {
+            return sendRes(res, 200, partido_db, "Success", null);
+          }
+        });
+    });
+  }else{
+    return sendRes(res, 402, null, "El parametro id es requerido", null);
+  }
 });
 
 //Borra un partido de la bd
 router.delete('/partidos/:id', function (req, res) {
-  Partido.findByIdAndRemove({ _id: req.params.id }).then(function (partido) {
-    res.status(200).send(partido);
-  });
+  const id = _.get(req, 'params.id', false) || false;
+  if(id){
+    Partido.findByIdAndRemove({ _id: req.params.id }, function(err,partido_db){
+      if (err || !partido_db) {
+        return sendRes(res, 500, null, 'Error', err || "No pudimos borrar el partido :(");
+      } else {
+        return sendRes(res, 200, partido_db, "Success", null);
+      }
+    });
+  }else{
+    return sendRes(res, 402, null, "El parametro id es requerido", null);
+  }
 });
 
 module.exports = router;

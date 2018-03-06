@@ -1,16 +1,22 @@
 import axios from 'axios';
-const baseURL = "http://localhost:3000/api";
+import _ from 'lodash';
+const baseURL = "http://0.0.0.0:3000/api";
 
 // Equipos
 export default {
   getEquipos: function({ commit, state }){
-    axios.get(baseURL+"/equipos")
+    axios.get(`${baseURL}/equipos`)
         .then((response) => {
-          commit('set_equipo_store', response.data);
+          const message = _.get(response, 'data.message', '') || '';
+          const equipos = _.get(response, 'data.data', []) || [];
+          if (message === 'Success') {
+            commit('set_equipo_store', equipos);
+          }
         }, (err) => {
           console.error(err);
         });
   },
+
   setEquipo: function ({ commit, state }, obj) {
     axios.post(baseURL + "/equipos/", obj)
       .then((response) => {
@@ -49,9 +55,13 @@ export default {
         });
   },
   getPartidos: function({ commit, state }){
-    axios.get(baseURL+"/partidos")
+    axios.get(`${baseURL}/partidos`)
         .then((response) => {
-          commit('set_partido_store', response.data);
+          const message = _.get(response, 'data.message', '') || '';
+          const partidos = _.get(response, 'data.data', []) || [];
+          if (message === 'Success') {
+            commit('set_partido_store', partidos);
+          }
         }, (err) => {
           console.error(err);
         });
@@ -87,15 +97,17 @@ export default {
 
   //Tipos Evento
   getTiposEvento: function({ commit, state }){
-    axios.get(baseURL+"/tiposEvento")
+    axios.get(`${baseURL}/tipos-evento/`)
         .then((response) => {
-          commit('set_tipo_evento_store', response.data);
+          const message = _.get(response, 'data.message', '') || '';
+          const tiposEvento = _.get(response, 'data.data', []) || [];
+          commit('set_tipo_evento_store',tiposEvento);
         }, (err) => {
           console.error(err);
         });
   },
   setTipoEvento: function ({ commit, state }, obj) {
-    axios.post(baseURL + "/tiposEvento/", obj)
+    axios.post(baseURL + "/tipos-evento/", obj)
       .then((response) => {
         commit('add_tipo_evento_to_store',response.data);
         return response.data;
@@ -104,7 +116,7 @@ export default {
       });
   },
   updateTipoEvento: function ({ commit, state }, obj) {
-    axios.put(baseURL + "/tiposEvento/"+obj._id, obj)
+    axios.put(baseURL + "/tipos-evento/"+obj._id, obj)
       .then((response) => {
         commit('update_tipo_evento_store',response.data);
         return response.data;
@@ -113,7 +125,7 @@ export default {
       });
   },
   deleteTipoEvento: function({ commit, state }, obj){
-    axios.delete(baseURL+ "/tiposEvento/"+obj._id)
+    axios.delete(baseURL+ "/tipos-evento/"+obj._id)
     .then((response) => {
       commit('delete_tipo_evento_from_store',response.data);
       return response.data;
@@ -126,37 +138,39 @@ export default {
   getTorneos: function({ commit, state }){
     axios.get(baseURL+"/torneos")
         .then((response) => {
-          commit('set_torneos_store', response.data);
+          const message = _.get(response, 'data.message', '') || '';
+          const torneos = _.get(response, 'data.data', []) || [];
+          commit('set_torneos_store', torneos);
         }, (err) => {
           console.error(err);
         });
-  }
-  /*
-  setTipoEvento: function ({ commit, state }, obj) {
-    axios.post(baseURL + "/tiposEvento/", obj)
+  },
+  setTorneo: function ({ commit, state }, obj) {
+    axios.post(baseURL + "/torneos/", obj)
       .then((response) => {
-        commit('add_tipo_evento_to_store',response.data);
+        commit('add_torneo_to_store',response.data);
         return response.data;
       }, (err) => {
         console.error(err);
       });
   },
-  updateTipoEvento: function ({ commit, state }, obj) {
-    axios.put(baseURL + "/tiposEvento/"+obj._id, obj)
-      .then((response) => {
-        commit('update_tipo_evento_store',response.data);
-        return response.data;
-      }, (err) => {
-        console.error(err);
-      });
-  },
-  deleteTipoEvento: function({ commit, state }, obj){
-    axios.delete(baseURL+ "/tiposEvento/"+obj._id)
+  deleteTorneo: function({ commit, state }, obj){
+    axios.delete(baseURL+ "/torneos/"+obj._id)
     .then((response) => {
-      commit('delete_tipo_evento_from_store',response.data);
+      commit('delete_torneo_from_store',response.data);
       return response.data;
     }, (err) => {
       console.error(err);
     });
-  },*/
+  },
+  updateTorneo: function ({ commit, state }, obj) {
+    console.log(obj);
+    axios.put(baseURL + "/torneos/"+obj._id, obj)
+      .then((response) => {
+        commit('update_torneo_store',response.data);
+        return response.data;
+      }, (err) => {
+        console.error(err);
+      });
+  }
 };
