@@ -82,7 +82,7 @@ methods: {
        })
     }else{
       this.updateTipoEvento({
-        id: this.tiposEvento[this.index]._id,
+        _id: this.tiposEvento[this.index]._id,
         nombre: this.nombre,
       });
       this.modoAlta = true;

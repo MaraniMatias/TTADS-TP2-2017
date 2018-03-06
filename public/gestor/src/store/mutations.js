@@ -98,5 +98,27 @@ export default {
   set_torneos_store: (state, torneos) => {
     state.torneos = torneos;
   },
+  add_torneo_to_store: (state, torneo) => {
+    state.torneos.push(torneo);
+  },
+  delete_torneo_from_store: (state, torneo) => {
+    for(var i = 0; i< state.torneos.length; i++){
+      if(state.torneos[i]._id === torneo._id){
+        state.torneos.splice(i,1);
+        break;
+      }
+    }
+  },
+  update_torneo_store: (state, torneo) => {
+
+    for(var i = 0; i< state.torneos.length; i++){
+      if(state.torneos[i]._id === torneo._id){
+        state.torneos[i].nombre = torneo.nombre;
+        state.torneos[i].fechaInicio = torneo.fechaInicio;
+        state.torneos[i].fechaFin = torneo.fechaFin;
+        break;
+      }
+    }
+  },
 
 };
