@@ -43,6 +43,7 @@ var mongoURLLabel = 'mongodb://localhost/' + mongodbName;
 if (process.env.NODE_ENV && process.env.NODE_ENV === 'production') {
   // Creo la conexion para MongoDB corriendo en el servidor
   mongoURLLabel = `mongodb://${mongodbUser}:${mongoPass}@${process.env.MONGODB_SERVICE_HOST}:${process.env.MONGODB_SERVICE_PORT}/${mongodbName}`;
+  console.log(mongoURLLabel);
   // console.log(process.env);
 }
 
