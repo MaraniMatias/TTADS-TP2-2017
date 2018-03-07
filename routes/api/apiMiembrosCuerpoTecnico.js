@@ -59,8 +59,8 @@ router.get('/miembros-cuerpo-tecnico/:id', function (req, res) {
 router.post('/miembros-cuerpo-tecnico',
   passport.authenticate('jwt', { session: false }),
   function (req, res) {
-    const nombre = _.get(req, 'body.cuerpo-tecnico.nombre', false) || false;
-    const apellido = _.get(req, 'body.cuerpo-tecnico.apellido', false) || false;
+    const nombre = _.get(req, 'body.cuerpoTecnico.nombre', false) || false;
+    const apellido = _.get(req, 'body.cuerpoTecnico.apellido', false) || false;
 
     if (nombre && apellido) {
       const cuerpoTecnico = new MiembroCuerpoTecnico({
@@ -85,8 +85,8 @@ router.post('/miembros-cuerpo-tecnico',
 router.put('/miembros-cuerpo-tecnico/:id',
   passport.authenticate('jwt', { session: false }),
   function (req, res) {
-    const nombre = _.get(req, 'body.cuerpo-tecnico.nombre', false) || false;
-    const apellido = _.get(req, 'body.cuerpo-tecnico.apellido', false) || false;
+    const nombre = _.get(req, 'body.cuerpoTecnico.nombre', false) || false;
+    const apellido = _.get(req, 'body.cuerpoTecnico.apellido', false) || false;
     if (nombre && apellido) {
       MiembroCuerpoTecnico
         .findById(req.params.id)
