@@ -228,7 +228,7 @@ router.delete('/partidos/:id',
 router.put('/partido-aztualizar/:id',
   passport.authenticate('jwt', { session: false }),
   function (req, res) {
-    console.log(req.body);
+    console.log(req.body, req.params);
     Partido
       .findById(req.params.id)
       .populate({
@@ -237,6 +237,7 @@ router.put('/partido-aztualizar/:id',
       })
       .exec(function (err, partido_db) {
         if (err || !partido_db) {
+          console.log(err);
           return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el partido :(");
         } else {
           const golesEquipoA = _.get(req, 'doby.partido.marcador.golesEquipoA', partido_db.marcador.golesEquipoA) || partido_db.marcador.golesEquipoA;
