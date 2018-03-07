@@ -224,4 +224,58 @@ router.delete('/partidos/:id',
     });
   });
 
+// Modifica un partido en la bd
+router.put('/partido-aztualizar/:id',
+  passport.authenticate('jwt', { session: false }),
+  function (req, res) {
+    console.log(req.body);
+    Partido
+      .findById(req.params.id)
+      .populate({
+        path: 'marcador',
+        model: Marcador
+      })
+      .exec(function (err, partido_db) {
+        if (err || !partido_db) {
+          return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el partido :(");
+        } else {
+          const golesEquipoA = _.get(req, 'doby.partido.marcador.golesEquipoA', partido_db.marcador.golesEquipoA) || partido_db.marcador.golesEquipoA;
+          const golesEquipoB = _.get(req, 'doby.partido.marcador.golesEquipoB', partido_db.marcador.golesEquipoB) || partido_db.marcador.golesEquipoB;
+          const estado = _.get(req, 'doby.partido.estado', partido_db.estado) || partido_db.estado;
+          partido_db.estado = estado;
+          const selectTipoEventos = _.get(req, 'doby.partido.selectTipoEventos', null);
+          partido_db.eventos.push({
+            evento: selectTipoEventos._id,
+            fecha: new Date()
+          });
+          partido_db.markModified('eventos');
+
+          Marcador
+            .findById(partido_db.marcador._id)
+            .exec(function (err, marcador_db) {
+              if (err || !marcador_db) {
+                return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el partido :(");
+              } else {
+                marcador_db.golesEquipoA = golesEquipoA;
+                marcador_db.golesEquipoB = golesEquipoB;
+                marcador_db.save((err) => {
+                  if (err) {
+                    return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el partido :(");
+                  } else {
+                    partido_db.seve((err, partido_save_db) => {
+
+                      if (err) {
+                        return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el partido :(");
+                      } else {
+                        return sendRes(res, 200, partido_save_db, "Success", null);
+                      }
+                    });
+                  }
+                });
+              }
+            });
+        }
+      });
+  });
+
 module.exports = router;
