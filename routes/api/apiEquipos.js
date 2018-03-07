@@ -58,10 +58,10 @@ router.post('/equipos',
   // Para validar la autenticación con el token
   passport.authenticate('jwt', { session: false }),
   function (req, res) {
-    const nombre = _.get(req, 'body.nombre', false) || false;
-    const escudoURL = _.get(req, 'body.escudoURL', null);
-    const jugadores = _.get(req, 'body.jugadores', false) || false;
-    const cuerpoTecnico = _.get(req, 'body.cuerpoTecnico', false) || false;
+    const nombre = _.get(req, 'body.equipo.nombre', false) || false;
+    const escudoURL = _.get(req, 'body.equipo.escudoURL', null);
+    const jugadores = _.get(req, 'body.equipo.jugadores', false) || false;
+    const cuerpoTecnico = _.get(req, 'body.equipo.cuerpoTecnico', false) || false;
 
     if (nombre && jugadores && cuerpoTecnico) {
       const equipo = new Equipo({
@@ -93,10 +93,10 @@ router.put('/equipos/:id',
         if (err || !equipo) {
           return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el equipo :(");
         } else {
-          const nombre = _.get(req, 'body.nombre', equipo.nombre) || equipo.nombre;
-          const escudoURL = _.get(req, 'body.escudoURL', equipo.escudoURL) || equipo.escudoURL;
-          const jugadores = _.get(req, 'body.jugadores', equipo.jugadores) || equipo.jugadores;
-          const cuerpoTecnico = _.get(req, 'body.cuerpoTecnico', equipo.cuerpoTecnico) || equipo.cuerpoTecnico;
+          const nombre = _.get(req, 'body.equipo.nombre', equipo.nombre) || equipo.nombre;
+          const escudoURL = _.get(req, 'body.equipo.escudoURL', equipo.escudoURL) || equipo.escudoURL;
+          const jugadores = _.get(req, 'body.equipo.jugadores', equipo.jugadores) || equipo.jugadores;
+          const cuerpoTecnico = _.get(req, 'body.equipo.cuerpoTecnico', equipo.cuerpoTecnico) || equipo.cuerpoTecnico;
           equipo.nombre = nombre;
           equipo.escudoURL = escudoURL;
           equipo.jugadores = jugadores;
