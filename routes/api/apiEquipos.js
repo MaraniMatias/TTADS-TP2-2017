@@ -87,34 +87,29 @@ router.put('/equipos/:id',
   // Para validar la autenticación con el token
   passport.authenticate('jwt', { session: false }),
   function (req, res) {
-    const nombre = _.get(req, 'body.nombre', equipo.nombre) || equipo.nombre;
-    const escudoURL = _.get(req, 'body.escudoURL', equipo.escudoURL) || equipo.escudoURL;
-    const jugadores = _.get(req, 'body.jugadores', equipo.jugadores) || equipo.jugadores;
-    const cuerpoTecnico = _.get(req, 'body.cuerpoTecnico', equipo.cuerpoTecnico) || equipo.cuerpoTecnico;
-    if(nombre && escudoURL && jugadores && cuerpoTecnico){
-      Equipo
-        .findById(req.params.id)
-        .exec(function (err, equipo) {
-          if (err || !equipo) {
-            return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el equipo :(");
-          } else {
-            equipo.nombre = nombre;
-            equipo.escudoURL = escudoURL;
-            equipo.jugadores = jugadores;
-            equipo.cuerpoTecnico = cuerpoTecnico;
-            equipo.save(function (err, equipo_db) {
-              if (err || !equipo_db) {
-                return sendRes(res, 500, null, 'Error', err || "No pudimos actualizar el equipo :(");
-              } else {
-                return sendRes(res, 200, equipo, "Success", null);
-              }
-            });
-          }
-        });
-    }else{
-      return sendRes(res, 402, null, "Parameros requeridos: nombre, jugadores y cuerpoTecnico", null);
-    }
-
+    Equipo
+      .findById(req.params.id)
+      .exec(function (err, equipo) {
+        if (err || !equipo) {
+          return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el equipo :(");
+        } else {
+          const nombre = _.get(req, 'body.equipo.nombre', equipo.nombre) || equipo.nombre;
+          const escudoURL = _.get(req, 'body.equipo.escudoURL', equipo.escudoURL) || equipo.escudoURL;
+          const jugadores = _.get(req, 'body.equipo.jugadores', equipo.jugadores) || equipo.jugadores;
+          const cuerpoTecnico = _.get(req, 'body.equipo.cuerpoTecnico', equipo.cuerpoTecnico) || equipo.cuerpoTecnico;
+          equipo.nombre = nombre;
+          equipo.escudoURL = escudoURL;
+          equipo.jugadores = jugadores;
+          equipo.cuerpoTecnico = cuerpoTecnico;
+          equipo.save(function (err, equipo_db) {
+            if (err || !equipo_db) {
+              return sendRes(res, 500, null, 'Error', err || "No pudimos actualizar el equipo :(");
+            } else {
+              return sendRes(res, 200, equipo_db, "Success", null);
+            }
+          });
+        }
+      });
   });
 
 // Borra un equipo de la bd

@@ -6,19 +6,22 @@ const PartidoSchema = new Schema({
   // Es redundante pero ganamos rendimiento.
   torneo: {
     type: Schema.Types.ObjectId,
-    ref: 'Torneos'
+    ref: 'Torneos',
+    required: [true, 'El ID del torneo es requerido']
   },
   equipoA: {
     type: Schema.Types.ObjectId,
-    ref: 'Equipos'
+    ref: 'Equipos',
+    required: [true, 'El ID del equipoA es requerido']
   },
   equipoB: {
     type: Schema.Types.ObjectId,
-    ref: 'Equipos'
+    ref: 'Equipos',
+    required: [true, 'El ID del equipoB es requerido']
   },
   estado: {
     type: String,
-    enum: ['Programado','En curso','Entretiempo','Terminado', 'Iniciado'],
+    enum: ['Programado', 'En curso', 'Entretiempo', 'Terminado', 'Iniciado'],
     default: 'Programado'
   },
   marcador: {

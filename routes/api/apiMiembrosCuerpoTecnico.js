@@ -44,84 +44,84 @@ router.get('/miembros-cuerpo-tecnico',
 
 router.get('/miembros-cuerpo-tecnico/:id', function (req, res) {
   // Validar parámetro de la consulta
-    MiembroCuerpoTecnico.findById(req.params.id)
-      .then(function (miembroCuerpoTecnico) {
-        // res, status, data, messager, error
-        return sendRes(res, 200, miembroCuerpoTecnico, "Success", null);
-      })
-      .catch(function (err) {
-        // res, status, data, messager, error
-        return sendRes(res, 500, null, "Ha ocurrido un error", err);
-      });
+  MiembroCuerpoTecnico.findById(req.params.id)
+    .then(function (miembroCuerpoTecnico) {
+      // res, status, data, messager, error
+      return sendRes(res, 200, miembroCuerpoTecnico, "Success", null);
+    })
+    .catch(function (err) {
+      // res, status, data, messager, error
+      return sendRes(res, 500, null, "Ha ocurrido un error", err);
+    });
 });
 
 //Agrega un miembro de cuerpo tecnico a la bd
 router.post('/miembros-cuerpo-tecnico',
-passport.authenticate('jwt', { session: false }),
-function (req, res) {
-  const nombre = _.get(req, 'body.cuerpo-tecnico.nombre', false) || false;
-  const apellido = _.get(req, 'body.cuerpo-tecnico.apellido', false) || false;
+  passport.authenticate('jwt', { session: false }),
+  function (req, res) {
+    const nombre = _.get(req, 'body.cuerpoTecnico.nombre', false) || false;
+    const apellido = _.get(req, 'body.cuerpoTecnico.apellido', false) || false;
 
-  if(nombre && apellido){
-    const cuerpoTecnico = new MiembroCuerpoTecnico({
-      nombre: nombre,
-      apellido: apellido
-    });
-    cuerpoTecnico.save((err, cuerpoTecnico_db) => {
-      if (error || !cuerpoTecnico_db) {
-        // res, status, data, messager, error
-        return sendRes(res, 500, null, 'Error', error || "No pudimos crear al miembro del cuerpo tecnico :(");
-      } else {
-        // res, status, data, messager, error
-        return sendRes(res, 200, cuerpoTecnico_db, "Success", null);
-      }
-    });
-  }else{
-    return sendRes(res, 402, null, "Parameros requeridos: nombre, apellido", null);
-  }
-});
+    if (nombre && apellido) {
+      const cuerpoTecnico = new MiembroCuerpoTecnico({
+        nombre: nombre,
+        apellido: apellido
+      });
+      cuerpoTecnico.save((err, cuerpoTecnico_db) => {
+        if (err || !cuerpoTecnico_db) {
+          // res, status, data, messager, error
+          return sendRes(res, 500, null, 'Error', error || "No pudimos crear al miembro del cuerpo tecnico :(");
+        } else {
+          // res, status, data, messager, error
+          return sendRes(res, 200, cuerpoTecnico_db, "Success", null);
+        }
+      });
+    } else {
+      return sendRes(res, 402, null, "Parameros requeridos: nombre, apellido", null);
+    }
+  });
 
 //Modifica un miembro de cuerpo tecnico en la bd
 router.put('/miembros-cuerpo-tecnico/:id',
   passport.authenticate('jwt', { session: false }),
- function (req, res) {
-   const nombre = _.get(req, 'body.cuerpo-tecnico.nombre', false) || false;
-   const apellido = _.get(req, 'body.cuerpo-tecnico.apellido', false) || false;
-   if(nombre && apellido){
-     MiembroCuerpoTecnico
-      .findById(req.params.id)
-      .exec(function(err, cuerpoTecnico){
-        if (err || !cuerpoTecnico) {
-          return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar al miembro del cuerpo tecnico :(");
-        } else {
-          cuerpoTecnico.nombre = nombre;
-          cuerpoTecnico.apellido = apellido;
-          cuerpoTecnico.save(function (err, cuerpoTecnico_db) {
-            if (err || !cuerpoTecnico_db) {
-              return sendRes(res, 500, null, 'Error', err || "No pudimos actualizar al miembro del cuerpo tecnico :(");
-            } else {
-              return sendRes(res, 200, cuerpoTecnico, "Success", null);
-            }
-          });
-        }
-      });
-   }else {
-     // res, status, data, messager, error
-     return sendRes(res, 402, null, "Parameros requeridos: nombre, apellido", null);
-   }
-});
+  function (req, res) {
+    const nombre = _.get(req, 'body.cuerpoTecnico.nombre', false) || false;
+    const apellido = _.get(req, 'body.cuerpoTecnico.apellido', false) || false;
+    if (nombre && apellido) {
+      MiembroCuerpoTecnico
+        .findById(req.params.id)
+        .exec(function (err, cuerpoTecnico) {
+          if (err || !cuerpoTecnico) {
+            return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar al miembro del cuerpo tecnico :(");
+          } else {
+            cuerpoTecnico.nombre = nombre;
+            cuerpoTecnico.apellido = apellido;
+            cuerpoTecnico.save(function (err, cuerpoTecnico_db) {
+              if (err || !cuerpoTecnico_db) {
+                return sendRes(res, 500, null, 'Error', err || "No pudimos actualizar al miembro del cuerpo tecnico :(");
+              } else {
+                return sendRes(res, 200, cuerpoTecnico, "Success", null);
+              }
+            });
+          }
+        });
+    } else {
+      // res, status, data, messager, error
+      return sendRes(res, 402, null, "Parameros requeridos: nombre, apellido", null);
+    }
+  });
 
 //Borra un miembro de cuerpo tecnico de la bd
 router.delete('/miembros-cuerpo-tecnico/:id',
   passport.authenticate('jwt', { session: false }),
   function (req, res) {
-    MiembroCuerpoTecnico.deleteOne({ _id: req.params.id }, function(err, cuerpoTecnico_db){
+    MiembroCuerpoTecnico.deleteOne({ _id: req.params.id }, function (err, cuerpoTecnico_db) {
       if (err || !cuerpoTecnico_db) {
         return sendRes(res, 500, null, 'Error', err || "No pudimos borrar al miembro del cuerpo tecnico :(");
       } else {
         return sendRes(res, 200, cuerpoTecnico_db, "Success", null);
       }
     });
-});
+  });
 
 module.exports = router;
