@@ -122,7 +122,7 @@ router.post('/partidos',
     // const destacado = _.get(req,'body.partido.destacado',false) || false;
     const arbitros = _.get(req, 'body.partido.arbitros', false) || false;
 
-    if (equipoA && equipoB && torneo) {
+    if (equipoA && equipoB && torneo && equipoA !== equipoB) {
       const marcador = new Marcador({
         golesEquipoA: 0,
         golesEquipoB: 0
@@ -153,7 +153,7 @@ router.post('/partidos',
         });
       });
     } else {
-      return sendRes(res, 402, null, "Parametros requeridos: equipoA, equipoB, torneo", null);
+      return sendRes(res, 402, null, equipoA !== equipoB ? "Parametros requeridos: equipoA, equipoB, torneo" : "Equipos no validos", null);
     }
   });
 
