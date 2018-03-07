@@ -13,7 +13,7 @@ const User = require('../models/usuario.js');
 
 // Define routes.
 // /login username password
-// curl 'http://192.168.1.6:3000/login' -H 'content-type: application/json' --data '{"username":"admin","password":"123456"}'
+// curl 'http://192.168.1.6:3000/auth/login' -H 'content-type: application/json' --data '{"username":"admin","password":"123456"}'
 router.post('/login',
   // Para validar la autenticación contra la BD
   passport.authenticate('local'),

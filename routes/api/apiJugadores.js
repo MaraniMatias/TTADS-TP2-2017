@@ -17,7 +17,7 @@ router.get('/jugadores',
   queryPage, // interceptor para completar el paginado
   function (req, res) {
     // Validar parámetro de la consulta
-    const nombre = _.get(req, 'query.jugador', false) || false;
+    const nombre = _.get(req, 'query.nombre', false) || false;
     let query = {}
     if (nombre) {
       query.$or = [
@@ -62,7 +62,6 @@ router.post('/jugadores',
   // Para validar la autenticación con el token
   passport.authenticate('jwt', { session: false }),
   function (req, res) {
-
     const nombre = _.get(req, 'body.nombre', false) || false;
     const apellido = _.get(req, 'body.apellido', false) || false;
     if (nombre && apellido) {
@@ -87,7 +86,7 @@ router.post('/jugadores',
       });
       jugador.save(function (err, jugador_db) {
         if (err || !jugador_db) {
-          return sendRes(res, 500, null, 'Error', err || "No pudimos borrar el equipo :(");
+          return sendRes(res, 500, null, 'Error', err || "No pudimos guardar el jugador :(");
         } else {
           return sendRes(res, 200, jugador_db, "Success", null);
         }
@@ -119,17 +118,17 @@ router.put('/jugadores/:id',
           const cantRojas = _.get(req, 'body.cantRojas', jugador.cantRojas) || jugador.cantRojas;
 
           jugador.nombre = nombre;
-          jugador.apellido;
-          jugador.peso;
-          jugador.altura;
-          jugador.edad;
-          jugador.cantGoles;
-          jugador.cantAmarillas;
-          jugador.cant2min;
-          jugador.cantRojas;
+          jugador.apellido = apellido;
+          jugador.peso = peso;
+          jugador.altura = altura;
+          jugador.edad = edad;
+          jugador.cantGoles = cantGoles;
+          jugador.cantAmarillas = cantAmarillas;
+          jugador.cant2min = cant2min;
+          jugador.cantRojas = cantRojas;
 
           jugador.save(function (err, jugador_db) {
-            if (error || !jugador_db) {
+            if (err || !jugador_db) {
               return sendRes(res, 500, null, 'Error', err || "No pudimos actualizar el jugador :(");
             } else {
               return sendRes(res, 200, jugador_db, "Success", null);
@@ -146,7 +145,7 @@ router.delete('/jugadores/:id',
   function (req, res) {
     Jugador
       .findByIdAndRemove(req.params.id, (err, jugador) => {
-        if (error || !jugador) {
+        if (err || !jugador) {
           return sendRes(res, 500, null, 'Error', err || "No pudimos actualizar el jugador :(");
         } else {
           return sendRes(res, 200, jugador, "Success", null);

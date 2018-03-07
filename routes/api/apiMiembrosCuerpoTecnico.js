@@ -16,11 +16,12 @@ router.get('/miembros-cuerpo-tecnico',
   function (req, res) {
     // Validar parámetro de la consulta
     const nombre = _.get(req, 'query.nombre', false) || false;
+    const apellido = _.get(req, 'query.apellido', false) || false;
     let query = {}
-    if (nombre) {
+    if (nombre || apellido) {
       query.$or = [
         { nombre: { $regex: nombre, $options: 'i' } },
-        { apellido: { $regex: nombre, $options: 'i' } }
+        { apellido: { $regex: apellido, $options: 'i' } }
       ];
     }
     MiembroCuerpoTecnico
