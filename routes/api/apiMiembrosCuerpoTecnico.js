@@ -68,7 +68,7 @@ router.post('/miembros-cuerpo-tecnico',
         apellido: apellido
       });
       cuerpoTecnico.save((err, cuerpoTecnico_db) => {
-        if (error || !cuerpoTecnico_db) {
+        if (err || !cuerpoTecnico_db) {
           // res, status, data, messager, error
           return sendRes(res, 500, null, 'Error', error || "No pudimos crear al miembro del cuerpo tecnico :(");
         } else {
