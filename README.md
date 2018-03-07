@@ -33,7 +33,7 @@ El Backend antes mencionado consta de las siguientes funciones:
   - Consultar un solo objeto junto con su detalle
   - Dar de alta un objeto
   - Modificar un determinado objeto pasando el id por una petición GET
-  - Eliminar un determinado objeto pasando el id por una petición GET
+  - Eliminar un determinado objeto pasando el id por una petición GET\n
   Mas abajo en este readme tenemos un ejemplo de uso.
 - Todas las consultas que recuperen información y traigan varios objetos, incorporan un paginado. Esto se
   logra con un interceptor que asigna valores de skip y limit a la consulta. Si no vienen espeficicados estos
