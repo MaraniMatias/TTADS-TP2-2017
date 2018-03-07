@@ -33,7 +33,7 @@ El Backend antes mencionado consta de las siguientes funciones:
   - Consultar un solo objeto junto con su detalle
   - Dar de alta un objeto
   - Modificar un determinado objeto pasando el id por una petición GET
-  - Eliminar un determinado objeto pasando el id por una petición GET\n
+  - Eliminar un determinado objeto pasando el id por una petición GET
   Mas abajo en este readme tenemos un ejemplo de uso.
 - Todas las consultas que recuperen información y traigan varios objetos, incorporan un paginado. Esto se
   logra con un interceptor que asigna valores de skip y limit a la consulta. Si no vienen espeficicados estos
@@ -257,6 +257,7 @@ router.delete('/equipos/:id',
 
 ## Tecnologías y dependencias utilizadas
 
+
 - [body-parser](https://github.com/expressjs/body-parser): Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
 - [chai](https://github.com/chaijs/chai): Chai is an assertion library, similar to Node's build in assert. It makes testing much easier by giving you lots of assertions you can run against your code.
 - [chai-http](https://github.com/chaijs/chai-http): HTTP integration testing with Chai assertions.
@@ -267,8 +268,10 @@ router.delete('/equipos/:id',
 - [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken): JSON Web token implementation.
 - [lodash](https://github.com/lodash/lodash): Lodash makes JavaScript easier by taking the hassle out of working with arrays, numbers, objects, strings, etc.
 - [mocha](https://github.com/mochajs/mocha): Simple, flexible, fun JavaScript test framework for Node.js & The Browser
+- [mongoDB](http://mongodb.com): Free and open-source cross-platform document-oriented database program.
 - [mongoose](https://github.com/Automattic/mongoose): Mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment.
 - [morgan](https://github.com/expressjs/morgan): HTTP request logger middleware for node.js
+- [nodejs](http://nodejs.org): Open-source, cross-platform JavaScript run-time environment for executing JavaScript code server-side.
 - [passport](https://github.com/jaredhanson/passport):Passport is Express-compatible authentication middleware for Node.js.
 - [passport-jwt](https://github.com/themikenicholson/passport-jwt): This module lets you authenticate endpoints using a JSON web token.
 - [passport-local](https://github.com/jaredhanson/passport-local): This module lets you authenticate using a username and password in your Node.js applications.
