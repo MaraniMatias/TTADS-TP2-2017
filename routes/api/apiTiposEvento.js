@@ -52,7 +52,7 @@ router.get('/tipos-evento/:id', function (req, res) {
 router.post('/tipos-evento',
   passport.authenticate('jwt', { session: false }),
   function (req, res) {
-    const nombre = _.get(req, 'body.tipo-evento.nombre', false) || false;
+    const nombre = _.get(req, 'body.tipoEvento.nombre', false) || false;
     if (nombre) {
       const tipoEvento = new TipoEvento({
         nombre: nombre
@@ -73,7 +73,7 @@ router.post('/tipos-evento',
 router.put('/tipos-evento/:id',
   passport.authenticate('jwt', { session: false }),
   function (req, res) {
-    const nombre = _.get(req, 'body.tipoevento.nombre', false) || false;
+    const nombre = _.get(req, 'body.tipoEvento.nombre', false) || false;
     if (nombre) {
       TipoEvento.findById(req.params.id)
         .exec(function (err, tipoEvento) {
