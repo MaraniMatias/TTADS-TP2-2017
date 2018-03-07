@@ -70,9 +70,9 @@ El Backend antes mencionado consta de las siguientes funciones:
 - Seguridad para todas las peticiones POST, PUT y DELETE antes mencionados incorporando autentificación
   por token.
 
-# Ejemplo
+## Ejemplo
 
-Modelo de equipo
+### Modelo de equipo
 
 ```javascript
 
@@ -113,7 +113,7 @@ module.exports = mongoose.model('Equipos', EquipoSchema);
 
 ```
 
-API de equipo
+### API de equipo
 
 ```javascript
 const express = require('express');
@@ -278,7 +278,7 @@ El proyecto se encuentra corriendo de forma online. La url es la siguiente:
 
 http://nodejs-mongo-persistent-ttads-tp3-2017.a3c1.starter-us-west-1.openshiftapps.com/status
 
-# Notas
+### Notas
 
 Agregar variables de entorno las que se leen en `process.env.`.
 Y configurar para que openshift valide que el server esta andando con `/status` y no con `/pagecount`
