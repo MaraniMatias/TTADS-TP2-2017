@@ -102,7 +102,7 @@ router.put('/equipos/:id',
           equipo.jugadores = jugadores;
           equipo.cuerpoTecnico = cuerpoTecnico;
           equipo.save(function (err, equipo_db) {
-            if (error || !equipo_db) {
+            if (err || !equipo_db) {
               return sendRes(res, 500, null, 'Error', err || "No pudimos actualizar el equipo :(");
             } else {
               return sendRes(res, 200, equipo_db, "Success", null);

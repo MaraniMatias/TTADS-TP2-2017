@@ -3,6 +3,7 @@ const router = express.Router();
 const _ = require('lodash');
 const passport = require('passport');
 const util = require('../utilities');
+const _ = require('lodash');
 const queryPage = util.queryPage;
 const sendRes = util.sendRes;
 
@@ -25,7 +26,7 @@ router.get('/torneos', function (req, res) {
 });
 
 router.get('/torneos/:id', function (req, res) {
-  Toreno.findById(req.params.id)
+  Torneo.findById(req.params.id)
     // .populate('partidos') // Creo que no lo usamos
     .then(function (torneo) {
       // res, status, data, messager, error
@@ -85,7 +86,7 @@ router.put('/torneos/:id',
             torneo.nombre = nombre;
             torneo.fechaInicio = fechaInicio;
             torneo.fechaFin = fechaFin;
-            torneo.seve(function (err, torneo_db) {
+            torneo.save(function (err, torneo_db) {
               if (err || !torneo_db) {
                 return sendRes(res, 500, null, 'Error', err || "No pudimos actualizar el torneo :(");
               } else {
