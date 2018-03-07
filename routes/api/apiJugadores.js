@@ -17,12 +17,12 @@ router.get('/jugadores',
   queryPage, // interceptor para completar el paginado
   function (req, res) {
     // Validar parámetro de la consulta
-    const nombre = _.get(req, 'query.nombre', false) || false;
+    const jugador = _.get(req, 'query.jugador', false) || false;
     let query = {}
-    if (nombre) {
+    if (jugador) {
       query.$or = [
-        { nombre: { $regex: nombre, $options: 'i' } },
-        { apellido: { $regex: nombre, $options: 'i' } }
+        { nombre: { $regex: jugador, $options: 'i' } },
+        { apellido: { $regex: jugador, $options: 'i' } }
       ];
     }
     Jugador
