@@ -225,12 +225,15 @@ router.delete('/partidos/:id',
   });
 
 // Modifica un partido en la bd
-router.put('/partido-actualizar/:id',
+router.put('/partido-actualizar/:partidoId',
   passport.authenticate('jwt', { session: false }),
   function (req, res) {
-    console.log(req.body, req.params);
+    console.log(
+      req.body,
+      // req.params
+  );
     Partido
-      .findById(req.params.id)
+      .findById(req.params.partidoId)
       .populate({
         path: 'marcador',
         model: Marcador
@@ -240,11 +243,11 @@ router.put('/partido-actualizar/:id',
           console.log(err);
           return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el partido :(");
         } else {
-          const golesEquipoA = _.get(req, 'boby.partido.marcador.golesEquipoA', partido_db.marcador.golesEquipoA) || partido_db.marcador.golesEquipoA;
-          const golesEquipoB = _.get(req, 'boby.partido.marcador.golesEquipoB', partido_db.marcador.golesEquipoB) || partido_db.marcador.golesEquipoB;
-          const estado = _.get(req, 'boby.partido.estado', partido_db.estado) || partido_db.estado;
+          const golesEquipoA = _.get(req, 'body.partido.marcador.golesEquipoA', partido_db.marcador.golesEquipoA) || partido_db.marcador.golesEquipoA;
+          const golesEquipoB = _.get(req, 'body.partido.marcador.golesEquipoB', partido_db.marcador.golesEquipoB) || partido_db.marcador.golesEquipoB;
+          const estado = _.get(req, 'body.partido.estado', partido_db.estado) || partido_db.estado;
           partido_db.estado = estado;
-          const selectTipoEventos = _.get(req, 'boby.partido.selectTipoEventos', null);
+          const selectTipoEventos = _.get(req, 'body.partido.selectTipoEventos', null);
           partido_db.eventos.push({
             evento: selectTipoEventos._id,
             fecha: new Date()
@@ -263,7 +266,7 @@ router.put('/partido-actualizar/:id',
                   if (err) {
                     return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el partido :(");
                   } else {
-                    partido_db.seve((err, partido_save_db) => {
+                    partido_db.save((err, partido_save_db) => {
 
                       if (err) {
                         return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el partido :(");
