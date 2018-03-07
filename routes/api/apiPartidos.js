@@ -181,7 +181,7 @@ router.put('/partidos/:id',
             partido.torneo = torneo;
             partido.equipoA = equipoA;
             partido.equipoB = equipoB;
-            estadopartido. = estado;
+            partido.estado = estado;
             partido.fechaInicio = fechaInicio;
             // fechaDescanso: null,
             partido.estadio = estadio;
