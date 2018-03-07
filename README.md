@@ -260,11 +260,7 @@ router.delete('/equipos/:id',
 
 - [body-parser](https://github.com/expressjs/body-parser): Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
 - [chai](https://github.com/chaijs/chai): Chai is an assertion library, similar to Node's build in assert. It makes testing much easier by giving you lots of assertions you can run against your code.
-- [chai-http](https://github.com/chaijs/chai-http): HTTP integration testing with Chai assertions.
-- [cookie-parser](https://github.com/expressjs/cookie-parser): Parse Cookie header and populate req.cookies with an object keyed by the cookie names. Optionally you may enable signed cookie support by passing a secret string, which assigns req.secret so it may be used by other middleware.
-- [cors](https://github.com/expressjs/cors): CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.
 - [express](https://github.com/expressjs/express): Web framework for node.
-- [express-session](https://github.com/expressjs/session): Session middleware for express.
 - [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken): JSON Web token implementation.
 - [lodash](https://github.com/lodash/lodash): Lodash makes JavaScript easier by taking the hassle out of working with arrays, numbers, objects, strings, etc.
 - [mocha](https://github.com/mochajs/mocha): Simple, flexible, fun JavaScript test framework for Node.js & The Browser
@@ -276,14 +272,13 @@ router.delete('/equipos/:id',
 - [passport-jwt](https://github.com/themikenicholson/passport-jwt): This module lets you authenticate endpoints using a JSON web token.
 - [passport-local](https://github.com/jaredhanson/passport-local): This module lets you authenticate using a username and password in your Node.js applications.
 
-# Servidor online
+## Servidor online
 
 El proyecto se encuentra corriendo de forma online. La url es la siguiente:
 
 http://nodejs-mongo-persistent-ttads-tp3-2017.a3c1.starter-us-west-1.openshiftapps.com/status
 
-
-# NOTAS
+# Notas
 
 Agregar variables de entorno las que se leen en `process.env.`.
 Y configurar para que openshift valide que el server esta andando con `/status` y no con `/pagecount`
