@@ -98,7 +98,7 @@ router.put('/miembros-cuerpo-tecnico/:id',
           cuerpoTecnico.apellido = apellido;
           cuerpoTecnico.save(function (err, cuerpoTecnico_db) {
             if (err || !cuerpoTecnico_db) {
-              return sendRes(res, 500, null, 'Error', err || "No pudimos actualizar el torneo :(");
+              return sendRes(res, 500, null, 'Error', err || "No pudimos actualizar al miembro del cuerpo tecnico :(");
             } else {
               return sendRes(res, 200, cuerpoTecnico, "Success", null);
             }
@@ -112,10 +112,16 @@ router.put('/miembros-cuerpo-tecnico/:id',
 });
 
 //Borra un miembro de cuerpo tecnico de la bd
-router.delete('/miembros-cuerpo-tecnico/:id', function (req, res) {
-  MiembroCuerpoTecnico.findByIdAndRemove({ _id: req.params.id }).then(function (miembrosCuerpoTecnico) {
-    res.status(200).send(miembrosCuerpoTecnico);
-  });
+router.delete('/miembros-cuerpo-tecnico/:id',
+  passport.authenticate('jwt', { session: false }),
+  function (req, res) {
+    MiembroCuerpoTecnico.deleteOne({ _id: req.params.id }, function(err, cuerpoTecnico_db){
+      if (err || !cuerpoTecnico_db) {
+        return sendRes(res, 500, null, 'Error', err || "No pudimos borrar al miembro del cuerpo tecnico :(");
+      } else {
+        return sendRes(res, 200, cuerpoTecnico_db, "Success", null);
+      }
+    });
 });
 
 module.exports = router;
