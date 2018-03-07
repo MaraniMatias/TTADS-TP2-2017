@@ -47,4 +47,4 @@ JugadorSchema.method('authenticate', function(password) {
     return crypto.createHash('sha256').update(password).digest("hex") === this.password;
 });
 
-module.exports = mongoose.model('Ususarios', JugadorSchema);
+module.exports = mongoose.model('Usuarios', JugadorSchema);

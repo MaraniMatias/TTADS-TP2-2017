@@ -225,7 +225,7 @@ router.delete('/partidos/:id',
   });
 
 // Modifica un partido en la bd
-router.put('/partido-aztualizar/:id',
+router.put('/partido-actualizar/:id',
   passport.authenticate('jwt', { session: false }),
   function (req, res) {
     console.log(req.body, req.params);
@@ -240,11 +240,11 @@ router.put('/partido-aztualizar/:id',
           console.log(err);
           return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el partido :(");
         } else {
-          const golesEquipoA = _.get(req, 'doby.partido.marcador.golesEquipoA', partido_db.marcador.golesEquipoA) || partido_db.marcador.golesEquipoA;
-          const golesEquipoB = _.get(req, 'doby.partido.marcador.golesEquipoB', partido_db.marcador.golesEquipoB) || partido_db.marcador.golesEquipoB;
-          const estado = _.get(req, 'doby.partido.estado', partido_db.estado) || partido_db.estado;
+          const golesEquipoA = _.get(req, 'boby.partido.marcador.golesEquipoA', partido_db.marcador.golesEquipoA) || partido_db.marcador.golesEquipoA;
+          const golesEquipoB = _.get(req, 'boby.partido.marcador.golesEquipoB', partido_db.marcador.golesEquipoB) || partido_db.marcador.golesEquipoB;
+          const estado = _.get(req, 'boby.partido.estado', partido_db.estado) || partido_db.estado;
           partido_db.estado = estado;
-          const selectTipoEventos = _.get(req, 'doby.partido.selectTipoEventos', null);
+          const selectTipoEventos = _.get(req, 'boby.partido.selectTipoEventos', null);
           partido_db.eventos.push({
             evento: selectTipoEventos._id,
             fecha: new Date()
