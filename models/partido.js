@@ -7,7 +7,6 @@ const PartidoSchema = new Schema({
   torneo: {
     type: Schema.Types.ObjectId,
     ref: 'Torneos',
-    required: [true, 'El ID del torneo es requerido']
   },
   equipoA: {
     type: Schema.Types.ObjectId,

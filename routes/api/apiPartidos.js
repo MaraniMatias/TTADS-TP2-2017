@@ -13,11 +13,20 @@ const Equipo = require('../../models/equipo');
 const TipoEvento = require('../../models/tipoEvento.js');
 
 // Recupera todos los partidos
-// http://localhost:3000/api/partido/?skip=1&limit=1&torneos=['nombreTorneo']
+// http://localhost:3000/api/partido/?skip=1&limit=1&find=any
 router.get('/partidos',
   queryPage, // interceptor para completar el paginado
   function (req, res) {
-    Partido.find({})
+    let query = {}
+    const find = _.get(req, 'query.find', false) || false;
+    if (find) {
+      query.$or = [
+        { estadio: { $regex: find, $options: 'i' } },
+        { categoria: { $regex: find, $options: 'i' } }
+      ];
+    }
+    Partido
+      .find(query)
       .populate({
         path: 'equipoA',
         select: 'nombre escudoURL',
@@ -122,7 +131,7 @@ router.post('/partidos',
     // const destacado = _.get(req,'body.partido.destacado',false) || false;
     const arbitros = _.get(req, 'body.partido.arbitros', false) || false;
 
-    if (equipoA && equipoB && torneo) {
+    if (equipoA && equipoB && torneo && equipoA !== equipoB) {
       const marcador = new Marcador({
         golesEquipoA: 0,
         golesEquipoB: 0
@@ -153,7 +162,7 @@ router.post('/partidos',
         });
       });
     } else {
-      return sendRes(res, 402, null, "Parametros requeridos: equipoA, equipoB, torneo", null);
+      return sendRes(res, 402, null, equipoA !== equipoB ? "Parametros requeridos: equipoA, equipoB, torneo" : "Equipos no validos", null);
     }
   });
 
@@ -213,6 +222,61 @@ router.delete('/partidos/:id',
         return sendRes(res, 200, partido_db, "Success", null);
       }
     });
+  });
+
+// Modifica un partido en la bd
+router.put('/partido-aztualizar/:id',
+  passport.authenticate('jwt', { session: false }),
+  function (req, res) {
+    console.log(req.body, req.params);
+    Partido
+      .findById(req.params.id)
+      .populate({
+        path: 'marcador',
+        model: Marcador
+      })
+      .exec(function (err, partido_db) {
+        if (err || !partido_db) {
+          console.log(err);
+          return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el partido :(");
+        } else {
+          const golesEquipoA = _.get(req, 'doby.partido.marcador.golesEquipoA', partido_db.marcador.golesEquipoA) || partido_db.marcador.golesEquipoA;
+          const golesEquipoB = _.get(req, 'doby.partido.marcador.golesEquipoB', partido_db.marcador.golesEquipoB) || partido_db.marcador.golesEquipoB;
+          const estado = _.get(req, 'doby.partido.estado', partido_db.estado) || partido_db.estado;
+          partido_db.estado = estado;
+          const selectTipoEventos = _.get(req, 'doby.partido.selectTipoEventos', null);
+          partido_db.eventos.push({
+            evento: selectTipoEventos._id,
+            fecha: new Date()
+          });
+          partido_db.markModified('eventos');
+
+          Marcador
+            .findById(partido_db.marcador._id)
+            .exec(function (err, marcador_db) {
+              if (err || !marcador_db) {
+                return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el partido :(");
+              } else {
+                marcador_db.golesEquipoA = golesEquipoA;
+                marcador_db.golesEquipoB = golesEquipoB;
+                marcador_db.save((err) => {
+                  if (err) {
+                    return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el partido :(");
+                  } else {
+                    partido_db.seve((err, partido_save_db) => {
+
+                      if (err) {
+                        return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el partido :(");
+                      } else {
+                        return sendRes(res, 200, partido_save_db, "Success", null);
+                      }
+                    });
+                  }
+                });
+              }
+            });
+        }
+      });
   });
 
 module.exports = router;
