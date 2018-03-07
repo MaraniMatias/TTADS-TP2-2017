@@ -78,7 +78,7 @@ router.post('/equipos',
         }
       });
     } else {
-      return sendRes(res, 402, null, "Los parametros nombre, jugadores y cuerpoTecnico son requeridos", null);
+      return sendRes(res, 402, null, "Parameros requeridos: nombre, jugadores y cuerpoTecnico", null);
     }
   });
 
@@ -91,26 +91,30 @@ router.put('/equipos/:id',
     const escudoURL = _.get(req, 'body.escudoURL', equipo.escudoURL) || equipo.escudoURL;
     const jugadores = _.get(req, 'body.jugadores', equipo.jugadores) || equipo.jugadores;
     const cuerpoTecnico = _.get(req, 'body.cuerpoTecnico', equipo.cuerpoTecnico) || equipo.cuerpoTecnico;
-    if(nombre && escudoURL && )
-    Equipo
-      .findById(req.params.id)
-      .exec(function (err, equipo) {
-        if (err || !equipo) {
-          return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el equipo :(");
-        } else {
-          equipo.nombre = nombre;
-          equipo.escudoURL = escudoURL;
-          equipo.jugadores = jugadores;
-          equipo.cuerpoTecnico = cuerpoTecnico;
-          equipo.save(function (err, equipo_db) {
-            if (err || !equipo_db) {
-              return sendRes(res, 500, null, 'Error', err || "No pudimos actualizar el equipo :(");
-            } else {
-              return sendRes(res, 200, equipo_db, "Success", null);
-            }
-          });
-        }
-      });
+    if(nombre && escudoURL && jugadores && cuerpoTecnico){
+      Equipo
+        .findById(req.params.id)
+        .exec(function (err, equipo) {
+          if (err || !equipo) {
+            return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el equipo :(");
+          } else {
+            equipo.nombre = nombre;
+            equipo.escudoURL = escudoURL;
+            equipo.jugadores = jugadores;
+            equipo.cuerpoTecnico = cuerpoTecnico;
+            equipo.save(function (err, equipo_db) {
+              if (err || !equipo_db) {
+                return sendRes(res, 500, null, 'Error', err || "No pudimos actualizar el equipo :(");
+              } else {
+                return sendRes(res, 200, equipo, "Success", null);
+              }
+            });
+          }
+        });
+    }else{
+      return sendRes(res, 402, null, "Parameros requeridos: nombre, jugadores y cuerpoTecnico", null);
+    }
+
   });
 
 // Borra un equipo de la bd
