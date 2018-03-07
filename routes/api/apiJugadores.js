@@ -72,7 +72,6 @@ router.post('/jugadores',
       const cantAmarillas = _.get(req, 'body.jugador.cantAmarillas');
       const cant2min = _.get(req, 'body.jugador.cant2min');
       const cantRojas = _.get(req, 'body.jugador.cantRojas');
-
       const jugador = new Jugador({
         nombre,
         apellido,
@@ -101,41 +100,44 @@ router.put('/jugadores/:id',
   // Para validar la autenticación con el token
   passport.authenticate('jwt', { session: false }),
   function (req, res) {
-    Jugador
-      .findById(req.params.id)
-      .exec(function (err, jugador) {
-        if (err || !jugador) {
-          return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar el jugador :(");
-        } else {
-          const nombre = _.get(req, 'body.nombre', jugador.nombre) || jugador.nombre;
-          const apellido = _.get(req, 'body.apellido', jugador.apellido) || jugador.apellido;
-          const peso = _.get(req, 'body.peso', jugador.peso) || jugador.peso;
-          const altura = _.get(req, 'body.altura', jugador.altura) || jugador.altura;
-          const edad = _.get(req, 'body.edad', jugador.edad) || jugador.edad;
-          const cantGoles = _.get(req, 'body.cantGoles', jugador.cantGoles) || jugador.cantGoles;
-          const cantAmarillas = _.get(req, 'body.cantAmarillas', jugador.cantAmarillas) || jugador.cantAmarillas;
-          const cant2min = _.get(req, 'body.cant2min', jugador.cant2min) || jugador.cant2min;
-          const cantRojas = _.get(req, 'body.cantRojas', jugador.cantRojas) || jugador.cantRojas;
+    const nombre = _.get(req, 'body.jugador.nombre', false) || false;
+    const apellido = _.get(req, 'body.jugador.apellido', false) || false;
+    if (nombre && apellido) {
+      const peso = _.get(req, 'body.jugador.peso', false) || false;
+      const altura = _.get(req, 'body.jugador.altura', false) || false;
+      const edad = _.get(req, 'body.jugador.edad', false) || false;
+      const cantGoles = _.get(req, 'body.jugador.cantGoles', false) || false;
+      const cantAmarillas = _.get(req, 'body.jugador.cantAmarillas', false) || false;
+      const cant2min = _.get(req, 'body.jugador.cant2min', false) || false;
+      const cantRojas = _.get(req, 'body.jugador.cantRojas', false) || false;
+      Jugador
+        .findById(req.params.id)
+        .exec(function (err, jugador) {
+          if (err || !jugador) {
+            return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar al jugador :(");
+          } else {
+            jugador.nombre = nombre;
+            jugador.apellido = apellido;
+            jugador.peso = peso;
+            jugador.altura = altura;
+            jugador.edad = edad;
+            jugador.cantGoles = cantGoles;
+            jugador.cantAmarillas = cantAmarillas;
+            jugador.cant2min = cant2min;
+            jugador.cantRojas = cantRojas;
+            jugador.save(function (err, jugador_db) {
+              if (err || !jugador_db) {
+                return sendRes(res, 500, null, 'Error', err || "No pudimos actualizar el jugador :(");
+              } else {
+                return sendRes(res, 200, jugador, "Success", null);
+              }
+            });
+          }
+        });
+    }else{
+      return sendRes(res, 402, null, "Parameros requeridos: nombre, apellido", null);
+    }
 
-          jugador.nombre = nombre;
-          jugador.apellido = apellido;
-          jugador.peso = peso;
-          jugador.altura = altura;
-          jugador.edad = edad;
-          jugador.cantGoles = cantGoles;
-          jugador.cantAmarillas = cantAmarillas;
-          jugador.cant2min = cant2min;
-          jugador.cantRojas = cantRojas;
-
-          jugador.save(function (err, jugador_db) {
-            if (err || !jugador_db) {
-              return sendRes(res, 500, null, 'Error', err || "No pudimos actualizar el jugador :(");
-            } else {
-              return sendRes(res, 200, jugador_db, "Success", null);
-            }
-          });
-        }
-      });
   });
 
 // Borra un jugador de la bd

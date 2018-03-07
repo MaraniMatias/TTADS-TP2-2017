@@ -78,7 +78,7 @@ router.post('/equipos',
         }
       });
     } else {
-      return sendRes(res, 402, null, "Los parametros nombre, jugadores y cuerpoTecnico son requeridos", null);
+      return sendRes(res, 402, null, "Parameros requeridos: nombre, jugadores y cuerpoTecnico", null);
     }
   });
 
@@ -87,6 +87,7 @@ router.put('/equipos/:id',
   // Para validar la autenticación con el token
   passport.authenticate('jwt', { session: false }),
   function (req, res) {
+<<<<<<< HEAD
     Equipo
       .findById(req.params.id)
       .exec(function (err, equipo) {
@@ -118,7 +119,7 @@ router.delete('/equipos/:id',
   passport.authenticate('jwt', { session: false }),
   function (req, res) {
     // findByIdAndRemove busca la propiedad _id en Mongo y elimina el objeto
-    Equipo.findByIdAndRemove(req.params.id, function (err, equipo_db) {
+    Equipo.deleteOne(req.params.id, function (err, equipo_db) {
       if (err || !equipo_db) {
         return sendRes(res, 500, null, 'Error', err || "No pudimos borrar el equipo :(");
       } else {
