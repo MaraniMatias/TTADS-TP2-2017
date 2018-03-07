@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const _ = require('lodash');
 const passport = require('passport');
 const util = require('../utilities');
 const queryPage = util.queryPage;
