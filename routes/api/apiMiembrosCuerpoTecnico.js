@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
 const util = require('../utilities');
+const passport = require('passport');
 const queryPage = util.queryPage;
 const sendRes = util.sendRes;
 
@@ -43,37 +44,71 @@ router.get('/miembros-cuerpo-tecnico',
 
 router.get('/miembros-cuerpo-tecnico/:id', function (req, res) {
   // Validar parámetro de la consulta
-  const id = _.get(req, 'params.id', false) || false;
-  if (id) {
-    MiembroCuerpoTecnico.findById(id)
-      .then(function (miembrosCuerpoTecnico) {
+    MiembroCuerpoTecnico.findById(req.params.id)
+      .then(function (miembroCuerpoTecnico) {
         // res, status, data, messager, error
-        return sendRes(res, 200, miembrosCuerpoTecnico, "Success", null);
+        return sendRes(res, 200, miembroCuerpoTecnico, "Success", null);
       })
       .catch(function (err) {
         // res, status, data, messager, error
         return sendRes(res, 500, null, "Ha ocurrido un error", err);
       });
-  } else {
-    // res, status, data, messager, error
-    return sendRes(res, 402, null, "Parametro id del evento es requerido", null);
-  }
 });
 
 //Agrega un miembro de cuerpo tecnico a la bd
-router.post('/miembros-cuerpo-tecnico', function (req, res, next) {
-  MiembroCuerpoTecnico.create(req.body).then(function (miembrosCuerpoTecnico) {
-    res.status(200).send(miembrosCuerpoTecnico);
-  }).catch(next);
+router.post('/miembros-cuerpo-tecnico',
+passport.authenticate('jwt', { session: false }),
+function (req, res) {
+  const nombre = _.get(req, 'body.cuerpo-tecnico.nombre', false) || false;
+  const apellido = _.get(req, 'body.cuerpo-tecnico.apellido', false) || false;
+
+  if(nombre && apellido){
+    const cuerpoTecnico = new MiembroCuerpoTecnico({
+      nombre: nombre,
+      apellido: apellido
+    });
+    cuerpoTecnico.save((err, cuerpoTecnico_db) => {
+      if (error || !cuerpoTecnico_db) {
+        // res, status, data, messager, error
+        return sendRes(res, 500, null, 'Error', error || "No pudimos crear al miembro del cuerpo tecnico :(");
+      } else {
+        // res, status, data, messager, error
+        return sendRes(res, 200, cuerpoTecnico_db, "Success", null);
+      }
+    });
+  }else{
+    return sendRes(res, 402, null, "Parameros requeridos: nombre, apellido", null);
+  }
 });
 
 //Modifica un miembro de cuerpo tecnico en la bd
-router.put('/miembros-cuerpo-tecnico/:id', function (req, res) {
-  MiembroCuerpoTecnico.findByIdAndUpdate({ _id: req.params.id }, req.body).then(function () {
-    MiembroCuerpoTecnico.findOne({ _id: req.params.id }).then(function (miembrosCuerpoTecnico) {
-      res.status(200).send(miembrosCuerpoTecnico);
-    });
-  });
+router.put('/miembros-cuerpo-tecnico/:id',
+  passport.authenticate('jwt', { session: false }),
+ function (req, res) {
+   const nombre = _.get(req, 'body.cuerpo-tecnico.nombre', false) || false;
+   const apellido = _.get(req, 'body.cuerpo-tecnico.apellido', false) || false;
+   if(nombre && apellido){
+     MiembroCuerpoTecnico
+      .findById(req.params.id)
+      .exec(function(err, cuerpoTecnico){
+        if (err || !cuerpoTecnico) {
+          return sendRes(res, 500, null, 'Error', err || "No pudimos encontrar al miembro del cuerpo tecnico :(");
+        } else {
+          cuerpoTecnico.nombre = nombre;
+          cuerpoTecnico.apellido = apellido;
+          cuerpoTecnico.save(function (err, cuerpoTecnico_db) {
+            if (err || !cuerpoTecnico_db) {
+              return sendRes(res, 500, null, 'Error', err || "No pudimos actualizar el torneo :(");
+            } else {
+              return sendRes(res, 200, cuerpoTecnico, "Success", null);
+            }
+          });
+        }
+      });
+   }else {
+     // res, status, data, messager, error
+     return sendRes(res, 402, null, "Parameros requeridos: nombre, apellido", null);
+   }
 });
 
 //Borra un miembro de cuerpo tecnico de la bd
