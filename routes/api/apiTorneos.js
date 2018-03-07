@@ -3,7 +3,6 @@ const router = express.Router();
 const _ = require('lodash');
 const passport = require('passport');
 const util = require('../utilities');
-const _ = require('lodash');
 const queryPage = util.queryPage;
 const sendRes = util.sendRes;
 
