@@ -13,11 +13,20 @@ const Equipo = require('../../models/equipo');
 const TipoEvento = require('../../models/tipoEvento.js');
 
 // Recupera todos los partidos
-// http://localhost:3000/api/partido/?skip=1&limit=1&torneos=['nombreTorneo']
+// http://localhost:3000/api/partido/?skip=1&limit=1&find=any
 router.get('/partidos',
   queryPage, // interceptor para completar el paginado
   function (req, res) {
-    Partido.find({})
+    let query = {}
+    const find = _.get(req, 'query.find', false) || false;
+    if (find) {
+      query.$or = [
+        { estadio: { $regex: find, $options: 'i' } },
+        { categoria: { $regex: find, $options: 'i' } }
+      ];
+    }
+    Partido
+      .find(query)
       .populate({
         path: 'equipoA',
         select: 'nombre escudoURL',

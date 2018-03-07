@@ -45,6 +45,7 @@ router.get('/fixture-activos',
       })
       .skip(req.query.skip)
       .limit(req.query.limit)
+      .sort('fechaInicio')
       .exec(function (err, partidos) {
         if (err) {
           // res, status, data, messager, error
@@ -85,6 +86,7 @@ router.get('/fixture-pasados',
       })
       .skip(req.query.skip)
       .limit(req.query.limit)
+      .sort('fechaInicio')
       .exec(function (err, partidos) {
         if (err) {
           // res, status, data, messager, error
