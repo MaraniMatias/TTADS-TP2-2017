@@ -86,7 +86,7 @@ router.post('/equipos',
 router.put('/equipos/:id',
   // Para validar la autenticación con el token
   passport.authenticate('jwt', { session: false }),
-  function (req, res) { <<
+  function (req, res) {
     Equipo
       .findById(req.params.id)
       .exec(function (err, equipo) {
