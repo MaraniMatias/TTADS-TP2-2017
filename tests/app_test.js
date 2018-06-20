@@ -1,3 +1,4 @@
+"use strict";
 var server = require('../server'),
   chai = require('chai'),
   chaiHTTP = require('chai-http'),
@@ -5,7 +6,7 @@ var server = require('../server'),
 
 chai.use(chaiHTTP);
 
-reqServer = process.env.HTTP_TEST_SERVER || server
+var reqServer = process.env.HTTP_TEST_SERVER || server;
 
 describe('Basic routes tests', function () {
 
@@ -15,7 +16,7 @@ describe('Basic routes tests', function () {
       .end(function (err, res) {
         res.should.have.status(200);
         done();
-      })
-  })
+      });
+  });
 
-})
+});
