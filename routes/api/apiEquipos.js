@@ -17,7 +17,7 @@ router.get('/equipos',
   function (req, res) {
     // Validar parámetro de la consulta
     const nombre = _.get(req, 'query.nombre', false) || false;
-    let query = {}
+    let query = {};
     if (nombre) {
       query.nombre = { $regex: nombre, $options: 'i' };
     }

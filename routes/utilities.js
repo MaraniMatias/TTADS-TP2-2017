@@ -1,3 +1,4 @@
+"use strict";
 const _ = require('lodash');
 
 // Solo con el objetivo de enviar siempre una misma respuesta

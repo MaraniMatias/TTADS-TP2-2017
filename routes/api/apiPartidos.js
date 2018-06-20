@@ -17,7 +17,7 @@ const TipoEvento = require('../../models/tipoEvento.js');
 router.get('/partidos',
   queryPage, // interceptor para completar el paginado
   function (req, res) {
-    let query = {}
+    let query = {};
     const find = _.get(req, 'query.find', false) || false;
     if (find) {
       query.$or = [
@@ -228,10 +228,6 @@ router.delete('/partidos/:id',
 router.put('/partido-actualizar/:partidoId',
   passport.authenticate('jwt', { session: false }),
   function (req, res) {
-    console.log(
-      req.body,
-      // req.params
-  );
     Partido
       .findById(req.params.partidoId)
       .populate({
